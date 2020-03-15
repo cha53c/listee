@@ -1,0 +1,22 @@
+{
+  "name": "listee",
+  "version": "1.0.0",
+  "description": "list management tool",
+  "main": "app.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cha53c/listee.git"
+  },
+  "author": "chasec",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cha53c/listee/issues"
+  },
+  "homepage": "https://github.com/cha53c/listee#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
