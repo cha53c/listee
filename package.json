@@ -4,6 +4,7 @@
   "description": "list management tool",
   "main": "app.js",
   "scripts": {
+    "start": "nodemon app.js",
     "test": "test"
   },
   "repository": {
@@ -18,5 +19,13 @@
   "homepage": "https://github.com/cha53c/listee#readme",
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  },
+  "nodemonConfig": {
+    "restartable": "rs",
+    "ignore": "node_modules/**/node_modules",
+    "delay": "3000"
   }
 }
