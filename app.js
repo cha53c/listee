@@ -1,5 +1,6 @@
 const express = require('express');
 const debug = require('debug')('app');
+const chalk = require('chalk');
 const app = express();
 
 app.get('/', (req, res) => {
@@ -7,5 +8,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(3000, () => {
-    console.log('Listee is listening to you on port 3000');
+    debug(`Listee is listening to you on port ${chalk.green('3000')}`);
 });
