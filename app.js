@@ -1,11 +1,11 @@
 const express = require('express');
 const debug = require('debug')('app');
 const chalk = require('chalk');
-const app = express();
+const path = require('path');
 
-app.get('/', (req, res) => {
-    res.send('Welcome to Listee');
-});
+const lists = require(path.join(__dirname, 'routes', 'listRoutes'));
+const app = express();
+app.use('/', lists);
 
 app.listen(3000, () => {
     debug(`Listee is listening to you on port ${chalk.green('3000')}`);
