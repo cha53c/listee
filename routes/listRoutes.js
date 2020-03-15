@@ -1,8 +1,9 @@
 const express = require('express');
+// const ejs = require('ejs');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    res.send('Welcome to Listee');
+    res.render('home', {title: 'Listee home page'});
 });
 
 module.exports = router;
