@@ -4,6 +4,7 @@ const chalk = require('chalk');
 const path = require('path');
 const ejs = require('ejs');
 const morgan = require('morgan');
+const bodyParser = require('body-parser');
 
 const home = require(path.join(__dirname, 'routes', 'homeRoutes'));
 const lists = require(path.join(__dirname, 'routes', 'listRoutes'));
@@ -11,6 +12,8 @@ const auth = require(path.join(__dirname, 'routes', 'authRoutes'));
 const app = express();
 
 app.use(morgan('tiny'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 
 // set up the routes
 app.use('/', home);
