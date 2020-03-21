@@ -6,7 +6,7 @@
   "scripts": {
     "start": "DEBUG=app,app:* nodemon app.js",
     "express-routes-list": "express-routes-list",
-    "test": "test"
+    "test": "jasmine"
   },
   "repository": {
     "type": "git",
