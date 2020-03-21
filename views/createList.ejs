@@ -18,7 +18,10 @@
         let item = document.getElementById('word').value;
         console.log(item);
         items.push(item);
-        localStorage.setItem("list", items);
+        addListNode(item);
+    }
+
+    function addListNode(item) {
         let node = document.createElement('LI');
         let textNode = document.createTextNode(item);
         node.appendChild(textNode);
