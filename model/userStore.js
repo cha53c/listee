@@ -1,11 +1,16 @@
 const debug = require('debug');
 
-let users = ['1'];
-
+//temporary user store for demo purposes stores a max of 10 users
 const userStore = (function ()
 {
+    let users = [];
+
+    function init() {
+        users = ['1']; //pre-populate for demo
+    }
+
     function addUser(user) {
-        if (!isUser(user)) {
+        if (users.length <= 10 && !isUser(user)) {
             users.push(user);
             debug(userStore);
         }
@@ -20,7 +25,9 @@ const userStore = (function ()
 
     return {
         addUser: addUser,
-        isUser: isUser
+        isUser: isUser,
+        init: init,
+        users: users
     };
 
 })();
