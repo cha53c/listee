@@ -2,12 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title><<%= title %></title>
+    <title><%= title %></title>
 </head>
 <body>
 <h1><%= heading %></h1>
-<button type="button">Add item</button><br>
+    <input type="text" id="word">
+    <button type="button" id="add" value="Add Item">Add item</button><br>
+<ul id="list">
+</ul>
 <button type="button">Submit list</button>
-
+<script>
+    let items = [];
+    document.getElementById('add').onclick =  function addItem() {
+        console.log('adding an item');
+        let item = document.getElementById('word').value;
+        console.log(item);
+        items.push(item);
+        localStorage.setItem("list", items);
+        let node = document.createElement('LI');
+        let textNode = document.createTextNode(item);
+        node.appendChild(textNode);
+        document.getElementById('list').appendChild(node);
+    }
+</script>
 </body>
 </html>
