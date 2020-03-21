@@ -27,6 +27,7 @@
     "morgan": "^1.9.1"
   },
   "devDependencies": {
+    "jasmine": "^3.5.0",
     "nodemon": "^2.0.2"
   },
   "nodemonConfig": {
