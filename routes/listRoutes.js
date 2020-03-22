@@ -1,8 +1,11 @@
 const express = require('express');
 const debug = require('debug')('listRoutes')
 const chalk = require('chalk');
+const path = require('path');
+
 const router = express.Router();
 
+//users home list page
 router.get('/:userId', (req, res) => {
     const userId = req.params.userId;
     debug(`lists for user ${chalk.magenta(userId)}`);
@@ -13,10 +16,20 @@ router.get('/:userId', (req, res) => {
     }
 });
 
+//send page to build new list
 router.get('/create/:userId/', (req, res) => {
-    debug('create');
-    res.render('createList', {title: 'create new list', heading: 'Create your new list'});
+    debug('create new list');
+    const userId = req.params.userId;
+    res.render('createList', {title: 'create new list', heading: 'Create your new list', userId: userId});
 });
+
+router.post('/create/:userId/', (req, res) => {
+    debug('post new list');
+    const userId = req.params.userId;
+    //save list to list store
+    debug(req.body.listname);
+    res.redirect(path.join('/lists', userId));
+})
 
 router.get('show/:userId/:listId', (req, res) => {
     const listId = req.params.listId;
