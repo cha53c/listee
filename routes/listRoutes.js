@@ -6,7 +6,7 @@ const path = require('path');
 const router = express.Router();
 
 //users home list page
-router.get('/:userId', (req, res) => {
+router.get('/:id', (req, res) => {
     const userId = req.params.userId;
     debug(`lists for user ${chalk.magenta(userId)}`);
     if(req.params.userId == 1) { //simulate logged in
@@ -17,13 +17,13 @@ router.get('/:userId', (req, res) => {
 });
 
 //send page to build new list
-router.get('/create/:userId/', (req, res) => {
+router.get('/create/:id/', (req, res) => {
     debug('create new list');
     const userId = req.params.userId;
     res.render('createList', {title: 'create new list', heading: 'Create your new list', userId: userId});
 });
 
-router.post('/create/:userId/', (req, res) => {
+router.post('/create/:id/', (req, res) => {
     debug('post new list');
     const userId = req.params.userId;
     //save list to list store
@@ -31,7 +31,7 @@ router.post('/create/:userId/', (req, res) => {
     res.redirect(path.join('/lists', userId));
 })
 
-router.get('show/:userId/:listId', (req, res) => {
+router.get('show/:id/:listId', (req, res) => {
     const listId = req.params.listId;
     debug(`show list: ${chalk.magenta(listId)}`);
     res.render('show', { listId: req.params.listId});

@@ -1,4 +1,7 @@
-// stores a list of all users lists by userId
+const debug = require ('debug')('app:listStore');
+const chalk = require ('chalk');
+
+// stores a list of all users lists by id
 const listStore = new Map();
 
 UserList = {
@@ -6,13 +9,14 @@ UserList = {
     lists: undefined
 }
 
-function addListsForUser(userId) {
+function createListStoreForUser(userId) {
     let usersLists = Object.create(UserList);
     usersLists.id = userId;
     usersLists.lists = new Map();
-    console.log('Created list store for : ' + userId);
+    debug(`created list store for ${chalk.green(userId)}`);
     listStore.set(userId, usersLists);
-    console.log('added new users lists store to the list store')
+    debug('added new users lists store to the list store');
+    return usersLists;
 }
 
 function getListsByUser(userId) {
@@ -27,5 +31,9 @@ function hasListsforUser(userId){
     return listStore.has(userId);
 }
 
+function emptyStore(){
+    listStore.clear();
+}
 
-module.exports = {addListsForUser, getListsByUser, listStoreSize, hasListsforUser}
+
+module.exports = { createListStoreForUser , getListsByUser, listStoreSize, hasListsforUser, emptyStore}
