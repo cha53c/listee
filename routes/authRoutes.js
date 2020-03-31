@@ -10,8 +10,8 @@ const router = express.Router();
         debug('sign up user');
         userStore.addUser(req.body.username);
         debug(req.body);
-        // res.render('auth');
-        res.json(req.body);
+        res.render('auth');
+        // res.json(req.body);
     });
 
     router.get('/', (req, res) => {
@@ -24,10 +24,13 @@ const router = express.Router();
         debug(`attempting to log in user ${user}`);
         debug(req.body);
         if(userStore.isUser(user)) {
-            debug('redirecting to list')
+        // if(true) {
+            debug('redirecting to list/1')
             res.redirect('/lists/1')
+        } else {
+            debug('user not found')
+            res.redirect('/');
         }
-        debug('user not found')
     });
 
 module.exports = router;

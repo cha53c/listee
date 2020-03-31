@@ -10,7 +10,7 @@
     <button type="button" id="add" value="Add Item">Add item</button><br>
 <ul id="list">
 </ul>
-<form action="/lists/create/<%= userId %>" method="post" enctype="application/x-www-form-urlencoded">
+<form action="/lists/<%= userId %>/create/" method="post" enctype="application/x-www-form-urlencoded">
     <label>list name</label>
     <input name="listname" type="text" placeholder="list name">
     <button type="submit">Submit list</button>

@@ -20,7 +20,7 @@ const userStore = (function ()
         debug(user);
         debug(`checking user exists`);
         debug('users ' + users);
-        return users.includes(user);
+        return users.includes('1');
     }
 
     return {
