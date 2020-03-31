@@ -43,5 +43,11 @@ function updateList(userId, listname, items) {
     debug(`list after update: ${JSON.stringify(list)}`);
 }
 
-
-module.exports = {addList, getList, updateList, removeList}
+function getAllLists(userId){
+    const usersListStore = listStore.getListsByUser(userId);
+    if(usersListStore){
+        return usersListStore.lists;
+    }
+    return undefined;
+}
+module.exports = {addList, getList, updateList, removeList, getAllLists}

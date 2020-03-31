@@ -2,10 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title><%=title%></title>
+    <title><%= title %></title>
 </head>
 <body>
- <h1><%=heading %></h1>
- <button onclick="window.location.href = '/lists/1/create';">Create List</button>
+<h1><%= heading %></h1>
+<button onclick="window.location.href = '/lists/1/create';">Create List</button>
+
+<h2>You have <%= listCount %> lists </h2>
+<% if (listCount > 0) { %>
+    <p><%= lists.next().value %></p>
+<% } %>
 </body>
 </html>
