@@ -13,14 +13,12 @@ router.get('/:userId', (req, res) => {
     debug(`user ${chalk.magenta(userId)} attempting to access their list page`);
     if(req.params.userId == 1) { //simulate logged in
         debug(`access ok for user ${chalk.magenta(userId)}`);
-        // TODO get users lists
         const lists = getAllLists(userId);
         const listCount = lists == undefined ? 0 : lists.size;
-        // TODO just pass list names
-        const listnames = lists &&   lists.keys();
+        const listnames = lists == undefined ? "" : lists.keys(); // pass empty iterable if undefined
         debug('list name: ' + listnames);
         res.render('lists', {title: 'your lists', heading: 'Listee keeps all your lists here',
-            listCount: listCount, lists: listnames});
+            listCount: listCount, listnames: listnames});
     }
     else {
         debug('user access not authorised');

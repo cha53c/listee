@@ -9,8 +9,10 @@
 <button onclick="window.location.href = '/lists/1/create';">Create List</button>
 
 <h2>You have <%= listCount %> lists </h2>
-<% if (listCount > 0) { %>
-    <p><%= lists.next().value %></p>
+<%# if (listCount>0) {%>
+<% for (const name of listnames) { %>
+<p><%= name  %></p>
 <% } %>
+<%#}%>
 </body>
 </html>
