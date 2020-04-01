@@ -5,13 +5,12 @@
     <title>Title</title>
 </head>
 <body>
-<h1>List name: <%=listId %></h1>
+<h1>List name: <%= listId %></h1>
 
-<ul>
-    <% for(let i = 0; i<=10; i++) {%>
-      <li><%=listId + i %></li>
-    <%}%>
-</ul>
+<h2>Items </h2>
+<% for (const item of items) { %>
+    <p><%= item %></p>
+<% } %>
 
 </body>
 </html>

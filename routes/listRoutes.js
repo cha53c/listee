@@ -3,7 +3,7 @@ const debug = require('debug')('app:listRoutes');
 const chalk = require('chalk');
 const path = require('path');
 
-const {getAllLists, addList } = require('../model/list');
+const {getAllLists, addList, getList } = require('../model/list');
 
 const router = express.Router();
 
@@ -35,19 +35,23 @@ router.get('/:userId/create/', (req, res) => {
 
 router.post('/:userId/create/', (req, res) => {
     debug('post new list');
+    debug(req.body);
     const userId = req.params.userId;
-    // TODO save list to list store
-    addList(userId, req.body.listname);
+    const listName = req.body.listname;
+    const items = req.body.items;
+    addList(userId, listName, items);
     debug(req.body.listname);
-    res.render('show', {listId: '1'}); //TODO will eventually go back to main lists page
-    // res.redirect(path.join('/lists', userId));
+    res.redirect(path.join('/lists', userId));
 })
 
 router.get('/:userId/show/:listId/', (req, res) => {
+    const userId = req.params.userId;
     const listId = req.params.listId;
     debug(`show list: ${chalk.magenta(listId)}`);
-    // TODO render list from list store
-    res.render('show', { listId: req.params.listId});
+    const list = getList(userId, listId);
+    const items = "";//list == undefined ? "" : list.items;
+    debug('items: ' + list.items);
+    res.render('show', { listId: listId, items: items});
 })
 
 module.exports = router;
