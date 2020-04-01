@@ -49,7 +49,7 @@ router.get('/:userId/show/:listId/', (req, res) => {
     const listId = req.params.listId;
     debug(`show list: ${chalk.magenta(listId)}`);
     const list = getList(userId, listId);
-    const items = "";//list == undefined ? "" : list.items;
+    const items = list == undefined ? "" : list.items;
     debug('items: ' + list.items);
     res.render('show', { listId: listId, items: items});
 })
