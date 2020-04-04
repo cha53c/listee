@@ -1,6 +1,4 @@
 const debug = require('debug')('app:list');
-const chalk = require('chalk');
-const { yellow } = require('chalk');
 
 const listStore = require('../model/listStore');
 const { isDefCol } = require('../utils/chalkbox');
@@ -17,7 +15,7 @@ function addList(userId, listname, items) {
     list.items = items;
 
     if (!listStore.hasListsforUser(userId)) {
-        debug(`creating a new list store for user: ${chalk.yellow(userId)}`);
+        debug(`creating a new list store for user: ${isDefCol(userId)}`);
         usersLists = listStore.createListStoreForUser(userId);
         usersLists.lists.set(list.id, list);
     } else {
@@ -27,7 +25,7 @@ function addList(userId, listname, items) {
 }
 
 function getList(userId, listname) {
-    debug(`get list: ${isDefCol(listname)} for user: ${yellow(userId)}`);
+    debug(`get list: ${isDefCol(listname)} for user: ${isDefCol(userId)}`);
     const userListStore = listStore.getListsByUser(userId);
     return  userListStore && userListStore.lists.get(listname);
 }
@@ -38,7 +36,7 @@ function removeList(userId, listname) {
 }
 
 function updateList(userId, listname, items) {
-    debug(`update list: ${chalk.yellow(listname)} for user: ${chalk.yellow(userId)}`);
+    debug(`update list: ${isDefCol(listname)} for user: ${isDefCol(userId)}`);
     const list = getList(userId, listname);
     debug(`list before update: ${JSON.stringify(list)}`);
     list.items = items;
