@@ -1,6 +1,9 @@
-const listStore = require('../model/listStore');
 const debug = require('debug')('app:list');
 const chalk = require('chalk');
+const { yellow } = require('chalk');
+
+const listStore = require('../model/listStore');
+const { isDefCol } = require('../utils/chalkbox');
 
 List = {
     id: undefined,
@@ -24,10 +27,9 @@ function addList(userId, listname, items) {
 }
 
 function getList(userId, listname) {
-    debug(`get list: ${chalk.yellow(listname)} for user: ${chalk.yellow(userId)}`);
-    const list = listStore.getListsByUser(userId).lists.get(listname);
-    debug(list);
-    return list;
+    debug(`get list: ${isDefCol(listname)} for user: ${yellow(userId)}`);
+    const userListStore = listStore.getListsByUser(userId);
+    return  userListStore && userListStore.lists.get(listname);
 }
 
 function removeList(userId, listname) {
@@ -43,11 +45,12 @@ function updateList(userId, listname, items) {
     debug(`list after update: ${JSON.stringify(list)}`);
 }
 
-function getAllLists(userId){
+function getAllLists(userId) {
     const usersListStore = listStore.getListsByUser(userId);
-    if(usersListStore){
+    if (usersListStore) {
         return usersListStore.lists;
     }
     return undefined;
 }
+
 module.exports = {addList, getList, updateList, removeList, getAllLists}

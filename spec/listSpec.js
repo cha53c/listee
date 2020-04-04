@@ -9,18 +9,25 @@ describe("a user", () => {
     beforeEach(() => {
         listStore.emptyStore();
     });
+
     describe('with no lists in the store it', () => {
-            it('should add a new list to the list store for that user', () => {
-                expect(listStore.hasListsforUser(usr1.id)).toBe(false);
-                addList(usr1.id, lst1.name, lst1.items);
-                expect(listStore.hasListsforUser(usr1.id)).toBe(true);
-            });
-        }
-    );
+        it('should return undefined from getList', () => {
+            expect(listStore.hasListsforUser(usr1.id)).toBe(false);
+            let list = getList(usr1.id, lst1.name);
+            expect(list).toBe(undefined);
+        });
+        it('should add a new list to the list store for that user', () => {
+            expect(listStore.hasListsforUser(usr1.id)).toBe(false);
+            addList(usr1.id, lst1.name, lst1.items);
+            expect(listStore.hasListsforUser(usr1.id)).toBe(true);
+        });
+    });
+
     describe('with an existing list', () => {
-        beforeEach(()=>{
+        beforeEach(() => {
             addList(usr1.id, lst1.name, lst1.items);
         });
+
         it('should find a list by the user and list name', () => {
             const list = getList(usr1.id, lst1.name);
             expect(list.id).toBe(lst1.name);
@@ -39,4 +46,5 @@ describe("a user", () => {
             pending();
         });
     });
-});
+})
+;

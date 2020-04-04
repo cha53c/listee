@@ -19,6 +19,7 @@ function createListStoreForUser(userId) {
     return usersLists;
 }
 
+// TODO rename to getUsersListStore
 function getListsByUser(userId) {
     return listStore.get(userId);
 }
