@@ -4,17 +4,18 @@ const chalk = require('chalk');
 const path = require('path');
 
 const {getAllLists, addList, getList} = require('../model/list');
+const { isDefCol } = require('../utils/chalkbox');
 
 const router = express.Router();
 
-let userId, listId;
+let userId, listId, listName, list, items;
 
 //users lists home page
 router.get('/:userId', (req, res) => {
-    const userId = req.params.userId;
-    debug(`user ${chalk.magenta(userId)} attempting to access their list page`);
+    unpackParams(req);
+    debug(`user ${isDefCol(userId)} attempting to access their list page`);
     if (req.params.userId == 1) { //simulate logged in
-        debug(`access ok for user ${chalk.magenta(userId)}`);
+        debug(`access ok for user ${isDefCol(userId)}`);
         const lists = getAllLists(userId);
         const listCount = lists == undefined ? 0 : lists.size;
         const listnames = lists == undefined ? "" : lists.keys(); // pass empty iterable if undefined
@@ -32,7 +33,7 @@ router.get('/:userId', (req, res) => {
 //new list page
 router.get('/:userId/create/', (req, res) => {
     debug('create new list');
-    const userId = req.params.userId;
+    unpackParams(req);
     res.render('createList', {title: 'create new list', heading: 'Create your new list', userId: userId});
 });
 
@@ -40,19 +41,17 @@ router.get('/:userId/create/', (req, res) => {
 router.post('/:userId/create/', (req, res) => {
     debug('post new list');
     debug(req.body);
-    const userId = req.params.userId;
-    const listName = req.body.listname;
-    const items = req.body.items;
+    unpackParams(req);
+    unpackBody(req);
     addList(userId, listName, items);
-    debug(req.body.listname);
+    debug(listName);
     res.redirect(path.join('/lists', userId));
 })
 
 // show list
 router.get('/:userId/show/:listId/', (req, res) => {
-    const userId = req.params.userId;
-    const listId = req.params.listId;
-    debug(`show list: ${chalk.magenta(listId)}`);
+    unpackParams(req);
+    debug(`show list: ${isDefCol(listId)}`);
     const list = getList(userId, listId);
     const items = list == undefined ? "" : list.items;
     debug('items: ' + items);
@@ -62,7 +61,7 @@ router.get('/:userId/show/:listId/', (req, res) => {
 // edit list
 router.get('/:userId/edit/:listId', (req, res) => {
     unpackParams(req);
-    debug(`edit list: ${chalk.magenta(listId)}`);
+    debug(`edit list: ${isDefCol(listId)}`);
     // TODO DRY this up - same as show
     const list = getList(userId, listId);
     const items = list == undefined ? "" : list.items;
@@ -74,9 +73,14 @@ router.get('/:userId/edit/:listId', (req, res) => {
 function unpackParams(req) {
     userId = req.params.userId;
     listId = req.params.listId;
-    debug(`userId: ${userId} listId: ${listId}`);
+    debug(`userId: ${isDefCol(userId)} listId: ${isDefCol(listId)})`);
 }
 
+function unpackBody(req){
+    listName = req.body.listname;
+    items = req.body.items;
+    debug(`listname: ${isDefCol(listName)} items: ${isDefCol(items)}`)
+}
 
 module.exports = router;
 
