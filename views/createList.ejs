@@ -23,8 +23,14 @@
     <!--    TODO move to a separate file -->
     let items = [];
     document.getElementById('add').onclick = function addItem() {
-        console.log('adding an item');
+        // TODO add prevent adding an empty item
+
         let item = document.getElementById('word').value;
+        if (item === '') {
+            console.log('item is empty');
+            return;
+        }
+        console.log('adding an item');
         console.log(item);
         items.push(item);
         addListItem(item);
@@ -35,15 +41,25 @@
     function addListItem(item) {
         let node = document.createElement('DIV');
         node.setAttribute('id', 'item');
+        node.setAttribute('class', 'listItem');
         let textNode = document.createTextNode(item)
         node.appendChild(textNode);
         document.getElementById('list_items').appendChild(node);
+        appendRemoveButton(node);
+    }
+
+    function appendRemoveButton(itemNode) {
+        let button = document.createElement('BUTTON');
+        button.setAttribute('class', 'removebtn');
+        let textNode = document.createTextNode('remove')
+        button.appendChild(textNode);
+        itemNode.appendChild(button);
     }
 
     const xhr = new XMLHttpRequest();
     document.getElementById('submit').onclick = function submitList() {
         let listname = document.getElementById('listname').value;
-        if (listname == '') {
+        if (listname === '') {
             console.log('list name is empty');
             alert('add a list name to create your list');
         }
@@ -60,6 +76,7 @@
         setAddItemfocus();
         const item = document.getElementById("word");
         const listname = document.getElementById('listname');
+
         // Execute a function when the user releases a key on the keyboard
         item.addEventListener("keyup", function (event) {
             // Number 13 is the "Enter" key on the keyboard
