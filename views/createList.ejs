@@ -8,11 +8,11 @@
 <h1><%= heading %></h1>
 <label>list name</label>
 <input id="listname" name="listname" type="text" placeholder="list name">
-<button type="button" id="submit" value="Add Item">submit without form</button>
+<button type="button" id="submit" value="Add Item">Create list</button>
 <br>
 <h2>List Items</h2>
 <div id="list_items"></div>
-<input type="text" id="word" placeholder="add an item" oninput="doSomthingOnInput()">
+<input type="text" id="word" placeholder="add an item">
 <button type="button" id="add" value="Add Item">Add item</button>
 <br>
 <ul id="list">
@@ -20,7 +20,7 @@
 
 
 <script>
-
+    <!--    TODO move to a separate file -->
     let items = [];
     document.getElementById('add').onclick = function addItem() {
         console.log('adding an item');
@@ -42,22 +42,26 @@
 
     const xhr = new XMLHttpRequest();
     document.getElementById('submit').onclick = function submitList() {
-        xhr.open("POST", '/lists/<%= userId %>/create/', true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
         let listname = document.getElementById('listname').value;
+        if (listname == '') {
+            console.log('list name is empty');
+            alert('add a list name to create your list');
+        }
         let list = {
             listname: listname,
             items: items
         }
+        xhr.open("POST", '/lists/<%= userId %>/create/', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify(list));
     }
 
     window.onload = function () {
         setAddItemfocus();
-        const input = document.getElementById("word");
-
+        const item = document.getElementById("word");
+        const listname = document.getElementById('listname');
         // Execute a function when the user releases a key on the keyboard
-        input.addEventListener("keyup", function (event) {
+        item.addEventListener("keyup", function (event) {
             // Number 13 is the "Enter" key on the keyboard
             if (event.keyCode === 13) {
                 // Cancel the default action, if needed
@@ -67,13 +71,17 @@
                 document.getElementById('add').click();
             }
         });
-
+        listname.addEventListener("keyup", function (event) {
+            // Number 13 is the "Enter" key on the keyboard
+            if (event.keyCode === 13) {
+                // Cancel the default action, if needed
+                event.preventDefault();
+                // Trigger the button element with a click
+                console.log('you hit enter');
+                document.getElementById('submit').click();
+            }
+        })
     };
-
-    function doSomthingOnInput() {
-        console.log('inputting text');
-        // document.getElementById("add").focus();
-    }
 
     function setAddItemfocus() {
         document.getElementById("word").focus();
