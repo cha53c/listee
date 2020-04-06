@@ -76,6 +76,10 @@
     }
 
     const xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+        window.location = this.responseURL;
+    };
+    
     document.getElementById('submit').onclick = function submitList() {
         let listname = document.getElementById('listname').value;
         if (listname === '') {
@@ -88,6 +92,7 @@
             listname: listname,
             items: Array.from(items.values())
         }
+
         xhr.open("POST", '/lists/<%= userId %>/create/', true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify(list));
