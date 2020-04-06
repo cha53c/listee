@@ -70,7 +70,7 @@
     function removeItem(itemId) {
         let element = document.getElementById(itemId);
         console.log(element);
-        console.log('removing ' + items.get(element.id) + ' and element id ' + element.id );
+        console.log('removing ' + items.get(element.id) + ' and element id ' + element.id);
         element.parentNode.removeChild(element);
         items.delete(element.id);
     }
@@ -82,9 +82,11 @@
             console.log('list name is empty');
             alert('add a list name to create your list');
         }
+        console.log(Array.from(items.values()));
+
         let list = {
             listname: listname,
-            items: items.values()
+            items: Array.from(items.values())
         }
         xhr.open("POST", '/lists/<%= userId %>/create/', true);
         xhr.setRequestHeader('Content-Type', 'application/json');
