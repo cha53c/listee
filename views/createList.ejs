@@ -21,7 +21,10 @@
 
 <script>
     <!--    TODO move to a separate file -->
-    let items = [];
+    let items = new Map();
+    let itemNum = 0;
+
+
     document.getElementById('add').onclick = function addItem() {
         // TODO add prevent adding an empty item
 
@@ -32,15 +35,16 @@
         }
         console.log('adding an item');
         console.log(item);
-        items.push(item);
-        addListItem(item);
-        document.getElementById('word').value = '';
+        let key = 'item' + itemNum++;
+        items.set(key, item);
+        appendListItem(item, key);
+        document.getElementById('word').value = ''; // reset input text
         setAddItemfocus();
     }
 
-    function addListItem(item) {
+    function appendListItem(item, id) {
         let node = document.createElement('DIV');
-        node.setAttribute('id', 'item');
+        node.setAttribute('id', id);
         node.setAttribute('class', 'listItem');
         let textNode = document.createTextNode(item)
         node.appendChild(textNode);
@@ -50,10 +54,25 @@
 
     function appendRemoveButton(itemNode) {
         let button = document.createElement('BUTTON');
-        button.setAttribute('class', 'removebtn');
+        button.setAttribute('class', 'remove-btn');
+        button.setAttribute('data-itemId', itemNode.id);
         let textNode = document.createTextNode('remove')
         button.appendChild(textNode);
         itemNode.appendChild(button);
+        button.addEventListener('click', function (event) {
+            console.log('you clicked remove');
+            console.log(event);
+            let itemId = event.target.getAttribute('data-itemId');
+            removeItem(itemId);
+        });
+    }
+
+    function removeItem(itemId) {
+        let element = document.getElementById(itemId);
+        console.log(element);
+        console.log('removing ' + items.get(element.id) + ' and element id ' + element.id );
+        element.parentNode.removeChild(element);
+        items.delete(element.id);
     }
 
     const xhr = new XMLHttpRequest();
@@ -65,7 +84,7 @@
         }
         let list = {
             listname: listname,
-            items: items
+            items: items.values()
         }
         xhr.open("POST", '/lists/<%= userId %>/create/', true);
         xhr.setRequestHeader('Content-Type', 'application/json');
@@ -76,6 +95,7 @@
         setAddItemfocus();
         const item = document.getElementById("word");
         const listname = document.getElementById('listname');
+        const removeBtns = document.getElementsByClassName('remove-btn');
 
         // Execute a function when the user releases a key on the keyboard
         item.addEventListener("keyup", function (event) {
