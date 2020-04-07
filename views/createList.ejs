@@ -20,13 +20,11 @@
 
 
 <script>
-    <!--    TODO move to a separate file -->
+    <!--    TODO move JS to a separate file -->
     let items = new Map();
     let itemNum = 0;
 
-
     document.getElementById('add').onclick = function addItem() {
-        // TODO add prevent adding an empty item
 
         let item = document.getElementById('word').value;
         if (item === '') {
@@ -79,12 +77,17 @@
     xhr.onload = function () {
         window.location = this.responseURL;
     };
-    
+
     document.getElementById('submit').onclick = function submitList() {
         let listname = document.getElementById('listname').value;
         if (listname === '') {
             console.log('list name is empty');
             alert('add a list name to create your list');
+            return;
+        }
+        if (items.size == 0) {
+            alert('your list is empty add some items');
+            return;
         }
         console.log(Array.from(items.values()));
 
