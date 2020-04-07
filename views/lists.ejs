@@ -10,7 +10,7 @@
 
 <h2>You have <%= listCount %> lists </h2>
 <% for (const name of listnames) { %>
-<p><%= name  %></p>
+    <a href="/lists/<%= userId %>/show/<%= name %>"><%= name %></a>
 <% } %>
 </body>
 </html>

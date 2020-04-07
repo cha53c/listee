@@ -22,7 +22,7 @@ router.get('/:userId', (req, res) => {
         debug('list name: ' + listnames);
         res.render('lists', {
             title: 'your lists', heading: 'Listee keeps all your lists here',
-            listCount: listCount, listnames: listnames
+            listCount: listCount, listnames: listnames, userId: userId
         });
     } else {
         debug('user access not authorised');
