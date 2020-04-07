@@ -1,7 +1,7 @@
 const debug = require('debug')('app:list');
 
 const listStore = require('../model/listStore');
-const { isDefCol } = require('../utils/chalkbox');
+const {isDefCol} = require('../utils/chalkbox');
 
 List = {
     id: undefined,
@@ -27,7 +27,7 @@ function addList(userId, listname, items) {
 function getList(userId, listname) {
     debug(`get list: ${isDefCol(listname)} for user: ${isDefCol(userId)}`);
     const userListStore = listStore.getListsByUser(userId);
-    return  userListStore && userListStore.lists.get(listname);
+    return userListStore && userListStore.lists.get(listname);
 }
 
 function removeList(userId, listname) {
@@ -51,4 +51,9 @@ function getAllLists(userId) {
     return undefined;
 }
 
-module.exports = {addList, getList, updateList, removeList, getAllLists}
+function getListNames(userId) {
+    const lists = getAllLists(userId);
+    return lists == undefined ? "" : Array.from(lists.keys()); // pass empty iterable if undefined
+}
+
+module.exports = {addList, getList, updateList, removeList, getAllLists, getListNames}

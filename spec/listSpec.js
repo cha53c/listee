@@ -1,4 +1,4 @@
-const {addList, updateList, removeList, getList} = require('../model/list');
+const {addList, updateList, removeList, getList, getListNames } = require('../model/list');
 const listStore = require('../model/listStore');
 
 describe("a user", () => {
@@ -21,6 +21,10 @@ describe("a user", () => {
             addList(usr1.id, lst1.name, lst1.items);
             expect(listStore.hasListsforUser(usr1.id)).toBe(true);
         });
+        it('should return an empty string from getAllListNames', ()=>{
+            const listnames = getListNames(usr1.id);
+            expect(listnames).toEqual("");
+        })
     });
 
     describe('with an existing list', () => {
@@ -41,6 +45,10 @@ describe("a user", () => {
         it('should remove a list users list store', () => {
             removeList(usr1.id, lst1.name);
             expect(getList(usr1.id, lst1)).toBe(undefined);
+        });
+        it('should get all list names', ()=>{
+            const listnames = getListNames(usr1.id);
+            expect(listnames).toEqual([ 'list 1']);
         });
         it('should get all lists for a user', () => {
             pending();

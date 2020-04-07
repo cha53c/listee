@@ -3,7 +3,7 @@ const debug = require('debug')('app:listRoutes');
 const chalk = require('chalk');
 const path = require('path');
 
-const {getAllLists, addList, getList} = require('../model/list');
+const {getAllLists, getListNames, addList, getList} = require('../model/list');
 const { isDefCol } = require('../utils/chalkbox');
 
 const router = express.Router();
@@ -16,9 +16,11 @@ router.get('/:userId', (req, res) => {
     debug(`user ${isDefCol(userId)} attempting to access their list page`);
     if (req.params.userId == 1) { //simulate logged in
         debug(`access ok for user ${isDefCol(userId)}`);
-        const lists = getAllLists(userId);
-        const listCount = lists == undefined ? 0 : lists.size;
-        const listnames = lists == undefined ? "" : lists.keys(); // pass empty iterable if undefined
+        // const lists = getAllLists(userId);
+        // const listCount = lists == undefined ? 0 : lists.size;
+        // const listnames = lists == undefined ? "" : lists.keys(); // pass empty iterable if undefined
+        const listnames = getListNames(userId);
+        const listCount = listnames.size;
         debug('list name: ' + listnames);
         res.render('lists', {
             title: 'your lists', heading: 'Listee keeps all your lists here',
@@ -34,7 +36,9 @@ router.get('/:userId', (req, res) => {
 router.get('/:userId/create/', (req, res) => {
     debug('create new list');
     unpackParams(req);
-    res.render('createList', {title: 'create new list', heading: 'Create your new list', userId: userId});
+    // const lists = getAllLists(userId);
+    const listnames = getListNames(userId);
+    res.render('createList', {title: 'create new list', heading: 'Create your new list', userId: userId, listnames: listnames});
 });
 
 // creat new list page
@@ -68,7 +72,6 @@ router.get('/:userId/edit/:listId', (req, res) => {
     debug('items: ' + items);
     res.render('edit', {listId: listId, items: items});
 })
-
 
 function unpackParams(req) {
     userId = req.params.userId;
