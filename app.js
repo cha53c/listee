@@ -20,7 +20,7 @@ app.use('/', home);
 app.use('/lists', lists);
 app.use('/auth', auth);
 
-app.set('views', './views');
+app.set('views', ['./views', 'views/list'] );
 app.set('view engine', 'ejs');
 
 app.listen(3000, () => {
