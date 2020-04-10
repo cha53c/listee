@@ -7,11 +7,16 @@
         form.remove-list {
             display: inline-block;
         }
+        form.remove-list.hide {
+            display: none;
+        }
+
     </style>
 </head>
 <body>
 <h1><%= heading %></h1>
 <button onclick="window.location.href = '/lists/<%= userId %>/create';">Create List</button>
+<button onclick="toggleEdit()">edit</button>
 
 <h2>You have <%= listCount %> lists </h2>
 <!-- TODO can you be changed to reuse for list items as well? -->
@@ -21,4 +26,12 @@
    <p></p>
 <% } %>
 </body>
+<script>
+    function toggleEdit() {
+      const elements = document.getElementsByClassName('remove-list');
+      for (const el of elements){
+          el.classList.toggle('hide');
+      }
+    }
+</script>
 </html>
