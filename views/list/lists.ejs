@@ -22,7 +22,8 @@
 <!-- TODO can you be changed to reuse for list items as well? -->
 <% for (const name of listnames) { %>
         <a href="/lists/<%= userId %>/show/<%= name %>"><%= name %></a>
-        <%- include('list/removeList', {userId: userId, name: name }); %>
+        <%- include('list/editButtons', {userId: userId, listname: name, operation: 'edit', method: 'get', label: 'edit list'}); %>
+        <%- include('list/editButtons', {userId: userId, listname: name, operation: 'delete', method: 'post', label: 'delete list'}); %>
    <p></p>
 <% } %>
 </body>
