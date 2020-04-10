@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title><%= title %></title>
+    <style>
+        form.remove-list {
+            display: inline-block;
+        }
+    </style>
 </head>
 <body>
 <h1><%= heading %></h1>
@@ -10,7 +15,14 @@
 
 <h2>You have <%= listCount %> lists </h2>
 <% for (const name of listnames) { %>
-    <p><a href="/lists/<%= userId %>/show/<%= name %>"><%= name %></a></p>
+        <a href="/lists/<%= userId %>/show/<%= name %>"><%= name %></a>
+    <form class="remove-list">
+        <button type="submit" formaction="/lists/<%= userId %>/delete/<%= name %>"
+                formmethod="post">X
+        </button>
+    </form><p></p>
+</body>
+</body>
 <% } %>
 </body>
 </html>
