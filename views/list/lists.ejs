@@ -14,15 +14,11 @@
 <button onclick="window.location.href = '/lists/<%= userId %>/create';">Create List</button>
 
 <h2>You have <%= listCount %> lists </h2>
+<!-- TODO can you be changed to reuse for list items as well? -->
 <% for (const name of listnames) { %>
         <a href="/lists/<%= userId %>/show/<%= name %>"><%= name %></a>
-    <form class="remove-list">
-        <button type="submit" formaction="/lists/<%= userId %>/delete/<%= name %>"
-                formmethod="post">X
-        </button>
-    </form><p></p>
-</body>
-</body>
+        <%- include('list/removeList', {userId: userId, name: name }); %>
+   <p></p>
 <% } %>
 </body>
 </html>
