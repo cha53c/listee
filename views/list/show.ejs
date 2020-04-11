@@ -7,6 +7,14 @@
         .hide {
             display: none;
         }
+
+        .strike-through {
+            text-decoration: line-through;
+            color: red;
+        }
+        div.item {
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
@@ -14,8 +22,15 @@
 <button onclick="edit()" class="update-page">edit</button>
 <button onclick="save()" class="update-page hide">save</button>
 <h2>Items </h2>
+<% let id = 0; %>
 <% for (const item of items) { %>
-    <p><%= item %></p>
+    <p class="list-row">
+    <div class='item' id="<%= id %>"><%= item %></div>
+    <button id="del<%= id %>" class="remove-btn hide" type="button" data-itemId="<%= id %>" onclick="delete_item(event)">X</button>
+    <button id="undo<%= id %>" class="undo-btn hide" type="button" data-itemId="<%= id %>" onclick="undo(event)">undo
+    </button>
+    </p>
+    <% id++ %>
 <% } %>
 <script>
     function edit() {
@@ -25,10 +40,34 @@
     function save() {
         toggle_edit_save();
     }
+
+    function delete_item(event) {
+        console.log('you clicked delete item');
+        console.log(event);
+        let itemId = event.target.getAttribute('data-itemId');
+        let element = document.getElementById(itemId);
+        element.classList.toggle('strike-through');
+        let undoButton = document.getElementById('undo' + itemId);
+        undoButton.classList.toggle('hide');
+        event.target.classList.toggle('hide');
+    }
+    function undo(event) {
+        console.log('you clicked undo');
+        console.log(event);
+        let itemId = event.target.getAttribute('data-itemId');
+        let element = document.getElementById(itemId);
+        element.classList.toggle('strike-through');
+        let delButton = document.getElementById('del' + itemId);
+        delButton.classList.toggle('hide');
+        event.target.classList.toggle('hide');
+    }
 </script>
 <script>
     function toggle_edit_save() {
-        const elements = document.getElementsByClassName('update-page');
+        let htmlCollection = document.getElementsByClassName('update-page');
+        let elements = Array.from(htmlCollection);
+        htmlCollection = document.getElementsByClassName('remove-btn');
+        elements = elements.concat(Array.from(htmlCollection));
         for (const el of elements) {
             el.classList.toggle('hide');
         }
