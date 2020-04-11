@@ -3,7 +3,7 @@ const debug = require('debug')('app:listRoutes');
 const chalk = require('chalk');
 const path = require('path');
 
-const {getAllLists, getListNames, addList, getList} = require('../model/list');
+const {getAllLists, getListNames, addList, getList, removeList} = require('../model/list');
 const { isDefCol } = require('../utils/chalkbox');
 
 const router = express.Router();
@@ -20,7 +20,7 @@ router.get('/:userId', (req, res) => {
         // const listCount = lists == undefined ? 0 : lists.size;
         // const listnames = lists == undefined ? "" : lists.keys(); // pass empty iterable if undefined
         const listnames = getListNames(userId);
-        const listCount = listnames.size;
+        const listCount = listnames.length;
         debug('list name: ' + listnames);
         res.render('lists', {
             title: 'your lists', heading: 'Listee keeps all your lists here',
@@ -36,9 +36,8 @@ router.get('/:userId', (req, res) => {
 router.get('/:userId/create/', (req, res) => {
     debug('create new list');
     unpackParams(req);
-    // const lists = getAllLists(userId);
     const listnames = getListNames(userId);
-    res.render('createList', {title: 'create new list', heading: 'Create your new list', userId: userId, listnames: listnames});
+    res.render('add', {title: 'create new list', heading: 'Create your new list', userId: userId, listnames: listnames});
 });
 
 // creat new list page
@@ -71,6 +70,13 @@ router.get('/:userId/edit/:listId', (req, res) => {
     const items = list == undefined ? "" : list.items;
     debug('items: ' + items);
     res.render('edit', {listId: listId, items: items});
+})
+
+// delete list
+router.post('/:userId/delete/:listId/', (req, res) => {
+    unpackParams(req);
+    removeList(userId, listName);
+    res.redirect(path.join('/lists', userId));
 })
 
 function unpackParams(req) {
