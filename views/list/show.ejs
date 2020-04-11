@@ -8,11 +8,12 @@
             display: none;
         }
 
-        .strike-through {
+        .deleted {
             text-decoration: line-through;
             color: red;
         }
-        div.item {
+
+        div.list-item {
             display: inline-block;
         }
     </style>
@@ -24,12 +25,14 @@
 <h2>Items </h2>
 <% let id = 0; %>
 <% for (const item of items) { %>
-    <p class="list-row">
-    <div class='item' id="<%= id %>"><%= item %></div>
-    <button id="del<%= id %>" class="remove-btn hide" type="button" data-itemId="<%= id %>" onclick="delete_item(event)">X</button>
+    <div class="list-row">
+    <div class='list-item' id="<%= id %>"><%= item %></div>
+    <button id="del<%= id %>" class="remove-btn hide" type="button" data-itemId="<%= id %>"
+            onclick="delete_item(event)">X
+    </button>
     <button id="undo<%= id %>" class="undo-btn hide" type="button" data-itemId="<%= id %>" onclick="undo(event)">undo
     </button>
-    </p>
+    </div><br>
     <% id++ %>
 <% } %>
 <script>
@@ -38,25 +41,57 @@
     }
 
     function save() {
+        const xhr = new XMLHttpRequest();
+        // send the updated list
+        xhr.open("PATCH", '/lists/<%= userId %>/<%= listId %>', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        let items = [];
+        let elements = document.getElementsByClassName('list-item');
+        console.log(elements);
+        for (const el of elements) {
+            console.log(el.innerText);
+            if (!el.classList.contains('deleted')) {
+                items.push(el.innerText);
+            }
+        }
+        let list = {listname: "<%= listId %>", items: items};
+        console.log('list ' + list);
+        xhr.send(JSON.stringify(list));
         toggle_edit_save();
+        xhr.onload = function () {
+            // TODO need to check http status 500 still counts as successful
+            console.log('save was successful');
+            let elements = document.getElementsByClassName('deleted');
+            for (const el of elements) {
+                let parent = el.parentNode;
+                console.log('parent ' + parent.name);
+                parent.parentNode.removeChild(parent);
+            }
+            // remove deleted elements from the DOM
+        };
+        xhr.onerror = function () {
+            console.log('there was an error saving changes');
+        }
     }
+
 
     function delete_item(event) {
         console.log('you clicked delete item');
         console.log(event);
         let itemId = event.target.getAttribute('data-itemId');
         let element = document.getElementById(itemId);
-        element.classList.toggle('strike-through');
+        element.classList.toggle('deleted');
         let undoButton = document.getElementById('undo' + itemId);
         undoButton.classList.toggle('hide');
         event.target.classList.toggle('hide');
     }
+
     function undo(event) {
         console.log('you clicked undo');
         console.log(event);
         let itemId = event.target.getAttribute('data-itemId');
         let element = document.getElementById(itemId);
-        element.classList.toggle('strike-through');
+        element.classList.toggle('deleted');
         let delButton = document.getElementById('del' + itemId);
         delButton.classList.toggle('hide');
         event.target.classList.toggle('hide');

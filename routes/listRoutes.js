@@ -3,7 +3,7 @@ const debug = require('debug')('app:listRoutes');
 const chalk = require('chalk');
 const path = require('path');
 
-const {getAllLists, getListNames, addList, getList, removeList} = require('../model/list');
+const {getAllLists, getListNames, addList, getList, updateList, removeList} = require('../model/list');
 const { isDefCol } = require('../utils/chalkbox');
 
 const router = express.Router();
@@ -51,6 +51,7 @@ router.post('/:userId/create/', (req, res) => {
     res.redirect(path.join('/lists', userId));
 })
 
+// TODO remove actions params from url and use http methods instead
 // show list
 router.get('/:userId/show/:listId/', (req, res) => {
     unpackParams(req);
@@ -58,16 +59,18 @@ router.get('/:userId/show/:listId/', (req, res) => {
     const list = getList(userId, listId);
     const items = list == undefined ? "" : list.items;
     debug('items: ' + items);
-    res.render('show', {listId: listId, items: items});
+    res.render('show', {userId: userId, listId: listId, items: items});
 })
 
-// edit list
-router.get('/:userId/edit/:listId', (req, res) => {
+// update with edits from show
+router.patch('/:userId/:listId', (req, res) => {
+    debug(`body ${isDefCol(req.body)}`)
     unpackParams(req);
-    debug(`edit list: ${isDefCol(listId)}`);
+    unpackBody(req);
+    debug(`updating list: ${isDefCol(listId)}`);
     // TODO DRY this up - same as show
-    const list = getList(userId, listId);
-    const items = list == undefined ? "" : list.items;
+    const list = updateList(userId, listId, items);
+    // const items = list == undefined ? "" : list.items;
     debug('items: ' + items);
     res.render('edit', {listId: listId, items: items});
 })
