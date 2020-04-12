@@ -34,7 +34,7 @@ router.get('/:userId', (req, res) => {
 
 //new list page
 router.get('/:userId/create/', (req, res) => {
-    debug('create new list');
+    debug('create new list page');
     unpackParams(req);
     const listnames = getListNames(userId);
     res.render('add', {title: 'create new list', heading: 'Create your new list', userId: userId, listnames: listnames});
@@ -57,7 +57,7 @@ router.get('/:userId/:listId/', (req, res) => {
     unpackParams(req);
     debug(`show list: ${isDefCol(listId)}`);
     const list = getList(userId, listId);
-    const items = list == undefined ? "" : list.items;
+    const items = list === undefined ? "" : list.items;
     debug('items: ' + items);
     res.render('show', {userId: userId, listId: listId, items: items});
 })
@@ -85,13 +85,13 @@ router.post('/:userId/delete/:listId/', (req, res) => {
 function unpackParams(req) {
     userId = req.params.userId;
     listId = req.params.listId;
-    debug(`userId: ${isDefCol(userId)} listId: ${isDefCol(listId)})`);
+    debug(`from params userId: ${isDefCol(userId)} listId: ${isDefCol(listId)}`);
 }
 
 function unpackBody(req){
     listName = req.body.listname;
     items = req.body.items;
-    debug(`listname: ${isDefCol(listName)} items: ${isDefCol(items)}`)
+    debug(`from body listname: ${isDefCol(listName)} items: ${isDefCol(items)}`)
 }
 
 module.exports = router;

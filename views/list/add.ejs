@@ -22,8 +22,6 @@
 <%- include('list/listFunctions'); %>
 <script>
     <!--    TODO move JS to a separate file -->
-    // TODO use array instead of map
-    let items = new Map();
     let itemNum = 0;
     const namesString = "<%= listnames %>";
     let x = namesString.split(',');
@@ -37,7 +35,6 @@
         console.log('adding an item');
         console.log(item);
         let key = '' + itemNum++;
-        items.set(key, item);
         appendListItem(item, key);
         document.getElementById('item-input').value = ''; // reset input text
         setAddItemfocus();
@@ -75,7 +72,6 @@
     function removeItem(itemId) {
         let element = document.getElementById(itemId);
         removeListRow(element);
-        items.delete(element.id);
     }
 
     const xhr = new XMLHttpRequest();
@@ -90,10 +86,7 @@
             alert('add a list name to create your list');
             return;
         }
-        if (items.size == 0) {
-            alert('your list is empty add some items');
-            return;
-        }
+
         // TODO don't create if list name already exists
         console.log('listnames ' + x);
         console.log('listnames number ' + x.length);
@@ -104,12 +97,27 @@
                 return;
             }
         }
-        console.log(Array.from(items.values()));
 
+        let items = [];
+        // TODO can you dry this up using closures?
+        let elements = document.getElementsByClassName('list-item');
+        console.log(elements);
+        for (const el of elements) {
+            console.log(el.innerText);
+            items.push(el.innerText);
+        }
+        if (items.size == 0) {
+            alert('your list is empty add some items');
+            return;
+        }
+        // console.log(Array.from(items.values()));
+        console.log(items);
         let list = {
             listname: listname,
-            items: Array.from(items.values())
+            // items: Array.from(items.values())
+            items: items
         }
+
 
         xhr.open("POST", '/lists/<%= userId %>/create/', true);
         xhr.setRequestHeader('Content-Type', 'application/json');
