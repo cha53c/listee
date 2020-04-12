@@ -22,25 +22,35 @@
 <h1>List name: <%= listId %></h1>
 <button onclick="edit()" class="update-page">edit</button>
 <button onclick="save()" class="update-page hide">save</button>
-<h2>Items </h2>
-<% let id = 0; %>
-<% for (const item of items) { %>
-    <div class="list-row">
-    <div class='list-item' id="<%= id %>"><%= item %></div>
-    <button id="del<%= id %>" class="remove-btn hide" type="button" data-itemId="<%= id %>"
-            onclick="delete_item(event)">X
-    </button>
-    <button id="undo<%= id %>" class="undo-btn hide" type="button" data-itemId="<%= id %>" onclick="undo(event)">undo
-    </button>
-    </div><br>
-    <% id++ %>
-<% } %>
+<br>
+<a href="/lists/<%= userId %>">Back to my lists</a>
+<h2>List items</h2>
+<div class="list-items">
+    <%- include('list/addItem', { classStr: 'hide' }) %>
+    <% let id = 0; %>
+    <% for (const item of items) { %>
+        <div class="list-row">
+            <div class='list-item' id="<%= id %>"><%= item %></div>
+            <button id="del<%= id %>" class="remove-btn hide" type="button" data-itemId="<%= id %>"
+                    onclick="delete_item(event)">X
+            </button>
+            <button id="undo<%= id %>" class="undo-btn hide" type="button" data-itemId="<%= id %>"
+                    onclick="undo(event)">undo
+            </button>
+        </div><br>
+        <% id++ %>
+    <% } %>
+</div>
+<%- include('list/listFunctions'); %>
 <script>
     function edit() {
         toggle_edit_save();
+        toggle_add_item();
     }
 
     function save() {
+        toggle_edit_save();
+        toggle_add_item();
         const xhr = new XMLHttpRequest();
         // send the updated list
         xhr.open("PATCH", '/lists/<%= userId %>/<%= listId %>', true);
@@ -57,23 +67,19 @@
         let list = {listname: "<%= listId %>", items: items};
         console.log('list ' + list);
         xhr.send(JSON.stringify(list));
-        toggle_edit_save();
+
         xhr.onload = function () {
             // TODO need to check http status 500 still counts as successful
             console.log('save was successful');
             let elements = document.getElementsByClassName('deleted');
-            for (const el of elements) {
-                let parent = el.parentNode;
-                console.log('parent ' + parent.name);
-                parent.parentNode.removeChild(parent);
+            for (const item of elements) {
+                removeListRow(item);
             }
-            // remove deleted elements from the DOM
         };
         xhr.onerror = function () {
             console.log('there was an error saving changes');
         }
     }
-
 
     function delete_item(event) {
         console.log('you clicked delete item');
@@ -96,8 +102,18 @@
         delButton.classList.toggle('hide');
         event.target.classList.toggle('hide');
     }
+    // window.onload = function() {
+    //     // document.getElementById('item-input').classList.toggle('hide');
+    //     // document.getElementById('add').classList.toggle('hide');
+    //     toggle_add_item();
+    // }
+
 </script>
 <script>
+    function toggle_add_item() {
+        document.getElementById('item-input').classList.toggle('hide');
+        document.getElementById('add').classList.toggle('hide');
+    }
     function toggle_edit_save() {
         let htmlCollection = document.getElementsByClassName('update-page');
         let elements = Array.from(htmlCollection);

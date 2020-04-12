@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title><%= title %></title>
+    <style>
+        div.list-item {
+            display: inline-block;
+        }
+    </style>
 </head>
 <body>
 <h1><%= heading %></h1>
@@ -11,14 +16,10 @@
 <button type="button" id="submit" value="Add Item">Create list</button>
 <br>
 <h2>List Items</h2>
-<div id="list_items"></div>
-<input id="item-input" type="text" placeholder="add an item">
-<button id="add" type="button"  value="Add Item">Add item</button>
+<div id="list-items"></div>
+<%- include('list/addItem', { classStr: ''}) %>
 <br>
-<ul id="list">
-</ul>
-
-
+<%- include('list/listFunctions'); %>
 <script>
     <!--    TODO move JS to a separate file -->
     // TODO use array instead of map
@@ -35,7 +36,7 @@
         }
         console.log('adding an item');
         console.log(item);
-        let key = 'item' + itemNum++;
+        let key = '' + itemNum++;
         items.set(key, item);
         appendListItem(item, key);
         document.getElementById('item-input').value = ''; // reset input text
@@ -43,22 +44,25 @@
     }
 
     function appendListItem(item, id) {
-        let node = document.createElement('DIV');
-        node.setAttribute('id', id);
-        node.setAttribute('class', 'listItem');
+        let rowDiv = document.createElement('DIV')
+        rowDiv.setAttribute('class', 'list-row');
+        let itemDiv = document.createElement('DIV');
+        itemDiv.setAttribute('id', id);
+        itemDiv.setAttribute('class', 'list-item');
         let textNode = document.createTextNode(item)
-        node.appendChild(textNode);
-        document.getElementById('list_items').appendChild(node);
-        appendRemoveButton(node);
+        itemDiv.appendChild(textNode);
+        document.getElementById('list-items').appendChild(rowDiv);
+        rowDiv.appendChild(itemDiv)
+        appendRemoveButton(rowDiv, itemDiv.id);
     }
 
-    function appendRemoveButton(itemNode) {
+    function appendRemoveButton(parent, itemId) {
         let button = document.createElement('BUTTON');
         button.setAttribute('class', 'remove-btn');
-        button.setAttribute('data-itemId', itemNode.id);
+        button.setAttribute('data-itemId', itemId);
         let textNode = document.createTextNode('remove')
         button.appendChild(textNode);
-        itemNode.appendChild(button);
+        parent.appendChild(button);
         button.addEventListener('click', function (event) {
             console.log('you clicked remove');
             console.log(event);
@@ -67,11 +71,10 @@
         });
     }
 
+    //remove from Map and DOM
     function removeItem(itemId) {
         let element = document.getElementById(itemId);
-        console.log(element);
-        console.log('removing ' + items.get(element.id) + ' and element id ' + element.id);
-        element.parentNode.removeChild(element);
+        removeListRow(element);
         items.delete(element.id);
     }
 

@@ -53,7 +53,7 @@ router.post('/:userId/create/', (req, res) => {
 
 // TODO remove actions params from url and use http methods instead
 // show list
-router.get('/:userId/show/:listId/', (req, res) => {
+router.get('/:userId/:listId/', (req, res) => {
     unpackParams(req);
     debug(`show list: ${isDefCol(listId)}`);
     const list = getList(userId, listId);

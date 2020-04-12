@@ -15,14 +15,13 @@
 </head>
 <body>
 <h1><%= heading %></h1>
-<button onclick="window.location.href = '/lists/<%= userId %>/create';">Create List</button>
+<button onclick="window.location.href = '/lists/<%= userId %>/create';">Creat new list</button>
 <button onclick="toggleEdit()">edit</button>
 
 <h2>You have <%= listCount %> lists </h2>
 <!-- TODO can you be changed to reuse for list items as well? -->
 <% for (const name of listnames) { %>
-        <a href="/lists/<%= userId %>/show/<%= name %>"><%= name %></a>
-        <%- include('list/editButtons', {userId: userId, listname: name, operation: 'edit', method: 'get', label: 'edit list'}); %>
+        <a href="/lists/<%= userId %>/<%= name %>"><%= name %></a>
         <%- include('list/editButtons', {userId: userId, listname: name, operation: 'delete', method: 'post', label: 'delete list'}); %>
    <p></p>
 <% } %>
