@@ -25,17 +25,17 @@
 <br>
 <a href="/lists/<%= userId %>">Back to my lists</a>
 <h2>List items</h2>
-<div class="list-items">
+<div id="list-items">
     <%- include('list/addItem', { classStr: 'hide' }) %>
     <% let id = 0; %>
     <% for (const item of items) { %>
         <div class="list-row">
             <div class='list-item' id="<%= id %>"><%= item %></div>
             <button id="del<%= id %>" class="remove-btn hide" type="button" data-itemId="<%= id %>"
-                    onclick="delete_item(event)">X
+                    onclick="deleteAction(event)">remove
             </button>
             <button id="undo<%= id %>" class="undo-btn hide" type="button" data-itemId="<%= id %>"
-                    onclick="undo(event)">undo
+                    onclick="undoAction(event)">undo
             </button>
         </div><br>
         <% id++ %>
@@ -46,6 +46,7 @@
     function edit() {
         toggle_edit_save();
         toggle_add_item();
+        setAddItemfocus();
     }
 
     function save() {
@@ -81,7 +82,21 @@
         }
     }
 
-    function delete_item(event) {
+    document.getElementById('add').onclick = function addItem() {
+        let value = document.getElementById('item-input').value;
+        validateAddedItem(value);
+
+        console.log('adding an item');
+        console.log(value);
+        let id = 'a' + itemNum++;
+        let itemNode = appendListItem(value, id); //  TODO change to build own row
+        appendRemoveButton(itemNode, deleteAction);
+        appendUndoButton(itemNode, undoAction)
+        document.getElementById('item-input').value = ''; // reset input text
+        setAddItemfocus();
+    }
+
+    const deleteAction = function (event) {
         console.log('you clicked delete item');
         console.log(event);
         let itemId = event.target.getAttribute('data-itemId');
@@ -92,7 +107,7 @@
         event.target.classList.toggle('hide');
     }
 
-    function undo(event) {
+    const undoAction = function (event) {
         console.log('you clicked undo');
         console.log(event);
         let itemId = event.target.getAttribute('data-itemId');
@@ -102,11 +117,6 @@
         delButton.classList.toggle('hide');
         event.target.classList.toggle('hide');
     }
-    // window.onload = function() {
-    //     // document.getElementById('item-input').classList.toggle('hide');
-    //     // document.getElementById('add').classList.toggle('hide');
-    //     toggle_add_item();
-    // }
 
 </script>
 <script>
@@ -114,6 +124,7 @@
         document.getElementById('item-input').classList.toggle('hide');
         document.getElementById('add').classList.toggle('hide');
     }
+
     function toggle_edit_save() {
         let htmlCollection = document.getElementsByClassName('update-page');
         let elements = Array.from(htmlCollection);

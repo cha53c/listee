@@ -22,56 +22,28 @@
 <%- include('list/listFunctions'); %>
 <script>
     <!--    TODO move JS to a separate file -->
-    let itemNum = 0;
     const namesString = "<%= listnames %>";
     let x = namesString.split(',');
 
+    const removeAction = function (event) {
+        console.log('you clicked remove');
+        console.log(event);
+        let itemId = event.target.getAttribute('data-itemId');
+        let itemNode = document.getElementById(itemId);
+        removeListRow(itemNode);
+    }
+    // TODO could be DRYer similar to show
     document.getElementById('add').onclick = function addItem() {
-        let item = document.getElementById('item-input').value;
-        if (item === '') {
-            console.log('item is empty');
-            return;
-        }
+        let value = document.getElementById('item-input').value;
+        validateAddedItem(value);
+
         console.log('adding an item');
-        console.log(item);
-        let key = '' + itemNum++;
-        appendListItem(item, key);
+        console.log(value);
+        let id = 'a' + itemNum++;
+        let itemNode = appendListItem(value, id);
+        appendRemoveButton(itemNode, removeAction);
         document.getElementById('item-input').value = ''; // reset input text
         setAddItemfocus();
-    }
-
-    function appendListItem(item, id) {
-        let rowDiv = document.createElement('DIV')
-        rowDiv.setAttribute('class', 'list-row');
-        let itemDiv = document.createElement('DIV');
-        itemDiv.setAttribute('id', id);
-        itemDiv.setAttribute('class', 'list-item');
-        let textNode = document.createTextNode(item)
-        itemDiv.appendChild(textNode);
-        document.getElementById('list-items').appendChild(rowDiv);
-        rowDiv.appendChild(itemDiv)
-        appendRemoveButton(rowDiv, itemDiv.id);
-    }
-
-    function appendRemoveButton(parent, itemId) {
-        let button = document.createElement('BUTTON');
-        button.setAttribute('class', 'remove-btn');
-        button.setAttribute('data-itemId', itemId);
-        let textNode = document.createTextNode('remove')
-        button.appendChild(textNode);
-        parent.appendChild(button);
-        button.addEventListener('click', function (event) {
-            console.log('you clicked remove');
-            console.log(event);
-            let itemId = event.target.getAttribute('data-itemId');
-            removeItem(itemId);
-        });
-    }
-
-    //remove from Map and DOM
-    function removeItem(itemId) {
-        let element = document.getElementById(itemId);
-        removeListRow(element);
     }
 
     const xhr = new XMLHttpRequest();
@@ -110,14 +82,11 @@
             alert('your list is empty add some items');
             return;
         }
-        // console.log(Array.from(items.values()));
         console.log(items);
         let list = {
             listname: listname,
-            // items: Array.from(items.values())
             items: items
         }
-
 
         xhr.open("POST", '/lists/<%= userId %>/create/', true);
         xhr.setRequestHeader('Content-Type', 'application/json');
@@ -126,36 +95,7 @@
 
     window.onload = function () {
         setAddItemfocus();
-        const item = document.getElementById("item-input");
-        const listname = document.getElementById('listname');
-        const removeBtns = document.getElementsByClassName('remove-btn');
-
-        // Execute a function when the user releases a key on the keyboard
-        item.addEventListener("keyup", function (event) {
-            // Number 13 is the "Enter" key on the keyboard
-            if (event.keyCode === 13) {
-                // Cancel the default action, if needed
-                event.preventDefault();
-                // Trigger the button element with a click
-                console.log('you hit enter');
-                document.getElementById('add').click();
-            }
-        });
-        listname.addEventListener("keyup", function (event) {
-            // Number 13 is the "Enter" key on the keyboard
-            if (event.keyCode === 13) {
-                // Cancel the default action, if needed
-                event.preventDefault();
-                // Trigger the button element with a click
-                console.log('you hit enter');
-                document.getElementById('submit').click();
-            }
-        })
     };
-
-    function setAddItemfocus() {
-        document.getElementById("item-input").focus();
-    }
 
 </script>
 </body>
