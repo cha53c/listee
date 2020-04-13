@@ -4,7 +4,7 @@ const chalk = require('chalk');
 const path = require('path');
 
 const {getAllLists, getListNames, addList, getList, updateList, removeList} = require('../model/list');
-const { isDefCol } = require('../utils/chalkbox');
+const {isDefCol} = require('../utils/chalkbox');
 
 const router = express.Router();
 
@@ -32,12 +32,29 @@ router.get('/:userId', (req, res) => {
     }
 });
 
+router.patch('/:userId', (req, res) => {
+    debug('delete lists by name');
+    unpackParams(req);
+    let deletedLists = req.body.listnames;
+    debug(deletedLists);
+    for (const listName of deletedLists){
+        removeList(userId, listName);
+    }
+    res.sendStatus(200);
+    // res.redirect(path.join('/lists', userId)); should be render
+});
+
 //new list page
 router.get('/:userId/create/', (req, res) => {
     debug('create new list page');
     unpackParams(req);
     const listnames = getListNames(userId);
-    res.render('add', {title: 'create new list', heading: 'Create your new list', userId: userId, listnames: listnames});
+    res.render('add', {
+        title: 'create new list',
+        heading: 'Create your new list',
+        userId: userId,
+        listnames: listnames
+    });
 });
 
 // creat new list page
@@ -88,7 +105,7 @@ function unpackParams(req) {
     debug(`from params userId: ${isDefCol(userId)} listId: ${isDefCol(listId)}`);
 }
 
-function unpackBody(req){
+function unpackBody(req) {
     listName = req.body.listname;
     items = req.body.items;
     debug(`from body listname: ${isDefCol(listName)} items: ${isDefCol(items)}`)

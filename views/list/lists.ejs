@@ -10,21 +10,20 @@
         div.list-item {
             display: inline-block;
         }
-
-        /*form.remove-list.hide {*/
-        /*    display: none;*/
-        /*}*/
-
         .hide {
             display: none;
         }
 
+        .deleted {
+            text-decoration: line-through;
+            color: red;
+        }
     </style>
 </head>
 <body>
 <h1><%= heading %></h1>
 <button onclick="window.location.href = '/lists/<%= userId %>/create';">Creat new list</button>
-<!--<button onclick="toggleEdit()">edit</button>-->
+
 <%- include('list/editSaveButtons', { editAction: 'editLists()', saveAction: 'saveLists()' }) %>
 
 <h2>You have <%= listCount %> lists </h2>
@@ -33,7 +32,7 @@
 <div id="list-items">
     <% for (const name of listnames) { %>
         <div class="list-row">
-            <div class='list-item' id="<%= id %>"><%= name %></div>
+            <a class='list-item' id="<%= id %>" href="/lists/<%= userId %>/<%= name %>"><%= name %></a>
             <!--    <a href="/lists/<%= userId %>/<%= name %>"><%= name %></a>-->
             <%- include('list/removeUndoButtons', { id: id, removeAction: 'deleteAction(event)', undoAction: 'undoAction(event)'}) %>
             <%#- include('list/editButtons', {userId: userId, listname: name, operation: 'delete', method: 'post', label: 'delete list'}); %>
@@ -44,13 +43,6 @@
 </body>
 <%- include('list/listFunctions'); %>
 <script>
-    function toggleEdit() {
-        const elements = document.getElementsByClassName('remove-list');
-        for (const el of elements) {
-            el.classList.toggle('hide');
-        }
-    }
-
     function editLists() {
         toggle_edit_save();
     }
@@ -58,10 +50,24 @@
     function saveLists() {
         toggle_edit_save();
         console.log('you clicked save lists');
+        const xhr = new XMLHttpRequest();
+        // send the updated list
+        xhr.open("PATCH", '/lists/<%= userId %>', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        let deletedListNames = getDeletedItems();
+        let list = {listnames: deletedListNames};
+        console.log(JSON.stringify(list));
+        xhr.send(JSON.stringify(list));
+
+        xhr.onload = function () {
+            // TODO need to check http status 500 still counts as successful
+            console.log('save was successful');
+            removeDeletedRows();
+        };
+        xhr.onerror = function () {
+            console.log('there was an error saving changes');
+        }
     }
-    // const deleteAction = function (event) {
-    //     console.log('deleteAction needs to be implemented');
-    //
-    // }
 </script>
 </html>

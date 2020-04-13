@@ -15,6 +15,18 @@
         listNode.removeChild(rowNode);// removes whole list-row
     }
 
+    function removeDeletedRows(){
+        let elements = document.getElementsByClassName('deleted');
+        for (const itemNode of elements) {
+            console.log('itemNode: ' + itemNode.id);
+            let rowNode = itemNode.parentNode;
+            console.log('rowNode: ' + rowNode.className);
+            let listNode = rowNode.parentNode
+            console.log('listNode: ' + listNode.id);
+            listNode.removeChild(rowNode);// removes whole list-row
+        }
+    }
+
     function validateAddedItem(value) {
         let msg = validationMsg.valid;
         if (value === '') {
@@ -136,5 +148,31 @@
         let delButton = document.getElementById('del' + itemId);
         delButton.classList.toggle('hide');
         event.target.classList.toggle('hide');
+    }
+
+    function getDeletedItems(){
+        let items = [];
+        let elements = document.getElementsByClassName('list-item');
+        console.log(elements);
+        for (const el of elements) {
+            console.log(el.innerText);
+            if (el.classList.contains('deleted')) {
+                items.push(el.innerText);
+            }
+        }
+        return items;
+    }
+
+    function getRemainingItems(){
+        let items = [];
+        let elements = document.getElementsByClassName('list-item');
+        console.log(elements);
+        for (const el of elements) {
+            console.log(el.innerText);
+            if (!el.classList.contains('deleted')) {
+                items.push(el.innerText);
+            }
+        }
+        return items;
     }
 </script>

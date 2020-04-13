@@ -53,15 +53,8 @@
         // send the updated list
         xhr.open("PATCH", '/lists/<%= userId %>/<%= listId %>', true);
         xhr.setRequestHeader('Content-Type', 'application/json');
-        let items = [];
-        let elements = document.getElementsByClassName('list-item');
-        console.log(elements);
-        for (const el of elements) {
-            console.log(el.innerText);
-            if (!el.classList.contains('deleted')) {
-                items.push(el.innerText);
-            }
-        }
+
+        let items = getRemainingItems();
         let list = {listname: "<%= listId %>", items: items};
         console.log('list ' + list);
         xhr.send(JSON.stringify(list));
@@ -69,10 +62,7 @@
         xhr.onload = function () {
             // TODO need to check http status 500 still counts as successful
             console.log('save was successful');
-            let elements = document.getElementsByClassName('deleted');
-            for (const item of elements) {
-                removeListRow(item);
-            }
+            removeDeletedRows();
         };
         xhr.onerror = function () {
             console.log('there was an error saving changes');
@@ -93,44 +83,10 @@
         setAddItemfocus();
     }
 
-    // const deleteAction = function (event) {
-    //     console.log('you clicked delete item');
-    //     console.log(event);
-    //     let itemId = event.target.getAttribute('data-itemId');
-    //     let element = document.getElementById(itemId);
-    //     element.classList.toggle('deleted');
-    //     let undoButton = document.getElementById('undo' + itemId);
-    //     undoButton.classList.toggle('hide');
-    //     event.target.classList.toggle('hide');
-    // }
-    //
-    // const undoAction = function (event) {
-    //     console.log('you clicked undo');
-    //     console.log(event);
-    //     let itemId = event.target.getAttribute('data-itemId');
-    //     let element = document.getElementById(itemId);
-    //     element.classList.toggle('deleted');
-    //     let delButton = document.getElementById('del' + itemId);
-    //     delButton.classList.toggle('hide');
-    //     event.target.classList.toggle('hide');
-    // }
-
-</script>
-<script>
     function toggle_add_item() {
         document.getElementById('item-input').classList.toggle('hide');
         document.getElementById('add').classList.toggle('hide');
     }
-
-    // function toggle_edit_save() {
-    //     let htmlCollection = document.getElementsByClassName('update-page');
-    //     let elements = Array.from(htmlCollection);
-    //     htmlCollection = document.getElementsByClassName('remove-btn');
-    //     elements = elements.concat(Array.from(htmlCollection));
-    //     for (const el of elements) {
-    //         el.classList.toggle('hide');
-    //     }
-    // }
 </script>
 </body>
 </html>
