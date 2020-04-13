@@ -77,29 +77,64 @@
     }
 
     // Execute a function when the user releases a key on the keyboard
-    item.addEventListener("keyup", function (event) {
-        // Number 13 is the "Enter" key on the keyboard
-        if (event.keyCode === 13) {
-            // Cancel the default action, if needed
-            event.preventDefault();
-            // Trigger the button element with a click
-            console.log('you hit enter');
-            document.getElementById('add').click();
-        }
-    });
-
-    listname.addEventListener("keyup", function (event) {
-        // Number 13 is the "Enter" key on the keyboard
-        if (event.keyCode === 13) {
-            // Cancel the default action, if needed
-            event.preventDefault();
-            // Trigger the button element with a click
-            console.log('you hit enter');
-            document.getElementById('submit').click();
-        }
-    });
+    if (item) {
+        item.addEventListener("keyup", function (event) {
+            // Number 13 is the "Enter" key on the keyboard
+            if (event.keyCode === 13) {
+                // Cancel the default action, if needed
+                event.preventDefault();
+                // Trigger the button element with a click
+                console.log('you hit enter');
+                document.getElementById('add').click();
+            }
+        });
+    }
+    if (listname) {
+        listname.addEventListener("keyup", function (event) {
+            // Number 13 is the "Enter" key on the keyboard
+            if (event.keyCode === 13) {
+                // Cancel the default action, if needed
+                event.preventDefault();
+                // Trigger the button element with a click
+                console.log('you hit enter');
+                document.getElementById('submit').click();
+            }
+        });
+    }
 
     function setAddItemfocus() {
         document.getElementById("item-input").focus();
+    }
+
+    function toggle_edit_save() {
+        let htmlCollection = document.getElementsByClassName('update-page');
+        let elements = Array.from(htmlCollection);
+        htmlCollection = document.getElementsByClassName('remove-btn');
+        elements = elements.concat(Array.from(htmlCollection));
+        for (const el of elements) {
+            el.classList.toggle('hide');
+        }
+    }
+
+    const deleteAction = function (event) {
+        console.log('you clicked delete item');
+        console.log(event);
+        let itemId = event.target.getAttribute('data-itemId');
+        let element = document.getElementById(itemId);
+        element.classList.toggle('deleted');
+        let undoButton = document.getElementById('undo' + itemId);
+        undoButton.classList.toggle('hide');
+        event.target.classList.toggle('hide');
+    }
+
+    const undoAction = function (event) {
+        console.log('you clicked undo');
+        console.log(event);
+        let itemId = event.target.getAttribute('data-itemId');
+        let element = document.getElementById(itemId);
+        element.classList.toggle('deleted');
+        let delButton = document.getElementById('del' + itemId);
+        delButton.classList.toggle('hide');
+        event.target.classList.toggle('hide');
     }
 </script>

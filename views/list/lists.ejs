@@ -7,7 +7,15 @@
         form.remove-list {
             display: inline-block;
         }
-        form.remove-list.hide {
+        div.list-item {
+            display: inline-block;
+        }
+
+        /*form.remove-list.hide {*/
+        /*    display: none;*/
+        /*}*/
+
+        .hide {
             display: none;
         }
 
@@ -16,22 +24,44 @@
 <body>
 <h1><%= heading %></h1>
 <button onclick="window.location.href = '/lists/<%= userId %>/create';">Creat new list</button>
-<button onclick="toggleEdit()">edit</button>
+<!--<button onclick="toggleEdit()">edit</button>-->
+<%- include('list/editSaveButtons', { editAction: 'editLists()', saveAction: 'saveLists()' }) %>
 
 <h2>You have <%= listCount %> lists </h2>
 <!-- TODO can you be changed to reuse for list items as well? -->
-<% for (const name of listnames) { %>
-        <a href="/lists/<%= userId %>/<%= name %>"><%= name %></a>
-        <%- include('list/editButtons', {userId: userId, listname: name, operation: 'delete', method: 'post', label: 'delete list'}); %>
-   <p></p>
-<% } %>
+<% let id = 0; %>
+<div id="list-items">
+    <% for (const name of listnames) { %>
+        <div class="list-row">
+            <div class='list-item' id="<%= id %>"><%= name %></div>
+            <!--    <a href="/lists/<%= userId %>/<%= name %>"><%= name %></a>-->
+            <%- include('list/removeUndoButtons', { id: id, removeAction: 'deleteAction(event)', undoAction: 'undoAction(event)'}) %>
+            <%#- include('list/editButtons', {userId: userId, listname: name, operation: 'delete', method: 'post', label: 'delete list'}); %>
+        </div><br>
+        <% id++ %>
+    <% } %>
+</div>
 </body>
+<%- include('list/listFunctions'); %>
 <script>
     function toggleEdit() {
-      const elements = document.getElementsByClassName('remove-list');
-      for (const el of elements){
-          el.classList.toggle('hide');
-      }
+        const elements = document.getElementsByClassName('remove-list');
+        for (const el of elements) {
+            el.classList.toggle('hide');
+        }
     }
+
+    function editLists() {
+        toggle_edit_save();
+    }
+
+    function saveLists() {
+        toggle_edit_save();
+        console.log('you clicked save lists');
+    }
+    // const deleteAction = function (event) {
+    //     console.log('deleteAction needs to be implemented');
+    //
+    // }
 </script>
 </html>

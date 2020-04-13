@@ -20,8 +20,9 @@
 </head>
 <body>
 <h1>List name: <%= listId %></h1>
-<button onclick="edit()" class="update-page">edit</button>
-<button onclick="save()" class="update-page hide">save</button>
+<%- include('list/editSaveButtons', { editAction: 'edit()', saveAction: 'save()'}) %>
+<!--<button id="edit-btn" onclick="edit()"  class="update-page" type="button">edit</button>-->
+<!--<button id="save-btn" onclick="save()" class="update-page hide">save</button>-->
 <br>
 <a href="/lists/<%= userId %>">Back to my lists</a>
 <h2>List items</h2>
@@ -31,12 +32,8 @@
     <% for (const item of items) { %>
         <div class="list-row">
             <div class='list-item' id="<%= id %>"><%= item %></div>
-            <button id="del<%= id %>" class="remove-btn hide" type="button" data-itemId="<%= id %>"
-                    onclick="deleteAction(event)">remove
-            </button>
-            <button id="undo<%= id %>" class="undo-btn hide" type="button" data-itemId="<%= id %>"
-                    onclick="undoAction(event)">undo
-            </button>
+
+            <%- include('list/removeUndoButtons', { id: id, removeAction: 'deleteAction(event)', undoAction: 'undoAction(event)'}) %>
         </div><br>
         <% id++ %>
     <% } %>
@@ -96,27 +93,27 @@
         setAddItemfocus();
     }
 
-    const deleteAction = function (event) {
-        console.log('you clicked delete item');
-        console.log(event);
-        let itemId = event.target.getAttribute('data-itemId');
-        let element = document.getElementById(itemId);
-        element.classList.toggle('deleted');
-        let undoButton = document.getElementById('undo' + itemId);
-        undoButton.classList.toggle('hide');
-        event.target.classList.toggle('hide');
-    }
-
-    const undoAction = function (event) {
-        console.log('you clicked undo');
-        console.log(event);
-        let itemId = event.target.getAttribute('data-itemId');
-        let element = document.getElementById(itemId);
-        element.classList.toggle('deleted');
-        let delButton = document.getElementById('del' + itemId);
-        delButton.classList.toggle('hide');
-        event.target.classList.toggle('hide');
-    }
+    // const deleteAction = function (event) {
+    //     console.log('you clicked delete item');
+    //     console.log(event);
+    //     let itemId = event.target.getAttribute('data-itemId');
+    //     let element = document.getElementById(itemId);
+    //     element.classList.toggle('deleted');
+    //     let undoButton = document.getElementById('undo' + itemId);
+    //     undoButton.classList.toggle('hide');
+    //     event.target.classList.toggle('hide');
+    // }
+    //
+    // const undoAction = function (event) {
+    //     console.log('you clicked undo');
+    //     console.log(event);
+    //     let itemId = event.target.getAttribute('data-itemId');
+    //     let element = document.getElementById(itemId);
+    //     element.classList.toggle('deleted');
+    //     let delButton = document.getElementById('del' + itemId);
+    //     delButton.classList.toggle('hide');
+    //     event.target.classList.toggle('hide');
+    // }
 
 </script>
 <script>
@@ -125,15 +122,15 @@
         document.getElementById('add').classList.toggle('hide');
     }
 
-    function toggle_edit_save() {
-        let htmlCollection = document.getElementsByClassName('update-page');
-        let elements = Array.from(htmlCollection);
-        htmlCollection = document.getElementsByClassName('remove-btn');
-        elements = elements.concat(Array.from(htmlCollection));
-        for (const el of elements) {
-            el.classList.toggle('hide');
-        }
-    }
+    // function toggle_edit_save() {
+    //     let htmlCollection = document.getElementsByClassName('update-page');
+    //     let elements = Array.from(htmlCollection);
+    //     htmlCollection = document.getElementsByClassName('remove-btn');
+    //     elements = elements.concat(Array.from(htmlCollection));
+    //     for (const el of elements) {
+    //         el.classList.toggle('hide');
+    //     }
+    // }
 </script>
 </body>
 </html>
