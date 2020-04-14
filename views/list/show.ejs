@@ -59,11 +59,15 @@
         console.log('list ' + list);
         xhr.send(JSON.stringify(list));
 
-        xhr.onload = function () {
-            // TODO need to check http status 500 still counts as successful
-            console.log('save was successful');
-            removeDeletedRows();
-        };
+        // xhr.onload = function () {
+        //     // TODO need to check http status 500 still counts as successful
+        //
+        //     console.log('save was successful');
+        //     removeDeletedRows();
+        //
+        // };
+
+        xhr.onload = saveOnloadAction(xhr);
         xhr.onerror = function () {
             console.log('there was an error saving changes');
         }
@@ -83,10 +87,10 @@
         setAddItemfocus();
     }
 
-    function toggle_add_item() {
-        document.getElementById('item-input').classList.toggle('hide');
-        document.getElementById('add').classList.toggle('hide');
-    }
+    // function toggle_add_item() {
+    //     document.getElementById('item-input').classList.toggle('hide');
+    //     document.getElementById('add').classList.toggle('hide');
+    // }
 </script>
 </body>
 </html>

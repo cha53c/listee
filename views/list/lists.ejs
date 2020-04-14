@@ -48,7 +48,7 @@
     }
 
     function saveLists() {
-        toggle_edit_save();
+        // toggle_edit_save();
         console.log('you clicked save lists');
         const xhr = new XMLHttpRequest();
         // send the updated list
@@ -60,11 +60,28 @@
         console.log(JSON.stringify(list));
         xhr.send(JSON.stringify(list));
 
-        xhr.onload = function () {
-            // TODO need to check http status 500 still counts as successful
-            console.log('save was successful');
-            removeDeletedRows();
-        };
+        // xhr.onload = function() {
+        //     console.log('ready state: ' + this.readyState)
+        //     console.log('xhr status ' +  xhr.status);
+        //     console.log('response text: ' + xhr.responseText);
+        //
+        //     if(xhr.status === 200) {
+        //         console.log('save was successful');
+        //         removeDeletedRows();
+        //         toggle_edit_save();
+        //         // toggle_add_item();
+        //     } else {
+        //         alert('Error! changes not saved');
+        //     }
+        // }
+
+        xhr.onload = saveOnloadAction(xhr);
+
+        // xhr.onreadystatechange = function(){
+        //     console.log('ready state change: ' + xhr.readyState);
+        // }
+
+
         xhr.onerror = function () {
             console.log('there was an error saving changes');
         }

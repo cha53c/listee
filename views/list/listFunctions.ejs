@@ -15,7 +15,7 @@
         listNode.removeChild(rowNode);// removes whole list-row
     }
 
-    function removeDeletedRows(){
+    function removeDeletedRows() {
         let elements = document.getElementsByClassName('deleted');
         for (const itemNode of elements) {
             console.log('itemNode: ' + itemNode.id);
@@ -150,7 +150,7 @@
         event.target.classList.toggle('hide');
     }
 
-    function getDeletedItems(){
+    function getDeletedItems() {
         let items = [];
         let elements = document.getElementsByClassName('list-item');
         console.log(elements);
@@ -163,7 +163,7 @@
         return items;
     }
 
-    function getRemainingItems(){
+    function getRemainingItems() {
         let items = [];
         let elements = document.getElementsByClassName('list-item');
         console.log(elements);
@@ -174,5 +174,31 @@
             }
         }
         return items;
+    }
+
+    function saveOnloadAction(xhr) {
+        return function () {
+            console.log('this is the closure version');
+            console.log('ready state: ' + xhr.readyState)
+            console.log('xhr status ' + xhr.status);
+
+            if (xhr.status === 200) {
+                console.log('save was successful');
+                removeDeletedRows();
+                toggle_edit_save();
+                toggle_add_item();
+            } else {
+                alert('Error! changes not saved');
+            }
+        }
+    }
+
+    function toggle_add_item() {
+        const input = document.getElementById('item-input');
+        const add = document.getElementById('add');
+        if (input && add) {
+            input.classList.toggle('hide');
+            add.classList.toggle('hide');
+        }
     }
 </script>

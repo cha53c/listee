@@ -16,9 +16,6 @@ router.get('/:userId', (req, res) => {
     debug(`user ${isDefCol(userId)} attempting to access their list page`);
     if (req.params.userId == 1) { //simulate logged in
         debug(`access ok for user ${isDefCol(userId)}`);
-        // const lists = getAllLists(userId);
-        // const listCount = lists == undefined ? 0 : lists.size;
-        // const listnames = lists == undefined ? "" : lists.keys(); // pass empty iterable if undefined
         const listnames = getListNames(userId);
         const listCount = listnames.length;
         debug('list name: ' + listnames);
@@ -33,6 +30,7 @@ router.get('/:userId', (req, res) => {
 });
 
 router.patch('/:userId', (req, res) => {
+    // res.sendStatus(500); // TODO remove testing only
     debug('delete lists by name');
     unpackParams(req);
     let deletedLists = req.body.listnames;
@@ -40,8 +38,16 @@ router.patch('/:userId', (req, res) => {
     for (const listName of deletedLists){
         removeList(userId, listName);
     }
-    res.sendStatus(200);
-    // res.redirect(path.join('/lists', userId)); should be render
+    // res.writeHead(200, {
+    //     'Content-Type': 'text/plain',
+    //     'Access-Control-Allow-Origin' : '*'
+    // });
+    // res.writeHead(200, {
+    //     'Access-Control-Allow-Origin' : '*'
+    // });
+    res.set('Content-Type', 'text/plain');
+    res.set('Access-Control-Allow-Origin',  '*');
+    res.sendStatus(200); // TODO changes status depending on errors
 });
 
 //new list page
