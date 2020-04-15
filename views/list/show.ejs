@@ -20,7 +20,7 @@
 </head>
 <body>
 <h1>List name: <%= listId %></h1>
-<%- include('list/editSaveButtons', { editAction: 'edit()', saveAction: 'save()'}) %>
+<%- include('list/editSaveButtons', { editAction: 'edit()', saveAction: 'save()', cancelAction: 'cancelAction()'}) %>
 <!--<button id="edit-btn" onclick="edit()"  class="update-page" type="button">edit</button>-->
 <!--<button id="save-btn" onclick="save()" class="update-page hide">save</button>-->
 <br>
@@ -42,13 +42,14 @@
 <script>
     function edit() {
         toggle_edit_save();
+        toggle_remove_undo();
         toggle_add_item();
         setAddItemfocus();
     }
 
     function save() {
-        toggle_edit_save();
-        toggle_add_item();
+        // toggle_edit_save();
+        // toggle_add_item();
         const xhr = new XMLHttpRequest();
         // send the updated list
         xhr.open("PATCH", '/lists/<%= userId %>/<%= listId %>', true);

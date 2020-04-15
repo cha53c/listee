@@ -18,13 +18,23 @@
     function removeDeletedRows() {
         let elements = document.getElementsByClassName('deleted');
         for (const itemNode of elements) {
-            console.log('itemNode: ' + itemNode.id);
-            let rowNode = itemNode.parentNode;
-            console.log('rowNode: ' + rowNode.className);
-            let listNode = rowNode.parentNode
-            console.log('listNode: ' + listNode.id);
-            listNode.removeChild(rowNode);// removes whole list-row
+            removeRowElement(itemNode);
+            // console.log('itemNode: ' + itemNode.id);
+            // let rowNode = itemNode.parentNode;
+            // console.log('rowNode: ' + rowNode.className);
+            // let listNode = rowNode.parentNode
+            // console.log('listNode: ' + listNode.id);
+            // listNode.removeChild(rowNode);// removes whole list-row
         }
+    }
+
+    function removeRowElement(itemNode){
+        console.log('itemNode: ' + itemNode.id);
+        let rowNode = itemNode.parentNode;
+        console.log('rowNode: ' + rowNode.className);
+        let listNode = rowNode.parentNode
+        console.log('listNode: ' + listNode.id);
+        listNode.removeChild(rowNode);// removes whole list-row
     }
 
     function validateAddedItem(value) {
@@ -119,10 +129,17 @@
     }
 
     function toggle_edit_save() {
-        let htmlCollection = document.getElementsByClassName('update-page');
-        let elements = Array.from(htmlCollection);
-        htmlCollection = document.getElementsByClassName('remove-btn');
-        elements = elements.concat(Array.from(htmlCollection));
+        console.log('toggle edit save');
+        const elements = document.getElementsByClassName('update-page');
+        for (const el of elements) {
+            el.classList.toggle('hide');
+        }
+        // TODO split out
+        // toggle_remove_undo()
+    }
+
+    function toggle_remove_undo(){
+        const elements = document.getElementsByClassName('remove-btn');
         for (const el of elements) {
             el.classList.toggle('hide');
         }
@@ -186,6 +203,7 @@
                 console.log('save was successful');
                 removeDeletedRows();
                 toggle_edit_save();
+                toggle_remove_undo();
                 toggle_add_item();
             } else {
                 alert('Error! changes not saved');
@@ -199,6 +217,41 @@
         if (input && add) {
             input.classList.toggle('hide');
             add.classList.toggle('hide');
+        }
+    }
+
+    function cancelAction(){
+        toggle_edit_save();
+        toggle_add_item();
+        toggle_deleted_items();
+        hide_by_class_name('remove-btn');
+        hide_by_class_name('undo-btn');
+        remove_added();
+    }
+
+    function toggle_deleted_items(){
+        const deletedItems = document.getElementsByClassName('deleted');
+        for (const item of deletedItems){
+            item.classList.toggle('deleted');
+        }
+    }
+
+    function hide_by_class_name(className){
+        const elements = document.getElementsByClassName(className);
+        for(const el of elements){
+            if(!el.classList.contains('hide')){
+                el.classList.add('hide');
+            }
+        }
+    }
+
+    function remove_added(){
+        const listItems = document.getElementsByClassName('list-item');
+        for(const item of listItems){
+            if(item.id.startsWith('a')){
+                console.log('removing item');
+                removeRowElement(item);
+            }
         }
     }
 </script>

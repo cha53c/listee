@@ -24,7 +24,7 @@
 <h1><%= heading %></h1>
 <button onclick="window.location.href = '/lists/<%= userId %>/create';">Creat new list</button>
 
-<%- include('list/editSaveButtons', { editAction: 'editLists()', saveAction: 'saveLists()' }) %>
+<%- include('list/editSaveButtons', { editAction: 'editLists()', saveAction: 'saveLists()', cancelAction: 'cancelAction()' }) %>
 
 <h2>You have <%= listCount %> lists </h2>
 <!-- TODO can you be changed to reuse for list items as well? -->
@@ -45,6 +45,7 @@
 <script>
     function editLists() {
         toggle_edit_save();
+        toggle_remove_undo();
     }
 
     function saveLists() {
