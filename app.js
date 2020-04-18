@@ -23,6 +23,12 @@ app.use('/auth', auth);
 app.set('views', ['./views', 'views/list', 'views/auth'] );
 app.set('view engine', 'ejs');
 
-app.listen(3000, () => {
+const server = app.listen(3000, () => {
     debug(`Listee is listening to you on port ${chalk.green('3000')}`);
 });
+
+function stop(){
+    server.close();
+}
+
+module.exports = {app, stop};

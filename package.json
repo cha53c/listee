@@ -6,7 +6,8 @@
   "scripts": {
     "start": "DEBUG=app,app:* nodemon app.js",
     "express-routes-list": "express-routes-list",
-    "test": "jasmine",
+    "test": "mocha",
+    "jasmine-test": "jasmine",
     "tests-with-debug": "DEBUG=app,app:* jasmine"
   },
   "repository": {
@@ -28,7 +29,11 @@
     "morgan": "^1.9.1"
   },
   "devDependencies": {
+    "chai": "4.2.0",
+    "chai-http": "4.3.0",
+    "cheerio": "1.0.0-rc.3",
     "jasmine": "^3.5.0",
+    "mocha": "7.1.1",
     "nodemon": "^2.0.2"
   },
   "nodemonConfig": {
