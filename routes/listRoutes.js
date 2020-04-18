@@ -28,7 +28,7 @@ router.get('/:userId', (req, res) => {
         res.redirect('/'); // if not logged in redirect back to home page
     }
 });
-
+// delete multiple lists from the lists page
 router.patch('/:userId', (req, res) => {
     // res.sendStatus(500); // TODO remove testing only
     debug('delete lists by name');
@@ -92,16 +92,18 @@ router.patch('/:userId/:listId', (req, res) => {
     unpackBody(req);
     debug(`updating list: ${isDefCol(listId)}`);
     // TODO DRY this up - same as show
-    const list = updateList(userId, listId, items);
-    // const items = list == undefined ? "" : list.items;
+    updateList(userId, listId, items);
     debug('items: ' + items);
-    res.render('edit', {listId: listId, items: items});
+    // TODO should patch and post render anything now we are using xhr
+    // this is only passing back what it received
+    res.render('show', {userId: userId, listId: listId, items: items});
 })
 
 // delete list
 router.post('/:userId/delete/:listId/', (req, res) => {
     unpackParams(req);
     removeList(userId, listName);
+    // TODO should patch and post render anything now we are using xhr
     res.redirect(path.join('/lists', userId));
 })
 

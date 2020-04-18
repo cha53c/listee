@@ -6,7 +6,7 @@
   "scripts": {
     "start": "DEBUG=app,app:* nodemon app.js",
     "express-routes-list": "express-routes-list",
-    "test": "mocha",
+    "test": "DEBUG=app,app:* mocha",
     "jasmine-test": "jasmine",
     "tests-with-debug": "DEBUG=app,app:* jasmine"
   },
