@@ -1,5 +1,5 @@
 const chalk = require("chalk");
-const chalkbox = require('../utils/chalkbox');
+const chalkbox = require('../../utils/chalkbox');
 
 
 describe('chalkbox', () => {

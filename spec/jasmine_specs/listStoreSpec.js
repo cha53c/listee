@@ -1,4 +1,4 @@
-const { createListStoreForUser, getListsByUser, listStoreSize, hasListsforUser } = require('../model/listStore');
+const { createListStoreForUser, getListsByUser, listStoreSize, hasListsforUser } = require('../../model/listStore');
 
 describe("The list store", () => {
     it('should create new list store for the user and add it to the store', () => {

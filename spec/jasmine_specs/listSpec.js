@@ -1,5 +1,5 @@
-const {addList, updateList, removeList, getList, getListNames } = require('../model/list');
-const listStore = require('../model/listStore');
+const {addList, updateList, removeList, getList, getListNames } = require('../../model/list');
+const listStore = require('../../model/listStore');
 
 describe("a user", () => {
     const usr1 = {id: 'user 1'};

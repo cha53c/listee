@@ -1,4 +1,4 @@
-const userStore = require('../model/userStore.js');
+const userStore = require('../../model/userStore.js');
 const debug = require('debug')('app:userStoreSpec');
 
 describe("add users to user store", ()=>{
