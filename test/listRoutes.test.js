@@ -30,15 +30,61 @@ describe('lists', () => {
                         done();
                     });
             });
+            it('it should delete all lists', (done) => {
+                chai.request(server)
+                    .get('/lists/1')
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                        const $ = cheerio.load(res.text);
+                        expect($('h2').text()).to.eql('You have 0 lists ');
+                    });
+                chai.request(server)
+                    .post('/lists/1/create')
+                    .set('content-type', 'application/json')
+                    .send({"listname": "new list", "items": ["red"]})
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                    });
+                chai.request(server)
+                    .post('/lists/1/create')
+                    .set('content-type', 'application/json')
+                    .send({"listname": "old list", "items": ["blue"]})
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                    });
+                chai.request(server)
+                    .get('/lists/1')
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                        const $ = cheerio.load(res.text);
+                        expect($('h2').text()).to.eql('You have 2 lists ');
+                    });
+                chai.request(server)
+                    .patch('/lists/1')
+                    .set('content-type', 'application/json')
+                    .send({"listnames": ["old list", "new list"]})
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                    });
+                chai.request(server)
+                    .get('/lists/1')
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                        const $ = cheerio.load(res.text);
+                        expect($('h2').text()).to.eql('You have 0 lists ');
+                    });
+                done();
+
+            });
         });
     });
 
     describe('list CRUD operations', () => {
-        // beforeEach( () => {
-        //     const { app: server, stop } = require('../app')
-        // });
         describe('/POST lists/userId/create', () => {
-            it('it should add a new list and redirect to lists page', (done) => {
+            beforeEach( () => {
+                const { app: server, stop } = require('../app')
+            });
+            it('it should add a new list and redirect to show page', (done) => {
                 const list = {"listname": "rainbow", "items": ["red", "yellow", "green", "blue"]};
                 chai.request(server)
                     .post('/lists/1/create')
@@ -53,6 +99,28 @@ describe('lists', () => {
                         expect($('h1').text()).to.include('rainbow');
                         done();
                     });
+            });
+            it('it should add a list that already exits', (done) => {
+                const list = {"listname": "new list", "items": ["red", "yellow", "green", "blue"]};
+                chai.request(server)
+                    .post('/lists/1/create')
+                    .set('content-type', 'application/json')
+                    .send(list)
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                        expect(res).to.redirect;
+                        // done();
+                    });
+                chai.request(server)
+                    .post('/lists/1/create')
+                    .set('content-type', 'application/json')
+                    .send(list)
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                        expect(res).to.not.redirect;
+
+                    });
+                done();
             });
         });
         describe('/GET lists/userId/listId', () => {

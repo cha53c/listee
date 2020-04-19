@@ -11,6 +11,8 @@ const lists = require(path.join(__dirname, 'routes', 'listRoutes'));
 const auth = require(path.join(__dirname, 'routes', 'authRoutes'));
 const app = express();
 
+process.title = "listeeApp";
+
 app.use(morgan('tiny'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));

@@ -38,9 +38,10 @@ router.patch('/:userId', (req, res) => {
     for (const listName of deletedLists) {
         removeList(userId, listName);
     }
-    res.set('Content-Type', 'text/plain');
-    res.set('Access-Control-Allow-Origin', '*');
-    res.sendStatus(200); // TODO changes status depending on errors
+    res.json({"status": "success", "msg": deletedLists + " list deleted"})
+    // res.set('Content-Type', 'text/plain');
+    // res.set('Access-Control-Allow-Origin', '*');
+    // res.sendStatus(200); // TODO changes status depending on errors
 });
 
 //new list page
