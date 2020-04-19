@@ -1,0 +1,459 @@
+{
+	"info": {
+		"_postman_id": "be38bad3-11e4-46d4-a3fe-a5892d1ffb92",
+		"name": "listee_create_10_lists",
+		"description": "used to set up test data",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "add shopping list",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5b653244-880d-468d-b3a2-64f0e04023fd",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"shopping\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"listname\": \"shopping\", \"items\": [ \"tomatoes\", \"bean\", \"squash\" ] }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{domain}}/lists/{{user}}/create",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"lists",
+						"{{user}}",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add laundry list",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5b653244-880d-468d-b3a2-64f0e04023fd",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"listname\": \"laundry\", \"items\": [ \"trousers\", \"shirts\", \"jacket\" ] }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{domain}}/lists/{{user}}/create",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"lists",
+						"{{user}}",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add cake list",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5b653244-880d-468d-b3a2-64f0e04023fd",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"shopping\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"listname\": \"cake\", \"items\": [ \"butter\", \"sugar\", \"eggs\", \"flour\" ] }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{domain}}/lists/{{user}}/create",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"lists",
+						"{{user}}",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add rainbow list",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5b653244-880d-468d-b3a2-64f0e04023fd",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"shopping\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"listname\": \"rainbow\", \"items\": [ \"red\", \"yellow\", \"green\", \"blue\" ] }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{domain}}/lists/{{user}}/create",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"lists",
+						"{{user}}",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add playlist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5b653244-880d-468d-b3a2-64f0e04023fd",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"shopping\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"listname\": \"playlist\", \"items\": [ \"london's burning\", \"yellow submarine\", \"god save the queen\", \"blue monday\" ] }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{domain}}/lists/{{user}}/create",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"lists",
+						"{{user}}",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add ingredience list",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5b653244-880d-468d-b3a2-64f0e04023fd",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"shopping\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"listname\": \"ingredience\", \"items\": [ \"aubergine\", \"oil\", \"garlic\", \"basil\" ] }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{domain}}/lists/{{user}}/create",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"lists",
+						"{{user}}",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add watchlist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5b653244-880d-468d-b3a2-64f0e04023fd",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"shopping\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"listname\": \"watchlist\", \"items\": [ \"Up\", \"Mean streets\", \"Alien\",\"Terminator\" ] }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{domain}}/lists/{{user}}/create",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"lists",
+						"{{user}}",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add exercise list",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5b653244-880d-468d-b3a2-64f0e04023fd",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"shopping\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"listname\": \"exercise\", \"items\": [ \"squats\", \"skipping\", \"yoga\", \"streaching\" ] }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{domain}}/lists/{{user}}/create",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"lists",
+						"{{user}}",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add abstract list",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5b653244-880d-468d-b3a2-64f0e04023fd",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"shopping\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"listname\": \"abstract\", \"items\": [ \"this is\", \"not\", \"a list\"] }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{domain}}/lists/{{user}}/create",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"lists",
+						"{{user}}",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add todo list",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5b653244-880d-468d-b3a2-64f0e04023fd",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"shopping\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"listname\": \"todo\", \"items\": [ \"washing\", \"call bank\", \"shopping\" ] }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{domain}}/lists/{{user}}/create",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"lists",
+						"{{user}}",
+						"create"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
