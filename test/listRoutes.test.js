@@ -34,6 +34,9 @@ describe('lists', () => {
     });
 
     describe('list CRUD operations', () => {
+        // beforeEach( () => {
+        //     const { app: server, stop } = require('../app')
+        // });
         describe('/POST lists/userId/create', () => {
             it('it should add a new list and redirect to lists page', (done) => {
                 const list = {"listname": "rainbow", "items": ["red", "yellow", "green", "blue"]};
@@ -61,7 +64,6 @@ describe('lists', () => {
                     });
             });
         });
-
         describe('/PATCH lists/userId/listId', () => {
             it('it should update an existing list', (done) => {
                 const list = {"listname": "rainbow", "items": ["red", "yellow", "green", "blue", "orange"]};
@@ -96,8 +98,10 @@ describe('lists', () => {
                     .set('content-type', 'application/json')
                     .end((err, res) => {
                         res.should.have.status(200);
-                        const status = res.body.status;
                         console.log(res.body);
+                        res.body.should.property('status')
+                        res.body.should.property('msg');
+                        const status = res.body.status;
                         expect(status).to.equal('err');
                         done();
                     });

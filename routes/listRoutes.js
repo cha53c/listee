@@ -35,18 +35,11 @@ router.patch('/:userId', (req, res) => {
     unpackParams(req);
     let deletedLists = req.body.listnames;
     debug(deletedLists);
-    for (const listName of deletedLists){
+    for (const listName of deletedLists) {
         removeList(userId, listName);
     }
-    // res.writeHead(200, {
-    //     'Content-Type': 'text/plain',
-    //     'Access-Control-Allow-Origin' : '*'
-    // });
-    // res.writeHead(200, {
-    //     'Access-Control-Allow-Origin' : '*'
-    // });
     res.set('Content-Type', 'text/plain');
-    res.set('Access-Control-Allow-Origin',  '*');
+    res.set('Access-Control-Allow-Origin', '*');
     res.sendStatus(200); // TODO changes status depending on errors
 });
 
@@ -63,12 +56,13 @@ router.get('/:userId/create/', (req, res) => {
     });
 });
 
-// creat new list page
+// add a new list page
 router.post('/:userId/create/', (req, res) => {
     debug('post new list');
     debug(req.body);
     unpackParams(req);
     unpackBody(req);
+    // TODO don't add if list already exits
     addList(userId, listName, items);
     debug(listName);
     res.redirect(path.join('/lists', userId));
@@ -100,21 +94,20 @@ router.patch('/:userId/:listId', (req, res) => {
 })
 
 // delete list
+// TODO replace with delete userId/listId
 router.post('/:userId/delete/:listId/', (req, res) => {
     unpackParams(req);
-    removeList(userId, listName);
+    removeList(userId, listId);
     // TODO should patch and post render anything now we are using xhr
     res.redirect(path.join('/lists', userId));
 })
 
-router.delete('/:userId/:listId/', (req, res) => {
+router.delete('/:userId/:listId', (req, res) => {
     unpackParams(req);
-    if (removeList(userId, listName)) {
-        const msg = listName + " deleted";
-        res.send({ "status": "success", "msg": msg});
-    } else {
-        res.send({"status": "err", "msg": listName + " not found"});
+    if (!removeList(userId, listId)) {
+        res.json({"status": "err", "msg": listId + " not found"});
     }
+    res.json({"status": "success", "msg": listId + ' deleted'});
 });
 
 function unpackParams(req) {
