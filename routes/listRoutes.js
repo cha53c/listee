@@ -63,9 +63,15 @@ router.post('/:userId/create/', (req, res) => {
     unpackParams(req);
     unpackBody(req);
     // TODO don't add if list already exits
+    const list = getList(userId, listName);
+    if(list){
+        res.json({"status": "err", "msg": listName + " already exits"});
+    }
     addList(userId, listName, items);
     debug(listName);
-    res.redirect(path.join('/lists', userId));
+    // res.render('show', {userId: userId, listId: listId, items: items});
+    // res.json({"status": "success", "msg": listName + " added"});
+    res.redirect(path.join('/lists', userId, listName));
 })
 
 // TODO remove actions params from url and use http methods instead

@@ -46,8 +46,11 @@ describe('lists', () => {
                     .send(list)
                     .end((err, res) => {
                         res.should.have.status(200);
+                        expect(res).to.redirect;
+                        // TODO figure out how to use rex in redirect
+                        // expect(res).to.redirectTo('/^*.\/lists\/1\/rainbow$/');
                         const $ = cheerio.load(res.text);
-                        expect($('h2').text()).to.eql('You have 1 lists ');
+                        expect($('h1').text()).to.include('rainbow');
                         done();
                     });
             });
