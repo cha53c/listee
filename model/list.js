@@ -32,7 +32,7 @@ function getList(userId, listname) {
 
 function removeList(userId, listname) {
     let usersLists = listStore.getListsByUser(userId);
-    usersLists.lists.delete(listname);
+    return usersLists.lists.delete(listname);
 }
 
 function updateList(userId, listname, items) {

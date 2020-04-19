@@ -77,16 +77,31 @@ describe('lists', () => {
                     });
             });
         });
-        describe('/POST /:userId/delete/:listId/', () => {
+        describe('/delete /:userId/:listId/', () => {
             it('it should delete an existing list', (done) => {
                 chai.request(server)
-                    .post('/lists/1/delete/rainbow')
+                    .delete('/lists/1/rainbow')
                     .set('content-type', 'application/json')
                     .end((err, res) => {
                         res.should.have.status(200);
+                        const status = res.body.status;
+                        console.log(res.body);
+                        expect(status).to.equal('success');
                         done();
                     });
             });
+            it('it should return massage if list does not exist', (done) =>{
+                chai.request(server)
+                    .delete('/lists/1/whatnot')
+                    .set('content-type', 'application/json')
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                        const status = res.body.status;
+                        console.log(res.body);
+                        expect(status).to.equal('err');
+                        done();
+                    });
+            })
         });
     });
 

@@ -107,6 +107,16 @@ router.post('/:userId/delete/:listId/', (req, res) => {
     res.redirect(path.join('/lists', userId));
 })
 
+router.delete('/:userId/:listId/', (req, res) => {
+    unpackParams(req);
+    if (removeList(userId, listName)) {
+        const msg = listName + " deleted";
+        res.send({ "status": "success", "msg": msg});
+    } else {
+        res.send({"status": "err", "msg": listName + " not found"});
+    }
+});
+
 function unpackParams(req) {
     userId = req.params.userId;
     listId = req.params.listId;
