@@ -21,8 +21,8 @@
 <body>
 <h1>List name: <%= listId %></h1>
 <%- include('list/editSaveButtons', { editAction: 'edit()', saveAction: 'save()', cancelAction: 'cancelAction()'}) %>
-<!--<button id="edit-btn" onclick="edit()"  class="update-page" type="button">edit</button>-->
-<!--<button id="save-btn" onclick="save()" class="update-page hide">save</button>-->
+<button id="delete-list-btn" class="update-page hide" type="button"
+        onclick="deleteList()">delete</button>
 <br>
 <a href="/lists/<%= userId %>">Back to my lists</a>
 <h2>List items</h2>
@@ -32,7 +32,6 @@
     <% for (const item of items) { %>
         <div class="list-row">
             <div class='list-item' id="<%= id %>"><%= item %></div>
-
             <%- include('list/removeUndoButtons', { id: id, removeAction: 'deleteAction(event)', undoAction: 'undoAction(event)'}) %>
         </div><br>
         <% id++ %>
@@ -48,8 +47,6 @@
     }
 
     function save() {
-        // toggle_edit_save();
-        // toggle_add_item();
         const xhr = new XMLHttpRequest();
         // send the updated list
         xhr.open("PATCH", '/lists/<%= userId %>/<%= listId %>', true);
@@ -59,15 +56,6 @@
         let list = {listname: "<%= listId %>", items: items};
         console.log('list ' + list);
         xhr.send(JSON.stringify(list));
-
-        // xhr.onload = function () {
-        //     // TODO need to check http status 500 still counts as successful
-        //
-        //     console.log('save was successful');
-        //     removeDeletedRows();
-        //
-        // };
-
         xhr.onload = saveOnloadAction(xhr);
         xhr.onerror = function () {
             console.log('there was an error saving changes');
@@ -88,10 +76,23 @@
         setAddItemfocus();
     }
 
-    // function toggle_add_item() {
-    //     document.getElementById('item-input').classList.toggle('hide');
-    //     document.getElementById('add').classList.toggle('hide');
-    // }
+    function deleteList() {
+        const xhr = new XMLHttpRequest();
+        // delete list
+        xhr.open("DELETE", '/lists/<%= userId %>/<%= listId %>', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send();
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                console.log('list deleted');
+                alert('list deleted');
+            }
+        };
+        xhr.onerror = function () {
+            console.log('there was an error deleting the list');
+        }
+    }
+
 </script>
 </body>
 </html>
