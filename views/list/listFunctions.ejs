@@ -16,19 +16,14 @@
     }
 
     function removeDeletedRows() {
-        let elements = document.getElementsByClassName('deleted');
+        const elements = Array.from(document.getElementsByClassName('deleted'));
+        console.log(elements);
         for (const itemNode of elements) {
             removeRowElement(itemNode);
-            // console.log('itemNode: ' + itemNode.id);
-            // let rowNode = itemNode.parentNode;
-            // console.log('rowNode: ' + rowNode.className);
-            // let listNode = rowNode.parentNode
-            // console.log('listNode: ' + listNode.id);
-            // listNode.removeChild(rowNode);// removes whole list-row
         }
     }
 
-    function removeRowElement(itemNode){
+    function removeRowElement(itemNode) {
         console.log('itemNode: ' + itemNode.id);
         let rowNode = itemNode.parentNode;
         console.log('rowNode: ' + rowNode.className);
@@ -138,7 +133,7 @@
         // toggle_remove_undo()
     }
 
-    function toggle_remove_undo(){
+    function toggle_remove_undo() {
         const elements = document.getElementsByClassName('remove-btn');
         for (const el of elements) {
             el.classList.toggle('hide');
@@ -220,7 +215,7 @@
         }
     }
 
-    function cancelAction(){
+    function cancelAction() {
         toggle_edit_save();
         toggle_add_item();
         toggle_deleted_items();
@@ -229,26 +224,26 @@
         remove_added();
     }
 
-    function toggle_deleted_items(){
+    function toggle_deleted_items() {
         const deletedItems = document.getElementsByClassName('deleted');
-        for (const item of deletedItems){
+        for (const item of deletedItems) {
             item.classList.toggle('deleted');
         }
     }
 
-    function hide_by_class_name(className){
+    function hide_by_class_name(className) {
         const elements = document.getElementsByClassName(className);
-        for(const el of elements){
-            if(!el.classList.contains('hide')){
+        for (const el of elements) {
+            if (!el.classList.contains('hide')) {
                 el.classList.add('hide');
             }
         }
     }
 
-    function remove_added(){
+    function remove_added() {
         const listItems = document.getElementsByClassName('list-item');
-        for(const item of listItems){
-            if(item.id.startsWith('a')){
+        for (const item of listItems) {
+            if (item.id.startsWith('a')) {
                 console.log('removing item');
                 removeRowElement(item);
             }
