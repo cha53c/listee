@@ -17,11 +17,10 @@ router.get('/:userId', (req, res) => {
     if (req.params.userId == 1) { //simulate logged in
         debug(`access ok for user ${isDefCol(userId)}`);
         const listnames = getListNames(userId);
-        const listCount = listnames.length;
         debug('list name: ' + listnames);
         res.render('lists', {
             title: 'your lists', heading: 'Listee keeps all your lists here',
-            listCount: listCount, listnames: listnames, userId: userId
+            listnames: listnames, userId: userId
         });
     } else {
         debug('user access not authorised');
@@ -65,7 +64,7 @@ router.post('/:userId/create/', (req, res) => {
     unpackBody(req);
     // TODO don't add if list already exits
     const list = getList(userId, listName);
-    if(list){
+    if (list) {
         res.json({"status": "err", "msg": listName + " already exits"});
     }
     addList(userId, listName, items);

@@ -7,9 +7,11 @@
         form.remove-list {
             display: inline-block;
         }
+
         div.list-item {
             display: inline-block;
         }
+
         .hide {
             display: none;
         }
@@ -26,16 +28,14 @@
 
 <%- include('list/editSaveButtons', { editAction: 'editLists()', saveAction: 'saveLists()', cancelAction: 'cancelAction()' }) %>
 
-<h2>You have <%= listCount %> lists </h2>
+<h2 id="list-count"></h2>
 <!-- TODO can you be changed to reuse for list items as well? -->
 <% let id = 0; %>
 <div id="list-items">
     <% for (const name of listnames) { %>
         <div class="list-row">
             <a class='list-item' id="<%= id %>" href="/lists/<%= userId %>/<%= name %>"><%= name %></a>
-            <!--    <a href="/lists/<%= userId %>/<%= name %>"><%= name %></a>-->
             <%- include('list/removeUndoButtons', { id: id, removeAction: 'deleteAction(event)', undoAction: 'undoAction(event)'}) %>
-            <%#- include('list/editButtons', {userId: userId, listname: name, operation: 'delete', method: 'post', label: 'delete list'}); %>
         </div><br>
         <% id++ %>
     <% } %>
@@ -61,31 +61,23 @@
         console.log(JSON.stringify(list));
         xhr.send(JSON.stringify(list));
 
-        // xhr.onload = function() {
-        //     console.log('ready state: ' + this.readyState)
-        //     console.log('xhr status ' +  xhr.status);
-        //     console.log('response text: ' + xhr.responseText);
-        //
-        //     if(xhr.status === 200) {
-        //         console.log('save was successful');
-        //         removeDeletedRows();
-        //         toggle_edit_save();
-        //         // toggle_add_item();
-        //     } else {
-        //         alert('Error! changes not saved');
-        //     }
-        // }
-
         xhr.onload = saveOnloadAction(xhr);
-
-        // xhr.onreadystatechange = function(){
-        //     console.log('ready state change: ' + xhr.readyState);
-        // }
-
 
         xhr.onerror = function () {
             console.log('there was an error saving changes');
         }
+    }
+
+    window.onload = function () {
+        setListCount();
+        const observer = new MutationObserver(setListCount);
+        observer.observe(document.getElementById('list-items'), { attributes: false, childList: true, subtree: true });
+    }
+
+    function setListCount() {
+        const count = document.getElementsByClassName('list-row').length;
+        const grammar = count == 1 ? "list" : "lists";
+        document.getElementById("list-count").innerHTML  = "You have " + count + " " + grammar;
     }
 </script>
 </html>
