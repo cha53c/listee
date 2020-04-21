@@ -1,0 +1,16 @@
+form.remove-list {
+    display: inline-block;
+}
+
+div.list-item {
+    display: inline-block;
+}
+
+.hide {
+    display: none;
+}
+
+.deleted {
+    text-decoration: line-through;
+    color: red;
+}

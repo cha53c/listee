@@ -17,6 +17,7 @@ app.use(morgan('tiny'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
+app.use('/static', express.static('public/css'));
 // set up the routes
 app.use('/', home);
 app.use('/lists', lists);
