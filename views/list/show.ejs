@@ -86,6 +86,7 @@
             if (xhr.status === 200) {
                 console.log('list deleted');
                 alert('list deleted');
+                window.location.replace('/lists/<%= userId %>');
             }
         };
         xhr.onerror = function () {
