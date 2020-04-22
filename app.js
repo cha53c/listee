@@ -18,6 +18,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use('/static', express.static('public/css'));
+app.use('/static', express.static('public/js'));
+
 // set up the routes
 app.use('/', home);
 app.use('/lists', lists);

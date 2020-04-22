@@ -12,7 +12,7 @@
 <%- include('list/editSaveButtons', { editAction: 'editLists()', saveAction: 'saveLists()', cancelAction: 'cancelAction()' }) %>
 
 <h2 id="list-count"></h2>
-<!-- TODO can you be changed to reuse for list items as well? -->
+<!-- TODO can this be changed to reuse for list items as an include as well? -->
 <% let id = 0; %>
 <div id="list-items">
     <% for (const name of listnames) { %>
@@ -24,7 +24,7 @@
     <% } %>
 </div>
 </body>
-<%- include('list/listFunctions'); %>
+<script src="/static/listFunctions.js"></script>
 <script>
     function editLists() {
         toggle_edit_save();
@@ -32,7 +32,6 @@
     }
 
     function saveLists() {
-        // toggle_edit_save();
         console.log('you clicked save lists');
         const xhr = new XMLHttpRequest();
         // send the updated list
