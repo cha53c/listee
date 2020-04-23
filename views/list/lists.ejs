@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title><%= title %></title>
-    <link rel="stylesheet" type="text/css" href="/static/lists.css">
-</head>
+<%- include('list/head') %>
 <body>
 <h1><%= heading %></h1>
 <button onclick="window.location.href = '/lists/<%= userId %>/create';">Creat new list</button>
@@ -18,12 +14,16 @@
     <% for (const name of listnames) { %>
         <div class="list-row">
             <a class='list-item' id="<%= id %>" href="/lists/<%= userId %>/<%= name %>"><%= name %></a>
-            <%- include('list/removeUndoButtons', { id: id, removeAction: 'deleteAction(event)', undoAction: 'undoAction(event)'}) %>
+            <%- include('list/removeUndoButtons', {
+                    id: id,
+                    removeAction: 'deleteAction(event)',
+                    undoAction: 'undoAction(event)'}) %>
         </div><br>
         <% id++ %>
     <% } %>
 </div>
 <script src="/static/listFunctions.js"></script>
+<%- include('bootstrapScripts')%>
 </body>
 
 <script>

@@ -29,7 +29,6 @@ router.get('/:userId', (req, res) => {
 });
 // delete multiple lists from the lists page
 router.patch('/:userId', (req, res) => {
-    // res.sendStatus(500); // TODO remove testing only
     debug('delete lists by name');
     unpackParams(req);
     let deletedLists = req.body.listnames;
@@ -37,10 +36,8 @@ router.patch('/:userId', (req, res) => {
     for (const listName of deletedLists) {
         removeList(userId, listName);
     }
-    res.json({"status": "success", "msg": deletedLists + " list deleted"})
-    // res.set('Content-Type', 'text/plain');
-    // res.set('Access-Control-Allow-Origin', '*');
-    // res.sendStatus(200); // TODO changes status depending on errors
+    // TODO check for errors and set status
+    res.json({"status": "success", "msg": deletedLists + " list deleted"});
 });
 
 //new list page
@@ -82,7 +79,7 @@ router.get('/:userId/:listId/', (req, res) => {
     const list = getList(userId, listId);
     const items = list === undefined ? "" : list.items;
     debug('items: ' + items);
-    res.render('show', {userId: userId, listId: listId, items: items});
+    res.render('show', {title: listId, userId: userId, listId: listId, items: items});
 })
 
 // update with edits from show
