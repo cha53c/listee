@@ -91,9 +91,7 @@ router.patch('/:userId/:listId', (req, res) => {
     // TODO DRY this up - same as show
     updateList(userId, listId, items);
     debug('items: ' + items);
-    // TODO should patch and post render anything now we are using xhr
-    // this is only passing back what it received
-    res.render('show', {userId: userId, listId: listId, items: items});
+    res.json({"status": "success", "msg": 'list updated to ' + items});
 })
 
 // delete list

@@ -1,4 +1,3 @@
-
 let itemNum = 0
 const item = document.getElementById("item-input");
 const listname = document.getElementById('listname');
@@ -190,13 +189,21 @@ function saveOnloadAction(xhr) {
         console.log('this is the closure version');
         console.log('ready state: ' + xhr.readyState)
         console.log('xhr status ' + xhr.status);
-
+        console.log(xhr.response);
+        const response = JSON.parse(xhr.response);
+        const msg = response.msg;
         if (xhr.status === 200) {
-            console.log('save was successful');
-            removeDeletedRows();
-            toggle_edit_save();
-            toggle_remove_undo();
-            toggle_add_item();
+            if (response.status === 'success') {
+                console.log('save was successful');
+                console.log(msg);
+                removeDeletedRows();
+                toggle_edit_save();
+                toggle_remove_undo();
+                toggle_add_item();
+            } else {
+                console.log(msg);
+            }
+
         } else {
             alert('Error! changes not saved');
         }
@@ -245,4 +252,14 @@ function remove_added() {
             removeRowElement(item);
         }
     }
+}
+
+//
+// functions from show.ejs
+//
+function showEditAction() {
+    toggle_edit_save();
+    toggle_remove_undo();
+    toggle_add_item();
+    setAddItemfocus();
 }

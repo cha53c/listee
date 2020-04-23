@@ -4,7 +4,7 @@
 <body>
 <div class="container-fluid bg-warning">
     <h1>List name: <%= listId %>
-        <span><%- include('list/editSaveButtons', { editAction: 'edit()', saveAction: 'save()', cancelAction: 'cancelAction()'}) %></span>
+        <span><%- include('list/editSaveButtons', { editAction: 'showEditAction()', saveAction: 'showSaveAction()', cancelAction: 'cancelAction()'}) %></span>
         <span><button id="delete-list-btn" class="update-page hide" type="button" onclick="deleteList()">delete</button></span>
     </h1>
 </div>
@@ -17,14 +17,8 @@
 <script src="/static/listFunctions.js"></script>
 <%- include('bootstrapScripts') %>
 <script>
-    function edit() {
-        toggle_edit_save();
-        toggle_remove_undo();
-        toggle_add_item();
-        setAddItemfocus();
-    }
 
-    function save() {
+    function showSaveAction() {
         const xhr = new XMLHttpRequest();
         // send the updated list
         xhr.open("PATCH", '/lists/<%= userId %>/<%= listId %>', true);
