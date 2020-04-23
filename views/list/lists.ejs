@@ -8,22 +8,9 @@
 <%- include('list/editSaveButtons', { editAction: 'editLists()', saveAction: 'saveLists()', cancelAction: 'cancelAction()' }) %>
 
 <h2 id="list-count"></h2>
-<!-- TODO can this be changed to reuse for list items as an include as well? -->
-<% let id = 0; %>
-<div id="list-items">
-    <% for (const name of listnames) { %>
-        <div class="list-row">
-            <a class='list-item' id="<%= id %>" href="/lists/<%= userId %>/<%= name %>"><%= name %></a>
-            <%- include('list/removeUndoButtons', {
-                    id: id,
-                    removeAction: 'deleteAction(event)',
-                    undoAction: 'undoAction(event)'}) %>
-        </div><br>
-        <% id++ %>
-    <% } %>
-</div>
+<%- include('list/listItems', { items: listnames, addButton: false, withLinks: true }) %>
 <script src="/static/listFunctions.js"></script>
-<%- include('bootstrapScripts')%>
+<%- include('bootstrapScripts') %>
 </body>
 
 <script>
@@ -54,13 +41,13 @@
     window.onload = function () {
         setListCount();
         const observer = new MutationObserver(setListCount);
-        observer.observe(document.getElementById('list-items'), { attributes: false, childList: true, subtree: true });
+        observer.observe(document.getElementById('list-items'), {attributes: false, childList: true, subtree: true});
     }
 
     function setListCount() {
         const count = document.getElementsByClassName('list-row').length;
         const grammar = count == 1 ? "list" : "lists";
-        document.getElementById("list-count").innerHTML  = "You have " + count + " " + grammar;
+        document.getElementById("list-count").innerHTML = "You have " + count + " " + grammar;
     }
 </script>
 </html>

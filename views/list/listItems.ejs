@@ -1,0 +1,20 @@
+<% let id = 0; %>
+<div id="list-items">
+    <% if (addButton === true) { %>
+        <%- include('list/addItem', { classStr: 'hide' }) %>
+    <% } %>
+    <% for (const item of items) { %>
+        <div class="list-row">
+            <% if(withLinks === true) { %>
+                <a class='list-item' id="<%= id %>" href="/lists/<%= userId %>/<%= item %>"><%= item %></a>
+            <% } else { %>
+                <div class='list-item' id="<%= id %>"><%= item %></div>
+            <% } %>
+            <%- include('list/removeUndoButtons', {
+            id: id,
+            removeAction: 'deleteAction(event)',
+            undoAction: 'undoAction(event)'}) %>
+        </div><br>
+        <% id++ %>
+    <% } %>
+</div>

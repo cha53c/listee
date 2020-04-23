@@ -5,21 +5,12 @@
 <h1>List name: <%= listId %></h1>
 <%- include('list/editSaveButtons', { editAction: 'edit()', saveAction: 'save()', cancelAction: 'cancelAction()'}) %>
 <button id="delete-list-btn" class="update-page hide" type="button"
-        onclick="deleteList()">delete</button>
+        onclick="deleteList()">delete
+</button>
 <br>
 <a href="/lists/<%= userId %>">Back to my lists</a>
 <h2>List items</h2>
-<div id="list-items">
-    <%- include('list/addItem', { classStr: 'hide' }) %>
-    <% let id = 0; %>
-    <% for (const item of items) { %>
-        <div class="list-row">
-            <div class='list-item' id="<%= id %>"><%= item %></div>
-            <%- include('list/removeUndoButtons', { id: id, removeAction: 'deleteAction(event)', undoAction: 'undoAction(event)'}) %>
-        </div><br>
-        <% id++ %>
-    <% } %>
-</div>
+<%- include('list/listItems', { items: items, addButton: true, withLinks: false }) %>
 <script src="/static/listFunctions.js"></script>
 <%- include('bootstrapScripts') %>
 <script>
