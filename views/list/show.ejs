@@ -2,15 +2,18 @@
 <html lang="en">
 <%- include('list/head') %>
 <body>
-<h1>List name: <%= listId %></h1>
-<%- include('list/editSaveButtons', { editAction: 'edit()', saveAction: 'save()', cancelAction: 'cancelAction()'}) %>
-<button id="delete-list-btn" class="update-page hide" type="button"
-        onclick="deleteList()">delete
-</button>
-<br>
+<div class="container-fluid bg-warning">
+    <h1>List name: <%= listId %>
+        <span><%- include('list/editSaveButtons', { editAction: 'edit()', saveAction: 'save()', cancelAction: 'cancelAction()'}) %></span>
+        <span><button id="delete-list-btn" class="update-page hide" type="button" onclick="deleteList()">delete</button></span>
+    </h1>
+</div>
+<div class="container bg-light" >
 <a href="/lists/<%= userId %>">Back to my lists</a>
 <h2>List items</h2>
 <%- include('list/listItems', { items: items, addButton: true, withLinks: false }) %>
+</div>
+</body>
 <script src="/static/listFunctions.js"></script>
 <%- include('bootstrapScripts') %>
 <script>

@@ -2,15 +2,19 @@
 <html lang="en">
 <%- include('list/head') %>
 <body>
-<h1><%= heading %></h1>
-<button onclick="window.location.href = '/lists/<%= userId %>/create';">Creat new list</button>
+<div class="container-fluid bg-warning">
+    <h1><%= heading %>
+        <span><button onclick="window.location.href = '/lists/<%= userId %>/create';">Add new list</button></span>
+        <span><%- include('list/editSaveButtons', { editAction: 'editLists()', saveAction: 'saveLists()', cancelAction: 'cancelAction()' }) %></span>
+    </h1>
 
-<%- include('list/editSaveButtons', { editAction: 'editLists()', saveAction: 'saveLists()', cancelAction: 'cancelAction()' }) %>
-
-<h2 id="list-count"></h2>
-<%- include('list/listItems', { items: listnames, addButton: false, withLinks: true }) %>
-<script src="/static/listFunctions.js"></script>
-<%- include('bootstrapScripts') %>
+</div>
+<div class="container bg-light">
+    <h2 id="list-count">You have 0 lists</h2>
+    <%- include('list/listItems', { items: listnames, addButton: false, withLinks: true }) %>
+    <script src="/static/listFunctions.js"></script>
+    <%- include('bootstrapScripts') %>
+</div>
 </body>
 
 <script>

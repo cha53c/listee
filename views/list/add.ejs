@@ -2,15 +2,22 @@
 <html lang="en">
 <%- include('list/head') %>
 <body>
-<h1><%= heading %></h1>
-<label>list name</label>
-<input id="listname" type="text" placeholder="list name">
-<button type="button" id="submit" value="Add Item">Create list</button>
-<br>
-<h2>List Items</h2>
-<div id="list-items"></div>
-<%- include('list/addItem', { classStr: ''}) %>
-<br>
+<div class="container-fluid bg-warning">
+    <h1><%= heading %>
+        <span><button type="button" id="submit" value="Add Item">Save</button></span>
+    </h1>
+</div>
+<div class="container bg-light">
+    <h2>List name
+        <span><input id="listname" type="text" placeholder="enter list name">
+        </span>
+    </h2>
+    <br>
+    <h2>List Items</h2>
+    <div id="list-items"></div>
+    <%- include('list/addItem', { classStr: ''}) %>
+    <br>
+</div>
 <script src="/static/listFunctions.js"></script>
 <%- include('bootstrapScripts') %>
 <script>
