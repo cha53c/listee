@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "DEBUG=app,app:* nodemon app.js",
+    "stop": "ps -e  | grep listeeApp | grep -v grep | awk '{print $1}' | xargs kill -9",
     "express-routes-list": "express-routes-list",
     "test": "DEBUG=app,app:* mocha",
     "jasmine-test": "jasmine",
