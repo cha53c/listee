@@ -10,20 +10,14 @@ let userId, listId, listName, list, items;
 
 function getUserHome(req, res) {
     unpackParams(req);
-    debug(`user ${isDefCol(userId)} attempting to access their list page`);
-    if (req.params.userId == 1) { //simulate logged in
-        debug(`access ok for user ${isDefCol(userId)}`);
-        const listnames = getListNames(userId);
-        const listCount = 'You have ' + listnames.length + ' lists'
-        debug('list name: ' + listnames);
-        res.render('lists', {
-            title: 'your lists', heading: 'Listee keeps all your lists here', listCount: listCount,
-            listnames: listnames, userId: userId
-        });
-    } else {
-        debug('user access not authorised');
-        res.redirect('/'); // if not logged in redirect back to home page
-    }
+    const listnames = getListNames(userId);
+    const listCount = 'You have ' + listnames.length + ' lists'
+    debug('list name: ' + listnames);
+    res.render('lists', {
+        title: 'your lists', heading: 'Listee keeps all your lists here', listCount: listCount,
+        listnames: listnames, userId: userId
+    });
+
 }
 
 function getAddListPage(req, res) {
@@ -98,7 +92,6 @@ function deleteMultipleLists(req, res) {
 function unpackParams(req) {
     userId = req.params.userId;
     listId = req.params.listId;
-    debug(`from params userId: ${isDefCol(userId)} listId: ${isDefCol(listId)}`);
 }
 
 function unpackBody(req) {
