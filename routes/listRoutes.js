@@ -17,9 +17,10 @@ router.get('/:userId', (req, res) => {
     if (req.params.userId == 1) { //simulate logged in
         debug(`access ok for user ${isDefCol(userId)}`);
         const listnames = getListNames(userId);
+        const listCount = 'You have ' + listnames.length + ' lists'
         debug('list name: ' + listnames);
         res.render('lists', {
-            title: 'your lists', heading: 'Listee keeps all your lists here',
+            title: 'your lists', heading: 'Listee keeps all your lists here', listCount: listCount,
             listnames: listnames, userId: userId
         });
     } else {
