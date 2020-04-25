@@ -28,8 +28,9 @@ app.use('/auth', auth);
 app.set('views', ['./views', 'views/list', 'views/auth'] );
 app.set('view engine', 'ejs');
 
-const server = app.listen(3000, () => {
-    debug(`Listee is listening to you on port ${chalk.green('3000')}`);
+const PORT = 3000;
+const server = app.listen(PORT, () => {
+    debug(`Listee is listening to you on port ${chalk.green(PORT)}`);
 });
 
 function stop(){
