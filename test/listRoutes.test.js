@@ -26,7 +26,7 @@ describe('lists', () => {
                     .end((err, res) => {
                         res.should.have.status(200);
                         const $ = cheerio.load(res.text);
-                        expect($('h2').text()).to.eql('You have 0 lists ');
+                        expect($('h2').text()).to.eql('You have 0 lists');
                         done();
                     });
             });
@@ -36,7 +36,7 @@ describe('lists', () => {
                     .end((err, res) => {
                         res.should.have.status(200);
                         const $ = cheerio.load(res.text);
-                        expect($('h2').text()).to.eql('You have 0 lists ');
+                        expect($('h2').text()).to.eql('You have 0 lists');
                     });
                 chai.request(server)
                     .post('/lists/1/create')
@@ -57,7 +57,7 @@ describe('lists', () => {
                     .end((err, res) => {
                         res.should.have.status(200);
                         const $ = cheerio.load(res.text);
-                        expect($('h2').text()).to.eql('You have 2 lists ');
+                        expect($('h2').text()).to.eql('You have 2 lists');
                     });
                 chai.request(server)
                     .patch('/lists/1')
@@ -71,7 +71,7 @@ describe('lists', () => {
                     .end((err, res) => {
                         res.should.have.status(200);
                         const $ = cheerio.load(res.text);
-                        expect($('h2').text()).to.eql('You have 0 lists ');
+                        expect($('h2').text()).to.eql('You have 0 lists');
                     });
                 done();
 
@@ -137,17 +137,24 @@ describe('lists', () => {
         });
         describe('/PATCH lists/userId/listId', () => {
             it('it should update an existing list', (done) => {
-                const list = {"listname": "rainbow", "items": ["red", "yellow", "green", "blue", "orange"]};
+                const originalList = {"listname": "rainbow", "items": ["red", "green"]};
+                chai.request(server)
+                    .post('/lists/1/create')
+                    .set('content-type', 'application/json')
+                    .send(originalList)
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                    });
+                const updatedList = {"listname": "rainbow", "items": ["red", "green", "blue"]};
                 chai.request(server)
                     .patch('/lists/1/rainbow')
                     .set('content-type', 'application/json')
-                    .send(list)
+                    .send(updatedList)
                     .end((err, res) => {
                         res.should.have.status(200);
-                        const $ = cheerio.load(res.text);
-                        expect($('.list-item').first().text()).to.equal('red');
-                        done();
+                        res.text.should.include('blue');
                     });
+                done();
             });
         });
         describe('/delete /:userId/:listId/', () => {
