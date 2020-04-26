@@ -4,7 +4,6 @@ const debug = require('debug')('app:userStoreSpec');
 describe("add users to user store", ()=>{
     it('should have user 1 already populated', ()=> {
         userStore.init();
-        console.log(userStore.users);
         expect(userStore.isUser('1')).toBe(true);
     })
 

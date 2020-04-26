@@ -183,7 +183,6 @@ describe('lists', () => {
                     .end((err, res) => {
                         res.should.have.status(200);
                         const status = res.body.status;
-                        console.log(res.body);
                         expect(status).to.equal('success');
                         done();
                     });
@@ -194,7 +193,6 @@ describe('lists', () => {
                     .set('content-type', 'application/json')
                     .end((err, res) => {
                         res.should.have.status(200);
-                        console.log(res.body);
                         res.body.should.property('status');
                         res.body.should.property('msg');
                         const status = res.body.status;

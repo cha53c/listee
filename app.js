@@ -13,7 +13,12 @@ const app = express();
 
 process.title = "listeeApp";
 
-app.use(morgan('tiny'));
+debug('node environment = %s', process.env.NODE_ENV);
+
+if(process.env.NODE_ENV !== 'test' ){
+    app.use(morgan('tiny'));
+}
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
