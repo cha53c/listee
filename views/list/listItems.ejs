@@ -1,5 +1,5 @@
 <% let id = 0; %>
-<div id="list-items">
+<div id="list-items" class="list-items overflow-auto">
     <% if (addButton === true) { %>
         <%- include('list/addItem', { classStr: 'hide' }) %>
     <% } %>
