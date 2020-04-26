@@ -1,31 +1,39 @@
 const debug = require('debug')('app:listController');
-const chalk = require('chalk');
+const {red} = require('chalk');
 const path = require('path');
 
-const {isDefCol} = require('../utils/chalkbox');
-const {getAllLists, getListNames, addList, getList, updateList, removeList} = require('../model/list');
+const {getListNames, addList, getList, updateList, removeList} = require('../model/list');
 
 
-let userId, listId, listName, list, items;
+let userId, listId, listName, items;
+
+const SUCCESS_STATUS = 'success';
+const ERROR_STATUS = 'err';
+
+const responseMsg = {
+    status: "",
+    msg: ""
+};
 
 function getUserHome(req, res) {
+    debug('get user\'s list home');
     unpackParams(req);
     const listnames = getListNames(userId);
-    const listCount = 'You have ' + listnames.length + ' lists'
-    debug('list name: ' + listnames);
+    const listCount = 'You have ' + listnames.length + ' lists';
+    debug('listnames: %o', listnames);
     res.render('lists', {
         title: 'your lists', heading: 'Listee keeps all your lists here', listCount: listCount,
         listnames: listnames, userId: userId
     });
-
 }
 
 function getAddListPage(req, res) {
-    debug('create new list page');
+    debug('get add list page');
     unpackParams(req);
+    // used to check if listname is aready a taken
     const listnames = getListNames(userId);
     res.render('add', {
-        title: 'create new list',
+        title: 'add new list',
         heading: 'Create your new list',
         userId: userId,
         listnames: listnames
@@ -33,60 +41,71 @@ function getAddListPage(req, res) {
 }
 
 function addNewList(req, res) {
-    debug('post new list');
-    debug(req.body);
+    debug('add list');
     unpackParams(req);
     unpackBody(req);
     // TODO don't add if list already exits
     const list = getList(userId, listName);
     if (list) {
-        res.json({"status": "err", "msg": listName + " already exits"});
+        responseMsg.status = ERROR_STATUS;
+        responseMsg.msg = 'list ' + listName + " already exits";
+        debug(`${red(responseMsg.msg)}`);
+        res.json(responseMsg);
     }
     addList(userId, listName, items);
-    debug(listName);
     // res.render('show', {userId: userId, listId: listId, items: items});
     // res.json({"status": "success", "msg": listName + " added"});
     res.redirect(path.join('/lists', userId, listName));
-};
+}
 
 function showList(req, res) {
+    debug(`show list`);
     unpackParams(req);
-    debug(`show list: ${isDefCol(listId)}`);
     const list = getList(userId, listId);
     const items = list === undefined ? "" : list.items;
-    debug('items: ' + items);
+    debug('items: %s', items);
     res.render('show', {title: listId, userId: userId, listId: listId, items: items});
 }
 
 function patchList(req, res) {
-    debug(`body ${isDefCol(req.body)}`);
+    debug(`update list`);
     unpackParams(req);
     unpackBody(req);
-    debug(`updating list: ${isDefCol(listId)}`);
     // TODO DRY this up - same as show
     updateList(userId, listId, items);
-    debug('items: ' + items);
-    res.json({"status": "success", "msg": 'list updated to ' + items});
+    res.json({"status": SUCCESS_STATUS, "msg": 'list updated to ' + items});
 }
 
 function deleteList(req, res) {
+    debug('delete list');
     unpackParams(req);
     if (!removeList(userId, listId)) {
-        res.json({"status": "err", "msg": listId + " not found"});
+        responseMsg.status = ERROR_STATUS;
+        responseMsg.msg = 'list ' + listId + " not found";
+        debug(`${red(responseMsg.msg)}`);
+        res.json(responseMsg);
     }
-    res.json({"status": "success", "msg": listId + ' deleted'});
+    res.json({"status": SUCCESS_STATUS, "msg": 'list ' + listId + ' deleted'});
 }
 
 function deleteMultipleLists(req, res) {
-    debug('delete lists by name');
+    debug('delete multiple lists');
     unpackParams(req);
     let deletedLists = req.body.listnames;
-    debug(deletedLists);
+    let failedLists = "";
     for (const listName of deletedLists) {
-        removeList(userId, listName);
+        // TODO handle errors if remove list returns false
+        if (!removeList(userId, listName)) {
+            responseMsg.status = ERROR_STATUS;
+            failedLists += listName + " ";
+        }
     }
-    // TODO check for errors and set status
-    res.json({"status": "success", "msg": deletedLists + " list deleted"});
+    if (responseMsg.status === ERROR_STATUS) {
+        responseMsg.msg = failedLists;
+        debug(`${red(responseMsg.msg)}`);
+        res.json(responseMsg);
+    }
+    res.json({"status": SUCCESS_STATUS, "msg": deletedLists + " list deleted"});
 }
 
 function unpackParams(req) {
@@ -97,7 +116,6 @@ function unpackParams(req) {
 function unpackBody(req) {
     listName = req.body.listname;
     items = req.body.items;
-    debug(`from body listname: ${isDefCol(listName)} items: ${isDefCol(items)}`)
 }
 
 module.exports = {

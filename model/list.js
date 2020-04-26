@@ -6,7 +6,7 @@ const {isDefCol} = require('../utils/chalkbox');
 List = {
     id: undefined,
     items: []
-}
+};
 
 function addList(userId, listname, items) {
     let usersLists;
@@ -38,9 +38,9 @@ function removeList(userId, listname) {
 function updateList(userId, listname, items) {
     debug(`update list: ${isDefCol(listname)} for user: ${isDefCol(userId)}`);
     const list = getList(userId, listname);
-    debug(`list before update: ${JSON.stringify(list)}`);
+    debug('list before update: %o', list);
     list.items = items;
-    debug(`list after update: ${JSON.stringify(list)}`);
+    debug('list after update: %o', list);
 }
 
 function getAllLists(userId) {
@@ -53,7 +53,7 @@ function getAllLists(userId) {
 
 function getListNames(userId) {
     const lists = getAllLists(userId);
-    return lists == undefined ? "" : Array.from(lists.keys()); // pass empty iterable if undefined
+    return lists === undefined ? "" : Array.from(lists.keys()); // pass empty iterable if undefined
 }
 
-module.exports = {addList, getList, updateList, removeList, getAllLists, getListNames}
+module.exports = {addList, getList, updateList, removeList, getAllLists, getListNames};

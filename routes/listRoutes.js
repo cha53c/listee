@@ -1,6 +1,6 @@
 const express = require('express');
 const debug = require('debug')('app:listRoutes');
-const { green } = require('chalk');
+const {green} = require('chalk');
 
 const {isDefCol} = require('../utils/chalkbox');
 const {
@@ -10,13 +10,26 @@ const {
 
 const router = express.Router();
 
-// router.use(function timeLog (req, res, next) {
-//     console.log('Time: ', Date.now());
-//     next();
-// });
+router.use('/:userId/', (req, res, next) => {
+    if (req.method === "PATCH") {
+        debug("request body %o", req.body);
+    }
+    next();
+});
 
-// TODO user router.param
-// TODO use errorhandler for development???
+router.use('/:userId/create/', (req, res, next) => {
+    if (req.method === "POST") {
+        debug("request body %o", req.body);
+    }
+    next();
+});
+
+router.use('/:userId/:listId/', (req, res, next) => {
+    if (req.method === "PATCH") {
+        debug("request body %o", req.body);
+    }
+    next();
+});
 
 router.route('/:userId')
     .get(getUserHome)
@@ -47,5 +60,6 @@ router.param('listId', (req, res, next) => {
     // TODO validate and sanitise listId
     next();
 });
+
 module.exports = router;
 

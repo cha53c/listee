@@ -10,17 +10,13 @@ const cheerio = require('cheerio');
 
 chai.use(chaiHttp);
 
-//Our parent block
 describe('lists', () => {
-    // beforeEach( () => {
-    //     const { app: server, stop } = require('../app')
-    // });
     after(() => {
         stop();
     });
     describe('home page', () => {
         describe('/GET lists', () => {
-            it('it should GET the lists page with 0 lists', (done) => {
+            it('should GET the lists page with 0 lists', (done) => {
                 chai.request(server)
                     .get('/lists/1')
                     .end((err, res) => {
@@ -30,61 +26,82 @@ describe('lists', () => {
                         done();
                     });
             });
-            it('it should delete all lists', (done) => {
-                chai.request(server)
-                    .get('/lists/1')
-                    .end((err, res) => {
-                        res.should.have.status(200);
-                        const $ = cheerio.load(res.text);
-                        expect($('h2').text()).to.eql('You have 0 lists');
-                    });
-                chai.request(server)
-                    .post('/lists/1/create')
-                    .set('content-type', 'application/json')
-                    .send({"listname": "new list", "items": ["red"]})
-                    .end((err, res) => {
-                        res.should.have.status(200);
-                    });
-                chai.request(server)
-                    .post('/lists/1/create')
-                    .set('content-type', 'application/json')
-                    .send({"listname": "old list", "items": ["blue"]})
-                    .end((err, res) => {
-                        res.should.have.status(200);
-                    });
-                chai.request(server)
-                    .get('/lists/1')
-                    .end((err, res) => {
-                        res.should.have.status(200);
-                        const $ = cheerio.load(res.text);
-                        expect($('h2').text()).to.eql('You have 2 lists');
-                    });
-                chai.request(server)
-                    .patch('/lists/1')
-                    .set('content-type', 'application/json')
-                    .send({"listnames": ["old list", "new list"]})
-                    .end((err, res) => {
-                        res.should.have.status(200);
-                    });
-                chai.request(server)
-                    .get('/lists/1')
-                    .end((err, res) => {
-                        res.should.have.status(200);
-                        const $ = cheerio.load(res.text);
-                        expect($('h2').text()).to.eql('You have 0 lists');
-                    });
-                done();
-
+            describe('/PATCH multiple lists', () => {
+                it('should delete all lists', (done) => {
+                    chai.request(server)
+                        .get('/lists/1')
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            const $ = cheerio.load(res.text);
+                            expect($('h2').text()).to.eql('You have 0 lists');
+                        });
+                    chai.request(server)
+                        .post('/lists/1/create')
+                        .set('content-type', 'application/json')
+                        .send({"listname": "new list", "items": ["red"]})
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                        });
+                    chai.request(server)
+                        .post('/lists/1/create')
+                        .set('content-type', 'application/json')
+                        .send({"listname": "old list", "items": ["blue"]})
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                        });
+                    chai.request(server)
+                        .get('/lists/1')
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            const $ = cheerio.load(res.text);
+                            expect($('h2').text()).to.eql('You have 2 lists');
+                        });
+                    chai.request(server)
+                        .patch('/lists/1')
+                        .set('content-type', 'application/json')
+                        .send({"listnames": ["old list", "new list"]})
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                        });
+                    chai.request(server)
+                        .get('/lists/1')
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            const $ = cheerio.load(res.text);
+                            expect($('h2').text()).to.eql('You have 0 lists');
+                        });
+                    done();
+                });
+                it('should return an error if a list does not exist', (done) => {
+                    chai.request(server)
+                        .post('/lists/1/create')
+                        .set('content-type', 'application/json')
+                        .send({"listname": "new list", "items": ["red"]})
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                        });
+                    chai.request(server)
+                        .patch('/lists/1')
+                        .set('content-type', 'application/json')
+                        .send({"listnames": ["new list", "wrong list"]})
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.text.should.include('err');
+                            res.text.should.include('wrong list');
+                            res.text.should.not.include('new list');
+                        });
+                    done();
+                });
             });
         });
     });
 
     describe('list CRUD operations', () => {
         describe('/POST lists/userId/create', () => {
-            beforeEach( () => {
-                const { app: server, stop } = require('../app')
+            beforeEach(() => {
+                const {app: server, stop} = require('../app');
             });
-            it('it should add a new list and redirect to show page', (done) => {
+            it('should add a new list and redirect to show page', (done) => {
                 const list = {"listname": "rainbow", "items": ["red", "yellow", "green", "blue"]};
                 chai.request(server)
                     .post('/lists/1/create')
@@ -100,7 +117,7 @@ describe('lists', () => {
                         done();
                     });
             });
-            it('it should add a list that already exits', (done) => {
+            it('should not add a list if the id already exits', (done) => {
                 const list = {"listname": "new list", "items": ["red", "yellow", "green", "blue"]};
                 chai.request(server)
                     .post('/lists/1/create')
@@ -108,7 +125,7 @@ describe('lists', () => {
                     .send(list)
                     .end((err, res) => {
                         res.should.have.status(200);
-                        expect(res).to.redirect;
+                        // expect(res).to.redirect;
                         // done();
                     });
                 chai.request(server)
@@ -117,6 +134,7 @@ describe('lists', () => {
                     .send(list)
                     .end((err, res) => {
                         res.should.have.status(200);
+                        // TODO check response message
                         expect(res).to.not.redirect;
 
                     });
@@ -124,7 +142,7 @@ describe('lists', () => {
             });
         });
         describe('/GET lists/userId/listId', () => {
-            it('it should show contents of list', (done) => {
+            it('should show contents of list', (done) => {
                 chai.request(server)
                     .get('/lists/1/rainbow')
                     .end((err, res) => {
@@ -136,7 +154,7 @@ describe('lists', () => {
             });
         });
         describe('/PATCH lists/userId/listId', () => {
-            it('it should update an existing list', (done) => {
+            it('should update an existing list', (done) => {
                 const originalList = {"listname": "rainbow", "items": ["red", "green"]};
                 chai.request(server)
                     .post('/lists/1/create')
@@ -158,7 +176,7 @@ describe('lists', () => {
             });
         });
         describe('/delete /:userId/:listId/', () => {
-            it('it should delete an existing list', (done) => {
+            it('should delete an existing list', (done) => {
                 chai.request(server)
                     .delete('/lists/1/rainbow')
                     .set('content-type', 'application/json')
@@ -170,14 +188,14 @@ describe('lists', () => {
                         done();
                     });
             });
-            it('it should return massage if list does not exist', (done) =>{
+            it('should return massage if list does not exist', (done) => {
                 chai.request(server)
                     .delete('/lists/1/whatnot')
                     .set('content-type', 'application/json')
                     .end((err, res) => {
                         res.should.have.status(200);
                         console.log(res.body);
-                        res.body.should.property('status')
+                        res.body.should.property('status');
                         res.body.should.property('msg');
                         const status = res.body.status;
                         expect(status).to.equal('err');
@@ -186,5 +204,4 @@ describe('lists', () => {
             })
         });
     });
-
 });
