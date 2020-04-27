@@ -4,8 +4,10 @@
 <body>
 <div class="container-fluid bg-warning">
     <h1><%= heading %>
-        <span><button onclick="window.location.href = '/lists/<%= userId %>/create';">Add new list</button></span>
+<!--        <span><button onclick="window.location.href = '/lists/<%= userId %>/create';">Add new list</button></span>-->
+        <span><i class="material-icons md-36 update-page" onclick="window.location.href = '/lists/<%= userId %>/create';">add_circle</i></span>
         <span><%- include('list/editSaveButtons', { editAction: 'editLists()', saveAction: 'saveLists()', cancelAction: 'cancelAction()' }) %></span>
+        <i id="face" class="material-icons md-36 md-inactive">face</i>
     </h1>
 
 </div>
@@ -46,6 +48,10 @@
         setListCount();
         const observer = new MutationObserver(setListCount);
         observer.observe(document.getElementById('list-items'), {attributes: false, childList: true, subtree: true});
+
+        document.getElementById('face').addEventListener('click', function () {
+            console.log('you clicked on my face');
+        })
     }
 
     function setListCount() {

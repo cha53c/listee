@@ -126,6 +126,7 @@ function toggle_edit_save() {
     const elements = document.getElementsByClassName('update-page');
     for (const el of elements) {
         el.classList.toggle('hide');
+        el.classList.toggle('material-icons')
     }
 }
 
