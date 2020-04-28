@@ -125,8 +125,8 @@ function toggle_edit_save() {
     const elements = document.getElementsByClassName('update-page');
     for (const el of elements) {
         el.classList.toggle('hide');
-        // material-icons also set display so have to be removed when hide is added
-        el.classList.toggle('material-icons')
+        // material-icons-two-tone also set display so have to be removed when hide is added
+        el.classList.toggle('material-icons-two-tone')
     }
 }
 
@@ -134,7 +134,7 @@ function toggle_remove_undo() {
     const elements = document.getElementsByClassName('remove-btn');
     for (const el of elements) {
         el.classList.toggle('hide');
-        el.classList.toggle('material-icons');
+        el.classList.toggle('material-icons-two-tone');
     }
 }
 
@@ -146,9 +146,9 @@ const deleteAction = function (event) {
     element.classList.toggle('deleted');
     let undoButton = document.getElementById('undo' + itemId);
     undoButton.classList.toggle('hide');
-    undoButton.classList.toggle('material-icons');
+    undoButton.classList.toggle('material-icons-two-tone');
     event.target.classList.toggle('hide');
-    event.target.classList.toggle('material-icons');
+    event.target.classList.toggle('material-icons-two-tone');
 
 
 };
@@ -161,9 +161,9 @@ const undoAction = function (event) {
     element.classList.toggle('deleted');
     let delButton = document.getElementById('del' + itemId);
     delButton.classList.toggle('hide');
-    delButton.classList.toggle('material-icons');
+    delButton.classList.toggle('material-icons-two-tone');
     event.target.classList.toggle('hide');
-    event.target.classList.toggle('material-icons');
+    event.target.classList.toggle('material-icons-two-tone');
 };
 
 function getDeletedItems() {
@@ -246,7 +246,7 @@ function hide_by_class_name(className) {
     for (const el of elements) {
         if (!el.classList.contains('hide')) {
             el.classList.add('hide');
-            el.classList.toggle('material-icons');
+            el.classList.toggle('material-icons-two-tone');
         }
     }
 }
