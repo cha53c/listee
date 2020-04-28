@@ -5,15 +5,15 @@
     <% } %>
     <% for (const item of items) { %>
         <div class="list-row">
+            <%- include('list/removeUndoButtons', {
+            id: id,
+            removeAction: 'deleteAction(event)',
+            undoAction: 'undoAction(event)'}) %>
             <% if(withLinks === true) { %>
                 <a class='list-item' id="<%= id %>" href="/lists/<%= userId %>/<%= item %>"><%= item %></a>
             <% } else { %>
                 <div class='list-item' id="<%= id %>"><%= item %></div>
             <% } %>
-            <%- include('list/removeUndoButtons', {
-            id: id,
-            removeAction: 'deleteAction(event)',
-            undoAction: 'undoAction(event)'}) %>
         </div><br>
         <% id++ %>
     <% } %>

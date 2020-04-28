@@ -1,15 +1,15 @@
-let itemNum = 0
+let itemNum = 0;
 const item = document.getElementById("item-input");
 const listname = document.getElementById('listname');
 const validationMsg = {
     empty: 'empty',
     tooLong: 'too long, max length x',
     valid: 'valid'
-}
+};
 
 function removeListRow(itemNode) {
     let rowNode = itemNode.parentNode;
-    let listNode = rowNode.parentNode
+    let listNode = rowNode.parentNode;
     listNode.removeChild(rowNode);// removes whole list-row
 }
 
@@ -25,7 +25,7 @@ function removeRowElement(itemNode) {
     console.log('itemNode: ' + itemNode.id);
     let rowNode = itemNode.parentNode;
     console.log('rowNode: ' + rowNode.className);
-    let listNode = rowNode.parentNode
+    let listNode = rowNode.parentNode;
     console.log('listNode: ' + listNode.id);
     listNode.removeChild(rowNode);// removes whole list-row
 }
@@ -40,16 +40,15 @@ function validateAddedItem(value) {
         return;
     }
     alert('input is ' + msg);
-    return;
 }
 
 function appendListItem(item, id) {
-    let rowDiv = document.createElement('DIV')
+    let rowDiv = document.createElement('DIV');
     rowDiv.setAttribute('class', 'list-row');
     let itemDiv = document.createElement('DIV');
     itemDiv.setAttribute('id', id);
     itemDiv.setAttribute('class', 'list-item');
-    let textNode = document.createTextNode(item)
+    let textNode = document.createTextNode(item);
     itemDiv.appendChild(textNode);
     document.getElementById('list-items').appendChild(rowDiv);
     rowDiv.appendChild(itemDiv);
@@ -63,7 +62,7 @@ function appendRemoveButton(itemNode, action) {
     button.setAttribute('class', 'remove-btn');
     button.setAttribute('type', 'button');
     button.setAttribute('data-itemId', itemNode.id);
-    let textNode = document.createTextNode('remove')
+    let textNode = document.createTextNode('remove');
     button.appendChild(textNode);
     parent.appendChild(button);
     button.addEventListener('click', action);
@@ -78,7 +77,7 @@ function appendUndoButton(itemNode, action) {
     undoButton.setAttribute('type', 'button');
     undoButton.setAttribute('data-itemId', itemNode.id);
     // undoButton.setAttribute('class', 'remove-btn hide');
-    let textNode = document.createTextNode('undo')
+    let textNode = document.createTextNode('undo');
     undoButton.appendChild(textNode);
     parent.appendChild(undoButton);
     // TODO how to get this to work for add and show???
@@ -126,6 +125,7 @@ function toggle_edit_save() {
     const elements = document.getElementsByClassName('update-page');
     for (const el of elements) {
         el.classList.toggle('hide');
+        // material-icons also set display so have to be removed when hide is added
         el.classList.toggle('material-icons')
     }
 }
@@ -134,6 +134,7 @@ function toggle_remove_undo() {
     const elements = document.getElementsByClassName('remove-btn');
     for (const el of elements) {
         el.classList.toggle('hide');
+        el.classList.toggle('material-icons');
     }
 }
 
@@ -145,8 +146,12 @@ const deleteAction = function (event) {
     element.classList.toggle('deleted');
     let undoButton = document.getElementById('undo' + itemId);
     undoButton.classList.toggle('hide');
+    undoButton.classList.toggle('material-icons');
     event.target.classList.toggle('hide');
-}
+    event.target.classList.toggle('material-icons');
+
+
+};
 
 const undoAction = function (event) {
     console.log('you clicked undo');
@@ -156,8 +161,10 @@ const undoAction = function (event) {
     element.classList.toggle('deleted');
     let delButton = document.getElementById('del' + itemId);
     delButton.classList.toggle('hide');
+    delButton.classList.toggle('material-icons');
     event.target.classList.toggle('hide');
-}
+    event.target.classList.toggle('material-icons');
+};
 
 function getDeletedItems() {
     let items = [];
@@ -187,8 +194,6 @@ function getRemainingItems() {
 
 function saveOnloadAction(xhr) {
     return function () {
-        console.log('this is the closure version');
-        console.log('ready state: ' + xhr.readyState)
         console.log('xhr status ' + xhr.status);
         console.log(xhr.response);
         const response = JSON.parse(xhr.response);
@@ -230,7 +235,7 @@ function cancelAction() {
 }
 
 function toggle_deleted_items() {
-    const deletedItems = document.getElementsByClassName('deleted');
+    const deletedItems = Array.from(document.getElementsByClassName('deleted'));
     for (const item of deletedItems) {
         item.classList.toggle('deleted');
     }
@@ -241,6 +246,7 @@ function hide_by_class_name(className) {
     for (const el of elements) {
         if (!el.classList.contains('hide')) {
             el.classList.add('hide');
+            el.classList.toggle('material-icons');
         }
     }
 }

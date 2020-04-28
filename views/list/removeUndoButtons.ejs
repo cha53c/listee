@@ -1,6 +1,4 @@
-<button id="del<%= id %>" class="remove-btn hide" type="button" data-itemId="<%= id %>"
-        onclick="<%= removeAction %>">remove
-</button>
-<button id="undo<%= id %>" class="undo-btn hide" type="button" data-itemId="<%= id %>"
-        onclick="<%= undoAction %>">undo
-</button>
+<i id="del<%= id %>" class="remove-btn hide" data-itemId="<%= id %>"
+   onclick="<%= removeAction %>">delete</i>
+<i id="undo<%= id %>" class="undo-btn hide" data-itemId="<%= id %>"
+   onclick="<%= undoAction %>">undo</i>
