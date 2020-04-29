@@ -5,9 +5,10 @@ const chalk = require('chalk');
 const userStore = require('../model/userStore')
 
 const router = express.Router();
+
 router.get('/signUp', (req, res) => {
     debug('sign up route');
-    res.render('sighup');
+    res.render('sighup', {title: "sign up"});
 });
 
 router.post('/signUp', (req, res) => {
