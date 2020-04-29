@@ -1,17 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta http-equiv="content-type" content="application/json; charset=UTF-8">
-    <title>Sign In</title>
-</head>
-<body>
-<h1>Login Page</h1>
+<%- include('list/head') %>
+<body class="text-center bg-light">
+<style>
+    .form-signin {
+        width: 100%;
+        max-width: 330px;
+        padding: 15px;
+        margin: 0 auto;
+    }
+    .form-signin .checkbox {
+        font-weight: 400;
+    }
+    .form-signin .form-control {
+        position: relative;
+        box-sizing: border-box;
+        height: auto;
+        padding: 10px;
+        font-size: 16px;
+    }
+    .form-signin .form-control:focus {
+        z-index: 2;
+    }
+    .form-signin input[type="email"] {
+        margin-bottom: -1px;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+    .form-signin input[type="password"] {
+        margin-bottom: 10px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+    }
 
-<form action="/auth/login" method="post">
-    <input name="username" type="text" placeholder="enter username"><br>
-    <input name="password" type="password" placeholder="enter password"><br>
-    <button type="submit">login</button>
+</style>
+
+
+<form class="form-signin" action="/auth/login" method="post">
+    <h1 class="mb-3 font-weight-normal">Welcome to Listee</h1>
+    <label for="inputEmail" class="sr-only">Email address</label>
+    <input name="username" class="form-control" type="text" placeholder="email address" type="email" required autofocus>
+    <label for="inputPassword" class="sr-only">Password</label>
+    <input name="password" class="form-control" type="password" placeholder="password" type="password" required>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">log in</button>
+    <div class="checkbox mb-3">
+        <label>
+            <input type="checkbox" value="remember-me"> Remember me
+        </label>
+    </div>
+    <a href="/auth/signup">Or create an account</a>
 </form>
-<a href="/auth/signup">Create account</a>
 </body>
 </html>

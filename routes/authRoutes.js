@@ -25,7 +25,7 @@ router.get('/', (req, res) => {
 
 router.get('/login', (req, res) => {
     debug('login route');
-    res.render('login');
+    res.render('login', {title: "login"});
 });
 
 router.post('/login', (req, res, next) => {

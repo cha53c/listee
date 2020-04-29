@@ -4,7 +4,8 @@
 <body>
 <div class="container-fluid bg-warning">
     <h1><%= heading %>
-        <i class="material-icons-two-tone md-36 update-page" onclick="window.location.href = '/lists/<%= userId %>/create';">add_circle</i>
+        <i class="material-icons-two-tone md-36 update-page"
+           onclick="window.location.href = '/lists/<%= userId %>/create';">add_circle</i>
         <%- include('list/editSaveButtons', { editAction: 'editLists()', saveAction: 'saveLists()', cancelAction: 'cancelAction()' }) %>
     </h1>
 
