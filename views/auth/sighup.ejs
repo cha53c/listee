@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <%- include('list/head') %>
-<body class="text-center">
-<form class="form-signin" action="/auth/signUp" method="post" enctype="application/x-www-form-urlencoded">
+<body class="text-center bg-light">
+<form class="form-signin mt-5" action="/auth/signUp" method="post" enctype="application/x-www-form-urlencoded">
     <h1 class="mb-3 font-weight-normal">Sign up to Listee</h1>
     <label for="inputEmail" class="sr-only">Email address</label>
     <input name="email" class="form-control" type="email" placeholder="Email address" required autofocus>
     <label for="inputPassword" class="sr-only">Password</label>
     <input name="password" class="form-control" type="password" placeholder="Password" required>
+    <label for="inputConfirmPwd" class="sr-only">Confirm password</label>
+    <input name="confirmPassword" class="form-control" type="password" placeholder=" Confirm password" required>
     <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+<p class="mt-3 mb-3">
+    <a  href="/auth/login">have an acccount? Log in here</a>
+</p>
 
-    <a href="/auth/login">have an acccount? Log in here</a>
 </form>
 </body>
 </html>
