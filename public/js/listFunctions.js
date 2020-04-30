@@ -58,11 +58,11 @@ function appendListItem(item, id) {
 function appendRemoveButton(itemNode, action) {
     const parent = itemNode.parentNode;
     console.log('appending remove button');
-    let button = document.createElement('BUTTON');
-    button.setAttribute('class', 'remove-btn');
+    let button = document.createElement('I');
+    button.setAttribute('class', 'remove-btn material-icons-two-tone');
     button.setAttribute('type', 'button');
     button.setAttribute('data-itemId', itemNode.id);
-    let textNode = document.createTextNode('remove');
+    let textNode = document.createTextNode('delete_outline');
     button.appendChild(textNode);
     parent.appendChild(button);
     button.addEventListener('click', action);

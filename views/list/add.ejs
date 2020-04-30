@@ -17,8 +17,8 @@
     <%- include('list/addItem', { classStr: ''}) %>
     <br>
 </div>
-<script src="/static/listFunctions.js"></script>
 <%- include('bootstrapScripts') %>
+<script src="/static/listFunctions.js"></script>
 <script>
     <!--    TODO move JS to a separate file -->
     const namesString = "<%= listnames %>";
@@ -32,10 +32,9 @@
         removeListRow(itemNode);
     }
     // TODO could be DRYer similar to show
-    document.getElementById('add').onclick = function addItem() {
+    const addNewItem = function () {
         let value = document.getElementById('item-input').value;
         validateAddedItem(value);
-
         console.log('adding an item');
         console.log(value);
         let id = 'a' + itemNum++;
@@ -56,43 +55,38 @@
         if (listname === '') {
             console.log('list name is empty');
             alert('add a list name to create your list');
-            return;
         }
-    }
 
-
-    // TODO don't create if list name already exists
-    console.log('listnames ' + x);
-    console.log('listnames number ' + x.length);
-    if (x.length > 0) {
-        console.log('there are list names');
-        if (x.includes(listname)) {
-            alert('you already have a list with the same name, choose another name');
-            return;
+        // TODO don't create if list name already exists
+        console.log('listnames ' + x);
+        console.log('listnames number ' + x.length);
+        if (x.length > 0) {
+            console.log('there are list names');
+            if (x.includes(listname)) {
+                alert('you already have a list with the same name, choose another name');
+            }
         }
-    }
 
-    let items = [];
-    // TODO can you dry this up using closures?
-    let elements = document.getElementsByClassName('list-item');
-    console.log(elements);
-    for (const el of elements) {
-        console.log(el.innerText);
-        items.push(el.innerText);
-    }
-    if (items.size == 0) {
-        alert('your list is empty add some items');
-        return;
-    }
-    console.log(items);
-    let list = {
-        listname: listname,
-        items: items
-    }
+        let items = [];
+        // TODO can you dry this up using closures?
+        let elements = document.getElementsByClassName('list-item');
+        console.log(elements);
+        for (const el of elements) {
+            console.log(el.innerText);
+            items.push(el.innerText);
+        }
+        if (items.size == 0) {
+            alert('your list is empty add some items');
+        }
+        console.log(items);
+        let list = {
+            listname: listname,
+            items: items
+        }
 
-    xhr.open("POST", '/lists/<%= userId %>/create/', true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.send(JSON.stringify(list));
+        xhr.open("POST", '/lists/<%= userId %>/create/', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify(list));
     }
 
     window.onload = function () {
