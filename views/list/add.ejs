@@ -4,13 +4,12 @@
 <body>
 <div class="container-fluid bg-warning">
     <h1><%= heading %>
-        <span><button type="button" id="submit" value="Add Item">Save</button></span>
+        <i id="save-btn" onclick="saveNewList()" class="material-icons-two-tone md-36">save</i>
     </h1>
 </div>
 <div class="container bg-light">
     <h2>List name
-        <span><input id="listname" type="text" placeholder="enter list name">
-        </span>
+        <span><input id="listname" type="text" placeholder="enter list name"></span>
     </h2>
     <br>
     <h2>List Items</h2>
@@ -52,46 +51,48 @@
         window.location = this.responseURL;
     };
 
-    document.getElementById('submit').onclick = function submitList() {
+    function saveNewList() {
         let listname = document.getElementById('listname').value;
         if (listname === '') {
             console.log('list name is empty');
             alert('add a list name to create your list');
             return;
         }
+    }
 
-        // TODO don't create if list name already exists
-        console.log('listnames ' + x);
-        console.log('listnames number ' + x.length);
-        if (x.length > 0) {
-            console.log('there are list names');
-            if (x.includes(listname)) {
-                alert('you already have a list with the same name, choose another name');
-                return;
-            }
-        }
 
-        let items = [];
-        // TODO can you dry this up using closures?
-        let elements = document.getElementsByClassName('list-item');
-        console.log(elements);
-        for (const el of elements) {
-            console.log(el.innerText);
-            items.push(el.innerText);
-        }
-        if (items.size == 0) {
-            alert('your list is empty add some items');
+    // TODO don't create if list name already exists
+    console.log('listnames ' + x);
+    console.log('listnames number ' + x.length);
+    if (x.length > 0) {
+        console.log('there are list names');
+        if (x.includes(listname)) {
+            alert('you already have a list with the same name, choose another name');
             return;
         }
-        console.log(items);
-        let list = {
-            listname: listname,
-            items: items
-        }
+    }
 
-        xhr.open("POST", '/lists/<%= userId %>/create/', true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.send(JSON.stringify(list));
+    let items = [];
+    // TODO can you dry this up using closures?
+    let elements = document.getElementsByClassName('list-item');
+    console.log(elements);
+    for (const el of elements) {
+        console.log(el.innerText);
+        items.push(el.innerText);
+    }
+    if (items.size == 0) {
+        alert('your list is empty add some items');
+        return;
+    }
+    console.log(items);
+    let list = {
+        listname: listname,
+        items: items
+    }
+
+    xhr.open("POST", '/lists/<%= userId %>/create/', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify(list));
     }
 
     window.onload = function () {
