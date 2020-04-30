@@ -1,20 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta http-equiv="content-type" content="application/json; charset=UTF-8">
-    <title><%= title %></title>
-    <link rel="stylesheet" type="text/css" href="/static/auth.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Two+Tone" rel="stylesheet">
-</head>
+<%- include('list/head') %>
 <body class="text-center">
 <form class="form-signin" action="/auth/signUp" method="post" enctype="application/x-www-form-urlencoded">
     <h1 class="mb-3 font-weight-normal">Sign up to Listee</h1>
     <label for="inputEmail" class="sr-only">Email address</label>
-    <input name="email" class="form-control" type="email" placeholder="Email address">
+    <input name="email" class="form-control" type="email" placeholder="Email address" required autofocus>
     <label for="inputPassword" class="sr-only">Password</label>
-    <input name="password" class="form-control" type="password" placeholder="Password">
+    <input name="password" class="form-control" type="password" placeholder="Password" required>
     <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+
     <a href="/auth/login">have an acccount? Log in here</a>
 </form>
 </body>
