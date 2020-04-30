@@ -5,7 +5,7 @@
 <div class="container-fluid bg-warning">
     <h1>List name: <%= listId %>
         <span><%- include('list/editSaveButtons', { editAction: 'showEditAction()', saveAction: 'showSaveAction()', cancelAction: 'cancelAction()'}) %></span>
-        <span><button id="delete-list-btn" class="update-page hide" type="button" onclick="deleteList()">delete</button></span>
+        <span><i id="delete-list-btn" class="update-page hide md-36" type="button" onclick="deleteList()" data-toggle="tooltip" title="delete list">delete</i></span>
     </h1>
 </div>
 <div class="container bg-light" >

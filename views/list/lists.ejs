@@ -4,20 +4,18 @@
 <body>
 <div class="container-fluid bg-warning">
     <h1><%= heading %>
-        <i class="material-icons-two-tone md-36 update-page"
-           onclick="window.location.href = '/lists/<%= userId %>/create';">add_circle</i>
+        <i class="material-icons-two-tone md-36 update-page" data-toggle="tooltip" title="add a list"
+           onclick="window.location.href = '/lists/<%= userId %>/create'">add_circle</i>
         <%- include('list/editSaveButtons', { editAction: 'editLists()', saveAction: 'saveLists()', cancelAction: 'cancelAction()' }) %>
     </h1>
-
 </div>
 <div class="container bg-light">
     <h2 id="list-count"><%= listCount %></h2>
     <%- include('list/listItems', { items: listnames, addButton: false, withLinks: true }) %>
-    <script src="/static/listFunctions.js"></script>
     <%- include('bootstrapScripts') %>
 </div>
 </body>
-
+<script src="/static/listFunctions.js"></script>
 <script>
     function editLists() {
         toggle_edit_save();

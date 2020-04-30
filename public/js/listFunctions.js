@@ -261,6 +261,10 @@ function remove_added() {
     }
 }
 
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+});
+
 //
 // functions from show.ejs
 //
