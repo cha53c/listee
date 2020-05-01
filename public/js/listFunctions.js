@@ -42,6 +42,7 @@ function validateAddedItem(value) {
     alert('input is ' + msg);
 }
 
+// TODO replace with two functions appanedRow appendItem
 function appendListItem(item, id) {
     let rowDiv = document.createElement('DIV');
     rowDiv.setAttribute('class', 'list-row');
@@ -55,28 +56,42 @@ function appendListItem(item, id) {
     return itemDiv;
 }
 
-function appendRemoveButton(itemNode, action) {
-    const parent = itemNode.parentNode;
+// parent to row items as buttons
+function appendRowDiv(){
+    let rowDiv = document.createElement('DIV');
+    rowDiv.setAttribute('class', 'list-row');
+    document.getElementById('list-items').appendChild(rowDiv);
+    return rowDiv;
+}
+
+function appendItemDiv(rowDiv, item, id){
+    let itemDiv = document.createElement('DIV');
+    itemDiv.setAttribute('id', id);
+    itemDiv.setAttribute('class', 'list-item');
+    let textNode = document.createTextNode(item);
+    itemDiv.appendChild(textNode);
+    rowDiv.appendChild(itemDiv);
+    return itemDiv;
+}
+
+
+function appendRemoveButton(parent, id, action) {
     console.log('appending remove button');
     let button = document.createElement('I');
     button.setAttribute('class', 'remove-btn material-icons-two-tone');
-    button.setAttribute('type', 'button');
-    button.setAttribute('data-itemId', itemNode.id);
-    let textNode = document.createTextNode('delete_outline');
+    button.setAttribute('data-itemId', id);
+    let textNode = document.createTextNode('delete');
     button.appendChild(textNode);
     parent.appendChild(button);
     button.addEventListener('click', action);
 }
 
-function appendUndoButton(itemNode, action) {
+function appendUndoButton(parent, id, action) {
     console.log('appending undo button');
-    let parent = itemNode.parentNode;
     let undoButton = document.createElement('BUTTON');
-    undoButton.setAttribute('id', 'undo' + itemNode.id);  //TODO can you chain these?
+    undoButton.setAttribute('id', 'undo' + id);
     undoButton.setAttribute('class', 'undo-btn hide');
-    undoButton.setAttribute('type', 'button');
-    undoButton.setAttribute('data-itemId', itemNode.id);
-    // undoButton.setAttribute('class', 'remove-btn hide');
+    undoButton.setAttribute('data-itemId', id);
     let textNode = document.createTextNode('undo');
     undoButton.appendChild(textNode);
     parent.appendChild(undoButton);

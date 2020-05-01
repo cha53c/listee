@@ -41,9 +41,12 @@
         console.log('adding an item');
         console.log(value);
         let id = 'a' + itemNum++;
-        let itemNode = appendListItem(value, id); //  TODO change to build own row
-        appendRemoveButton(itemNode, deleteAction);
-        appendUndoButton(itemNode, undoAction)
+
+        const rowDiv = appendRowDiv();
+        appendRemoveButton(rowDiv, id, removeAction);
+        appendUndoButton(rowDiv, id, undoAction);
+        appendItemDiv(rowDiv, value, id);
+
         document.getElementById('item-input').value = ''; // reset input text
         setAddItemfocus();
     }
