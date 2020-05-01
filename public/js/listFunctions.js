@@ -43,18 +43,18 @@ function validateAddedItem(value) {
 }
 
 // TODO replace with two functions appanedRow appendItem
-function appendListItem(item, id) {
-    let rowDiv = document.createElement('DIV');
-    rowDiv.setAttribute('class', 'list-row');
-    let itemDiv = document.createElement('DIV');
-    itemDiv.setAttribute('id', id);
-    itemDiv.setAttribute('class', 'list-item');
-    let textNode = document.createTextNode(item);
-    itemDiv.appendChild(textNode);
-    document.getElementById('list-items').appendChild(rowDiv);
-    rowDiv.appendChild(itemDiv);
-    return itemDiv;
-}
+// function appendListItem(item, id) {
+//     let rowDiv = document.createElement('DIV');
+//     rowDiv.setAttribute('class', 'list-row');
+//     let itemDiv = document.createElement('DIV');
+//     itemDiv.setAttribute('id', id);
+//     itemDiv.setAttribute('class', 'list-item');
+//     let textNode = document.createTextNode(item);
+//     itemDiv.appendChild(textNode);
+//     document.getElementById('list-items').appendChild(rowDiv);
+//     rowDiv.appendChild(itemDiv);
+//     return itemDiv;
+// }
 
 // parent to row items as buttons
 function appendRowDiv(){
@@ -80,6 +80,8 @@ function appendRemoveButton(parent, id, action) {
     let button = document.createElement('I');
     button.setAttribute('class', 'remove-btn material-icons-two-tone');
     button.setAttribute('data-itemId', id);
+    button.setAttribute('data-toggle', 'tooltip');
+    button.setAttribute('title', 'delete item');
     let textNode = document.createTextNode('delete');
     button.appendChild(textNode);
     parent.appendChild(button);
@@ -88,10 +90,12 @@ function appendRemoveButton(parent, id, action) {
 
 function appendUndoButton(parent, id, action) {
     console.log('appending undo button');
-    let undoButton = document.createElement('BUTTON');
+    let undoButton = document.createElement('I');
     undoButton.setAttribute('id', 'undo' + id);
     undoButton.setAttribute('class', 'undo-btn hide');
     undoButton.setAttribute('data-itemId', id);
+    undoButton.setAttribute('data-toggle', 'tooltip');
+    undoButton.setAttribute('title', 'undo delete');
     let textNode = document.createTextNode('undo');
     undoButton.appendChild(textNode);
     parent.appendChild(undoButton);

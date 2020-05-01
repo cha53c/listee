@@ -4,7 +4,8 @@
 <body>
 <div class="container-fluid bg-warning">
     <h1><%= heading %>
-        <i id="save-btn" onclick="saveNewList()" class="material-icons-two-tone md-36">save</i>
+<!--        TODO DRY up-->
+        <i id="save-btn" onclick="saveNewList()" class="material-icons-two-tone md-36" data-toggle="tooltip" title="save">save</i>
     </h1>
 </div>
 <div class="container bg-light">
