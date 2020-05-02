@@ -45,8 +45,8 @@ function validateAddedItem(value) {
 
 // parent to row items as buttons
 function appendRowDiv(){
-    let rowDiv = document.createElement('DIV');
-    rowDiv.setAttribute('class', 'list-row');
+    let rowDiv = document.createElement('LI');
+    rowDiv.setAttribute('class', 'list-row list-group-item');
     document.getElementById('list-items').appendChild(rowDiv);
     return rowDiv;
 }
@@ -96,6 +96,23 @@ function removeItem(itemId) {
     removeListRow(element);
 }
 
+function addItem() {
+    let value = document.getElementById('item-input').value;
+    validateAddedItem(value);
+
+    console.log('adding an item');
+    console.log(value);
+    let id = 'a' + itemNum++;
+
+    const rowDiv = appendRowDiv();
+    appendRemoveButton(rowDiv, id, deleteAction);
+    appendUndoButton(rowDiv, id, undoAction);
+    appendItemDiv(rowDiv, value, id);
+
+    document.getElementById('item-input').value = ''; // reset input text
+    setAddItemfocus();
+}
+
 // Execute a function when the user releases a key on the keyboard
 if (item) {
     item.addEventListener("keyup", function (event) {
@@ -105,7 +122,8 @@ if (item) {
             event.preventDefault();
             // Trigger the button element with a click
             console.log('you hit enter');
-            document.getElementById('add').click();
+            // document.getElementById('add').click();
+            addItem();
         }
     });
 }
@@ -243,7 +261,6 @@ function hide_by_class_name(className) {
     for (const el of elements) {
         if (!el.classList.contains('hide')) {
             el.classList.add('hide');
-            // el.classList.toggle('material-icons-two-tone');
         }
     }
 }

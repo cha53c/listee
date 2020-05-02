@@ -35,22 +35,6 @@
         }
     }
 
-    document.getElementById('add').onclick = function addItem() {
-        let value = document.getElementById('item-input').value;
-        validateAddedItem(value);
-
-        console.log('adding an item');
-        console.log(value);
-        let id = 'a' + itemNum++;
-
-        const rowDiv = appendRowDiv();
-        appendRemoveButton(rowDiv, id, removeAction);
-        appendUndoButton(rowDiv, id, undoAction);
-        appendItemDiv(rowDiv, value, id);
-
-        document.getElementById('item-input').value = ''; // reset input text
-        setAddItemfocus();
-    }
 
     function deleteList() {
         const xhr = new XMLHttpRequest();
