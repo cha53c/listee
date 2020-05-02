@@ -79,7 +79,7 @@ function appendUndoButton(parent, id, action) {
     console.log('appending undo button');
     let undoButton = document.createElement('I');
     undoButton.setAttribute('id', 'undo' + id);
-    undoButton.setAttribute('class', 'undo-btn hide');
+    undoButton.setAttribute('class', 'undo-btn hide material-icons-two-tone');
     undoButton.setAttribute('data-itemId', id);
     undoButton.setAttribute('data-toggle', 'tooltip');
     undoButton.setAttribute('title', 'undo delete');
