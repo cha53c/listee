@@ -237,6 +237,40 @@ function saveOnloadAction(xhr) {
     }
 }
 
+function showSaveAction(userId, listId) {
+    const xhr = new XMLHttpRequest();
+    // send the updated list
+    xhr.open("PATCH", '/lists/' + userId + '/' + listId, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    let items = getRemainingItems();
+    let list = {listname: "<%= listId %>", items: items};
+    console.log('list ' + list);
+    xhr.send(JSON.stringify(list));
+    xhr.onload = saveOnloadAction(xhr);
+    xhr.onerror = function () {
+        console.log('there was an error saving changes');
+    }
+}
+
+function deleteList(userId, listId) {
+    const xhr = new XMLHttpRequest();
+    // delete list
+    xhr.open("DELETE", '/lists/' + userId + '/' + listId, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send();
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            console.log('list deleted');
+            alert('list deleted');
+            window.location.replace('/lists/' + userId);
+        }
+    };
+    xhr.onerror = function () {
+        console.log('there was an error deleting the list');
+    }
+}
+
 function saveLists(userId) {
     console.log('you clicked save lists');
     const xhr = new XMLHttpRequest();

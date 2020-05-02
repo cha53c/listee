@@ -2,10 +2,12 @@
 <html lang="en">
 <%- include('list/head') %>
 <body>
+<script> const userId = <%- userId %>; const listId = '<%= listId %>' </script>
 <div class="container-fluid bg-warning">
     <h1>List name: <%= listId %>
-        <span><%- include('list/editSaveButtons', { editAction: 'showEditAction()', saveAction: 'showSaveAction()', cancelAction: 'cancelAction()'}) %></span>
-        <span><i id="delete-list-btn" class="update-page hide material-icons-two-tone md-36" type="button" onclick="deleteList()" data-toggle="tooltip" title="delete list">delete</i></span>
+        <span><%- include('list/editSaveButtons', { editAction: 'showEditAction()',
+            saveAction: 'showSaveAction(userId, listId)', cancelAction: 'cancelAction()'}) %></span>
+        <span><i id="delete-list-btn" class="update-page hide material-icons-two-tone md-36" type="button" onclick="deleteList(userId, listId)" data-toggle="tooltip" title="delete list">delete</i></span>
     </h1>
 </div>
 <div class="container bg-light" >
@@ -16,44 +18,5 @@
 </body>
 <%- include('bootstrapScripts') %>
 <script src="/static/listFunctions.js"></script>
-
-<script>
-
-    function showSaveAction() {
-        const xhr = new XMLHttpRequest();
-        // send the updated list
-        xhr.open("PATCH", '/lists/<%= userId %>/<%= listId %>', true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-
-        let items = getRemainingItems();
-        let list = {listname: "<%= listId %>", items: items};
-        console.log('list ' + list);
-        xhr.send(JSON.stringify(list));
-        xhr.onload = saveOnloadAction(xhr);
-        xhr.onerror = function () {
-            console.log('there was an error saving changes');
-        }
-    }
-
-
-    function deleteList() {
-        const xhr = new XMLHttpRequest();
-        // delete list
-        xhr.open("DELETE", '/lists/<%= userId %>/<%= listId %>', true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.send();
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                console.log('list deleted');
-                alert('list deleted');
-                window.location.replace('/lists/<%= userId %>');
-            }
-        };
-        xhr.onerror = function () {
-            console.log('there was an error deleting the list');
-        }
-    }
-
-</script>
 </body>
 </html>
