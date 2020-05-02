@@ -42,19 +42,6 @@ function validateAddedItem(value) {
     alert('input is ' + msg);
 }
 
-// TODO replace with two functions appanedRow appendItem
-// function appendListItem(item, id) {
-//     let rowDiv = document.createElement('DIV');
-//     rowDiv.setAttribute('class', 'list-row');
-//     let itemDiv = document.createElement('DIV');
-//     itemDiv.setAttribute('id', id);
-//     itemDiv.setAttribute('class', 'list-item');
-//     let textNode = document.createTextNode(item);
-//     itemDiv.appendChild(textNode);
-//     document.getElementById('list-items').appendChild(rowDiv);
-//     rowDiv.appendChild(itemDiv);
-//     return itemDiv;
-// }
 
 // parent to row items as buttons
 function appendRowDiv(){
@@ -144,8 +131,6 @@ function toggle_edit_save() {
     const elements = document.getElementsByClassName('update-page');
     for (const el of elements) {
         el.classList.toggle('hide');
-        // material-icons-two-tone also set display so have to be removed when hide is added
-        el.classList.toggle('material-icons-two-tone')
     }
 }
 
@@ -153,7 +138,6 @@ function toggle_remove_undo() {
     const elements = document.getElementsByClassName('remove-btn');
     for (const el of elements) {
         el.classList.toggle('hide');
-        el.classList.toggle('material-icons-two-tone');
     }
 }
 
@@ -165,11 +149,7 @@ const deleteAction = function (event) {
     element.classList.toggle('deleted');
     let undoButton = document.getElementById('undo' + itemId);
     undoButton.classList.toggle('hide');
-    undoButton.classList.toggle('material-icons-two-tone');
     event.target.classList.toggle('hide');
-    event.target.classList.toggle('material-icons-two-tone');
-
-
 };
 
 const undoAction = function (event) {
@@ -180,9 +160,7 @@ const undoAction = function (event) {
     element.classList.toggle('deleted');
     let delButton = document.getElementById('del' + itemId);
     delButton.classList.toggle('hide');
-    delButton.classList.toggle('material-icons-two-tone');
     event.target.classList.toggle('hide');
-    event.target.classList.toggle('material-icons-two-tone');
 };
 
 function getDeletedItems() {
@@ -237,10 +215,10 @@ function saveOnloadAction(xhr) {
 
 function toggle_add_item() {
     const input = document.getElementById('item-input');
-    const add = document.getElementById('add');
-    if (input && add) {
+    // const add = document.getElementById('add');
+    if (input) {
         input.classList.toggle('hide');
-        add.classList.toggle('hide');
+        // add.classList.toggle('hide');
     }
 }
 
@@ -265,7 +243,7 @@ function hide_by_class_name(className) {
     for (const el of elements) {
         if (!el.classList.contains('hide')) {
             el.classList.add('hide');
-            el.classList.toggle('material-icons-two-tone');
+            // el.classList.toggle('material-icons-two-tone');
         }
     }
 }

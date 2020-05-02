@@ -5,7 +5,7 @@
 <div class="container-fluid bg-warning">
     <h1>List name: <%= listId %>
         <span><%- include('list/editSaveButtons', { editAction: 'showEditAction()', saveAction: 'showSaveAction()', cancelAction: 'cancelAction()'}) %></span>
-        <span><i id="delete-list-btn" class="update-page hide md-36" type="button" onclick="deleteList()" data-toggle="tooltip" title="delete list">delete</i></span>
+        <span><i id="delete-list-btn" class="update-page hide material-icons-two-tone md-36" type="button" onclick="deleteList()" data-toggle="tooltip" title="delete list">delete</i></span>
     </h1>
 </div>
 <div class="container bg-light" >
@@ -14,8 +14,9 @@
 <%- include('list/listItems', { items: items, addButton: true, withLinks: false }) %>
 </div>
 </body>
-<script src="/static/listFunctions.js"></script>
 <%- include('bootstrapScripts') %>
+<script src="/static/listFunctions.js"></script>
+
 <script>
 
     function showSaveAction() {

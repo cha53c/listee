@@ -2,7 +2,6 @@ html * {
     font-family: "Comic Sans MS";
 }
 
-
 /*
     Auth form pages
 */
@@ -50,8 +49,9 @@ div.list-item {
     display: inline-block;
 }
 
+
 .hide {
-    display: none;
+    display: none !important;
 }
 
 .deleted {
