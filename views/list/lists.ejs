@@ -4,8 +4,9 @@
 <body>
 <div class="container-fluid bg-warning">
     <h1><%= heading %>
+        <script> const userId = <%= userId %> </script>
         <%- include('list/editSaveButtons', { editAction: 'editLists()',
-        saveAction: 'saveLists()', cancelAction: 'cancelAction()' }) %>
+        saveAction: 'saveLists(userId)', cancelAction: 'cancelAction()'}) %>
     </h1>
 </div>
 <div class="container bg-light">
@@ -16,32 +17,9 @@
     <%- include('bootstrapScripts') %>
 </div>
 </body>
+
 <script src="/static/listFunctions.js"></script>
 <script>
-    function editLists() {
-        toggle_edit_save();
-        toggle_remove_undo();
-    }
-
-    function saveLists() {
-        console.log('you clicked save lists');
-        const xhr = new XMLHttpRequest();
-        // send the updated list
-        xhr.open("PATCH", '/lists/<%= userId %>', true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-
-        let deletedListNames = getDeletedItems();
-        let list = {listnames: deletedListNames};
-        console.log(JSON.stringify(list));
-        xhr.send(JSON.stringify(list));
-
-        xhr.onload = saveOnloadAction(xhr);
-
-        xhr.onerror = function () {
-            console.log('there was an error saving changes');
-        }
-    }
-
     window.onload = function () {
         const observer = new MutationObserver(setListCount);
         observer.observe(document.getElementById('list-items'), {attributes: false, childList: true, subtree: false});

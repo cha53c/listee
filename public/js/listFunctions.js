@@ -144,6 +144,11 @@ function setAddItemfocus() {
     document.getElementById("item-input").focus();
 }
 
+function editLists() {
+    toggle_edit_save();
+    toggle_remove_undo();
+}
+
 function toggle_edit_save() {
     console.log('toggle edit save');
     const elements = document.getElementsByClassName('update-page');
@@ -180,6 +185,7 @@ const undoAction = function (event) {
     delButton.classList.toggle('hide');
     event.target.classList.toggle('hide');
 };
+
 
 function getDeletedItems() {
     let items = [];
@@ -228,6 +234,26 @@ function saveOnloadAction(xhr) {
         } else {
             alert('Error! changes not saved');
         }
+    }
+}
+
+function saveLists(userId) {
+    console.log('you clicked save lists');
+    const xhr = new XMLHttpRequest();
+    // send the updated list
+    // xhr.open("PATCH", '/lists/<%= userId %>', true);
+    xhr.open("PATCH", '/lists/' + userId, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    let deletedListNames = getDeletedItems();
+    let list = {listnames: deletedListNames};
+    console.log(JSON.stringify(list));
+    xhr.send(JSON.stringify(list));
+
+    xhr.onload = saveOnloadAction(xhr);
+
+    xhr.onerror = function () {
+        console.log('there was an error saving changes');
     }
 }
 

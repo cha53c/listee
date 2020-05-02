@@ -94,7 +94,7 @@ function deleteMultipleLists(req, res) {
     let deletedLists = req.body.listnames;
     let failedLists = "";
     for (const listName of deletedLists) {
-        // TODO handle errors if remove list returns false
+        // TODO handle errors if remove list returns false still returns 500 if list not found
         if (!removeList(userId, listName)) {
             responseMsg.status = ERROR_STATUS;
             failedLists += listName + " ";
