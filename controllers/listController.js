@@ -19,7 +19,7 @@ function getUserHome(req, res) {
     debug('get user\'s list home');
     unpackParams(req);
     const listnames = getListNames(userId);
-    const listCount = 'You have ' + listnames.length + ' lists';
+    const listCount = `You have ${listnames.length} lists`;
     debug('listnames: %o', listnames);
     res.render('lists', {
         title: 'your lists', heading: 'Listee keeps all your lists here', listCount: listCount,
@@ -30,7 +30,6 @@ function getUserHome(req, res) {
 function getAddListPage(req, res) {
     debug('get add list page');
     unpackParams(req);
-    // used to check if listname is aready a taken
     const listnames = getListNames(userId);
     res.render('add', {
         title: 'add new list',
@@ -48,13 +47,11 @@ function addNewList(req, res) {
     const list = getList(userId, listName);
     if (list) {
         responseMsg.status = ERROR_STATUS;
-        responseMsg.msg = 'list ' + listName + " already exits";
+        responseMsg.msg = `list ${listName} already exits`;
         debug(`${red(responseMsg.msg)}`);
         res.json(responseMsg);
     }
     addList(userId, listName, items);
-    // res.render('show', {userId: userId, listId: listId, items: items});
-    // res.json({"status": "success", "msg": listName + " added"});
     res.redirect(path.join('/lists', userId, listName));
 }
 
@@ -81,7 +78,7 @@ function deleteList(req, res) {
     unpackParams(req);
     if (!removeList(userId, listId)) {
         responseMsg.status = ERROR_STATUS;
-        responseMsg.msg = 'list ' + listId + " not found";
+        responseMsg.msg = `list  ${listId} not found`;
         debug(`${red(responseMsg.msg)}`);
         res.json(responseMsg);
     }
