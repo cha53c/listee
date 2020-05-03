@@ -3,7 +3,7 @@ process.env.NODE_ENV = 'test';
 //Require the dev-dependencies
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const {app: server, stop} = require('../app');
+const {app: server, stop} = require('../../app');
 const should = chai.should();
 const expect = chai.expect;
 const cheerio = require('cheerio');
@@ -99,7 +99,7 @@ describe('lists', () => {
     describe('list CRUD operations', () => {
         describe('/POST lists/userId/create', () => {
             beforeEach(() => {
-                const {app: server, stop} = require('../app');
+                const {app: server, stop} = require('../../app');
             });
             it('should add a new list and redirect to show page', (done) => {
                 const list = {"listname": "rainbow", "items": ["red", "yellow", "green", "blue"]};
