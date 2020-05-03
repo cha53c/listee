@@ -22,7 +22,7 @@ describe('lists', () => {
                     .end((err, res) => {
                         res.should.have.status(200);
                         const $ = cheerio.load(res.text);
-                        expect($('h2').text()).to.eql('You have 0 lists');
+                        expect($('h2').text()).to.include('You have 0 lists');
                         done();
                     });
             });
@@ -33,7 +33,7 @@ describe('lists', () => {
                         .end((err, res) => {
                             res.should.have.status(200);
                             const $ = cheerio.load(res.text);
-                            expect($('h2').text()).to.eql('You have 0 lists');
+                            expect($('h2').text()).to.include('You have 0 lists');
                         });
                     chai.request(server)
                         .post('/lists/1/create')
@@ -54,7 +54,7 @@ describe('lists', () => {
                         .end((err, res) => {
                             res.should.have.status(200);
                             const $ = cheerio.load(res.text);
-                            expect($('h2').text()).to.eql('You have 2 lists');
+                            expect($('h2').text()).to.include('You have 2 lists');
                         });
                     chai.request(server)
                         .patch('/lists/1')
@@ -68,7 +68,7 @@ describe('lists', () => {
                         .end((err, res) => {
                             res.should.have.status(200);
                             const $ = cheerio.load(res.text);
-                            expect($('h2').text()).to.eql('You have 0 lists');
+                            expect($('h2').text()).to.include('You have 0 lists');
                         });
                     done();
                 });
