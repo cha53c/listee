@@ -4,7 +4,7 @@ const expect = require('chai').expect;
 const {addList, updateList, removeList, getList, getListNames } = require('../../model/list');
 const listStore = require('../../model/listStore');
 
-describe("a user", () => {
+describe("users list store ", () => {
     const usr1 = {id: 'user 1'};
     const itms1 = ['item 1', 'item 2', 'item 3'];
     const itms2 = ['red', 'green', 'blue'];
@@ -12,6 +12,11 @@ describe("a user", () => {
 
     beforeEach(() => {
         listStore.emptyStore();
+    });
+
+    describe('add list', function () {
+       it('should create a unique id when adding a new list');
+       it('should not add the list if the id already exits ');
     });
 
     describe('with no lists in the store', () => {
@@ -35,18 +40,27 @@ describe("a user", () => {
     });
 
     describe('with an existing list', () => {
+        let existingList;
         beforeEach(() => {
-            addList(usr1.id, lst1.name, lst1.items);
+           existingList = addList(usr1.id, lst1.name, lst1.items);
         });
 
-        it('should find a list by the user and list name', () => {
-            const list = getList(usr1.id, lst1.name);
-            expect(list.id).to.equal(lst1.name);
+        it('should find a list by the user and list id', () => {
+            const list = getList(usr1.id, existingList.id);
+            expect(list.id).to.equal(existingList.id);
+            list.name.should.equal(lst1.name);
             expect(list.items[0]).to.equal(lst1.items[0]);
         });
-        it('should update items in list', () => {
-            updateList(usr1.id, lst1.name, itms2);
-            const list = getList(usr1.id, lst1.name);
+        it('should update list items', () => {
+            updateList(usr1.id, existingList.id, lst1.name, itms2);
+            const list = getList(usr1.id, existingList.id);
+            expect(list.items[0]).to.equal('red');
+        });
+        it('should not update list name and items', function () {
+            updateList(usr1.id, existingList.id, 'new name', itms2);
+            const list = getList(usr1.id, existingList.id);
+            list.name.should.equal('new name');
+            list.items.should.equal(itms2);
             expect(list.items[0]).to.equal('red');
         });
         it('should remove a list users list store', () => {

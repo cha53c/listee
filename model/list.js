@@ -1,27 +1,45 @@
 const debug = require('debug')('app:list');
+const { nanoid } = require('nanoid');
 
 const listStore = require('../model/listStore');
 const {isDefCol} = require('../utils/chalkbox');
 
-List = {
-    id: undefined,
-    items: []
+const List = {
+    _id: undefined,
+    _name: undefined,
+    items: [], // TODO add accessor properties for items
+    set id(id){
+        debug(`setting _id to ${id}`);
+        this._id = id;
+    },
+    get id(){
+        debug('getting _id');
+        return this._id;
+    },
+    set name(name){
+      this._name = name;
+    },
+    get name(){
+        return this._name;
+    }
 };
 
 function addList(userId, listname, items) {
     let usersLists;
     const list = Object.create(List);
-    list.id = listname;
+    // list.id = listname;
+    list.id = nanoid(12);
+    list.name = listname;
     list.items = items;
 
     if (!listStore.hasListsforUser(userId)) {
         debug(`creating a new list store for user: ${isDefCol(userId)}`);
         usersLists = listStore.createListStoreForUser(userId);
-        usersLists.lists.set(list.id, list);
     } else {
         usersLists = listStore.getListsByUser(userId);
-        usersLists.lists.set(listname, list);
     }
+    usersLists.lists.set(list.id, list);
+    return list;
 }
 
 function getList(userId, listname) {
@@ -35,10 +53,13 @@ function removeList(userId, listname) {
     return usersLists.lists.delete(listname);
 }
 
-function updateList(userId, listname, items) {
-    debug(`update list: ${isDefCol(listname)} for user: ${isDefCol(userId)}`);
-    const list = getList(userId, listname);
+function updateList(userId, listId, listname, items) {
+    debug(`update list: ${listId} ${isDefCol(listname)} for user: ${isDefCol(userId)}`);
+    const list = getList(userId, listId);
     debug('list before update: %o', list);
+    if(list.name !== listname){
+        list.name =listname;
+    }
     list.items = items;
     debug('list after update: %o', list);
 }
@@ -53,7 +74,15 @@ function getAllLists(userId) {
 
 function getListNames(userId) {
     const lists = getAllLists(userId);
-    return lists === undefined ? "" : Array.from(lists.keys()); // pass empty iterable if undefined
+    if(lists === undefined) {
+        return "";
+    }
+    let listNames = [];
+    for(const l of lists.values()){
+        listNames.push(l.name);
+    }
+    return listNames;
+    // return lists === undefined ? "" : Array.from(lists.keys()); // pass empty iterable if undefined
 }
 
 module.exports = {addList, getList, updateList, removeList, getAllLists, getListNames};
