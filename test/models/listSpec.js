@@ -1,7 +1,7 @@
 const should = require('chai').should();
 const expect = require('chai').expect;
 
-const {addList, updateList, removeList, getList, getListNames } = require('../../model/list');
+const {addList, updateList, removeList, getList, getListNames} = require('../../model/list');
 const listStore = require('../../model/listStore');
 
 describe("users list store ", () => {
@@ -15,8 +15,8 @@ describe("users list store ", () => {
     });
 
     describe('add list', function () {
-       it('should create a unique id when adding a new list');
-       it('should not add the list if the id already exits ');
+        it('should create a unique id when adding a new list');
+        it('should not add the list if the id already exits ');
     });
 
     describe('with no lists in the store', () => {
@@ -33,7 +33,7 @@ describe("users list store ", () => {
             hasLists = listStore.hasListsforUser(usr1.id);
             hasLists.should.be.true;
         });
-        it('should return an empty string from getAllListNames', ()=>{
+        it('should return an empty string from getAllListNames', () => {
             const listnames = getListNames(usr1.id);
             listnames.should.equal("");
         })
@@ -42,7 +42,7 @@ describe("users list store ", () => {
     describe('with an existing list', () => {
         let existingList;
         beforeEach(() => {
-           existingList = addList(usr1.id, lst1.name, lst1.items);
+            existingList = addList(usr1.id, lst1.name, lst1.items);
         });
 
         it('should find a list by the user and list id', () => {
@@ -64,14 +64,13 @@ describe("users list store ", () => {
             expect(list.items[0]).to.equal('red');
         });
         it('should remove a list users list store', () => {
-            removeList(usr1.id, lst1.name);
-            expect(getList(usr1.id, lst1)).to.equal(undefined);
+            removeList(usr1.id, existingList.id);
+            expect(getList(usr1.id, existingList.id)).to.equal(undefined);
         });
-        it('should get all list names', ()=>{
+        it('should get all list names', () => {
             const listnames = getListNames(usr1.id);
             expect(listnames).to.contain('list 1');
         });
         it('should get all lists for a user');
     });
-})
-;
+});

@@ -42,10 +42,10 @@ function addList(userId, listname, items) {
     return list;
 }
 
-function getList(userId, listname) {
-    debug(`get list: ${isDefCol(listname)} for user: ${isDefCol(userId)}`);
+function getList(userId, listId) {
+    debug(`get list: ${isDefCol(listId)} for user: ${isDefCol(userId)}`);
     const userListStore = listStore.getListsByUser(userId);
-    return userListStore && userListStore.lists.get(listname);
+    return userListStore && userListStore.lists.get(listId);
 }
 
 function removeList(userId, listname) {
