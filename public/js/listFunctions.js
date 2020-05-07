@@ -172,6 +172,7 @@ const deleteAction = function (event) {
     element.classList.toggle('deleted');
     let undoButton = document.getElementById('undo' + itemId);
     undoButton.classList.toggle('hide');
+    undoButton.classList.toggle('hide');
     event.target.classList.toggle('hide');
 };
 
@@ -192,9 +193,10 @@ function getDeletedItems() {
     let elements = document.getElementsByClassName('list-item');
     console.log(elements);
     for (const el of elements) {
-        console.log(el.innerText);
+        console.log(el.id);
         if (el.classList.contains('deleted')) {
-            items.push(el.innerText);
+            items.push(el.id);
+            // items.push(el.innerText);
         }
     }
     return items;

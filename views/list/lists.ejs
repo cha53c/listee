@@ -10,10 +10,10 @@
     </h1>
 </div>
 <div class="container bg-light">
-    <h2 id="list-count"><%= listCount %>
+    <h2 id="list-count">You have <%= lists.length %> lists
     <i class="material-icons-two-tone md-36 update-page" data-toggle="tooltip" title="add a list"
              onclick="window.location.href = '/lists/<%= userId %>/create'">add_circle</i></h2>
-    <%- include('list/listItems', { items: listnames, addButton: false, withLinks: true }) %>
+    <%- include('list/listItems', { items: lists, addButton: false, withLinks: true }) %>
     <%- include('bootstrapScripts') %>
 </div>
 </body>

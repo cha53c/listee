@@ -9,11 +9,9 @@ const List = {
     _name: undefined,
     items: [], // TODO add accessor properties for items
     set id(id){
-        debug(`setting _id to ${id}`);
         this._id = id;
     },
     get id(){
-        debug('getting _id');
         return this._id;
     },
     set name(name){
@@ -67,9 +65,12 @@ function updateList(userId, listId, listname, items) {
 function getAllLists(userId) {
     const usersListStore = listStore.getListsByUser(userId);
     if (usersListStore) {
-        return usersListStore.lists;
+        const lists = Array.from(usersListStore.lists.values());
+        return lists
+        // return usersListStore.lists;
     }
-    return undefined;
+    // return undefined;
+    return [];
 }
 
 function getListNames(userId) {

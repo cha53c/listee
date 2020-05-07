@@ -2,7 +2,7 @@ const debug = require('debug')('app:listController');
 const {red} = require('chalk');
 const path = require('path');
 
-const {getListNames, addList, getList, updateList, removeList} = require('../model/list');
+const {getListNames, addList, getList, updateList, removeList, getAllLists} = require('../model/list');
 
 
 let userId, listId, listName, items;
@@ -18,13 +18,20 @@ const responseMsg = {
 function getUserHome(req, res) {
     debug('get user\'s list home');
     unpackParams(req);
-    const listnames = getListNames(userId);
-    const listCount = `You have ${listnames.length} lists`;
-    debug('listnames: %o', listnames);
+    const lists = getAllLists(userId);
     res.render('lists', {
-        title: 'your lists', heading: 'Listee keeps all your lists here', listCount: listCount,
-        listnames: listnames, userId: userId
+        title: 'your lists', heading: 'Listee keeps all your lists here',
+        lists: lists, userId: userId
     });
+
+    // const listnames = getListNames(userId);
+    // const listCount = `You have ${listnames.length} lists`;
+    // debug('listnames: %o', listnames);
+    // res.render('lists', {
+    //     title: 'your lists', heading: 'Listee keeps all your lists here', listCount: listCount,
+    //     listnames: listnames, userId: userId
+    // });
+
 }
 
 function getAddListPage(req, res) {
@@ -43,25 +50,26 @@ function addNewList(req, res) {
     debug('add list');
     unpackParams(req);
     unpackBody(req);
-    // TODO don't add if list already exits
-    const list = getList(userId, listName);
-    if (list) {
-        responseMsg.status = ERROR_STATUS;
-        responseMsg.msg = `list ${listName} already exits`;
-        debug(`${red(responseMsg.msg)}`);
-        res.json(responseMsg);
-    }
-    addList(userId, listName, items);
-    res.redirect(path.join('/lists', userId, listName));
+    // // don't add if list already exits
+    // const list = getList(userId, listName);
+    // if (list) {
+    //     responseMsg.status = ERROR_STATUS;
+    //     responseMsg.msg = `list ${listName} already exits`;
+    //     debug(`${red(responseMsg.msg)}`);
+    //     res.json(responseMsg);
+    // }
+    const newlist = addList(userId, listName, items);
+    // redirect to list show page
+    res.redirect(path.join('/lists', userId, newlist.id));
 }
 
 function showList(req, res) {
-    debug(`show list`);
     unpackParams(req);
+    debug(`show list for id: %s`, listId );
     const list = getList(userId, listId);
-    const items = list === undefined ? "" : list.items;
-    debug('items: %s', items);
-    res.render('show', {title: listId, userId: userId, listId: listId, items: items});
+    const items = list === undefined ? [] : list.items;
+    debug('listId %s, list name %s, items: %s', list.id, list.name, items);
+    res.render('show', {title: list.name, userId: userId, listId: listId, listName: list.name, items: items});
 }
 
 function patchList(req, res) {

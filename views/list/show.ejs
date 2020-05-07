@@ -2,9 +2,9 @@
 <html lang="en">
 <%- include('list/head') %>
 <body>
-<script> const userId = <%- userId %>; const listId = '<%= listId %>' </script>
+<script> const userId = '<%- userId %>'; const listId = '<%= listId %>' </script>
 <div class="container-fluid bg-warning">
-    <h1>List name: <%= listId %>
+    <h1>List name: <%= listName %>
         <span><%- include('list/editSaveButtons', { editAction: 'showEditAction()',
             saveAction: 'showSaveAction(userId, listId)', cancelAction: 'cancelAction()'}) %></span>
         <span><i id="delete-list-btn" class="update-page hide material-icons-two-tone md-36" type="button" onclick="deleteList(userId, listId)" data-toggle="tooltip" title="delete list">delete</i></span>
