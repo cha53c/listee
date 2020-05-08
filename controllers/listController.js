@@ -23,15 +23,6 @@ function getUserHome(req, res) {
         title: 'your lists', heading: 'Listee keeps all your lists here',
         lists: lists, userId: userId
     });
-
-    // const listnames = getListNames(userId);
-    // const listCount = `You have ${listnames.length} lists`;
-    // debug('listnames: %o', listnames);
-    // res.render('lists', {
-    //     title: 'your lists', heading: 'Listee keeps all your lists here', listCount: listCount,
-    //     listnames: listnames, userId: userId
-    // });
-
 }
 
 function getAddListPage(req, res) {
@@ -50,14 +41,14 @@ function addNewList(req, res) {
     debug('add list');
     unpackParams(req);
     unpackBody(req);
-    // // don't add if list already exits
-    // const list = getList(userId, listName);
-    // if (list) {
-    //     responseMsg.status = ERROR_STATUS;
-    //     responseMsg.msg = `list ${listName} already exits`;
-    //     debug(`${red(responseMsg.msg)}`);
-    //     res.json(responseMsg);
-    // }
+    const allNames = getListNames(userId);
+    const found = allNames.indexOf(listName);
+    if(!found){
+        responseMsg.status = ERROR_STATUS;
+        responseMsg.msg = `list ${listName} already exits`;
+        debug(`${red(responseMsg.msg)}`);
+       return res.json(responseMsg);
+    }
     const newlist = addList(userId, listName, items);
     // redirect to list show page
     res.redirect(path.join('/lists', userId, newlist.id));

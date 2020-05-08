@@ -4,7 +4,7 @@ const expect = require('chai').expect;
 const {addList, updateList, removeList, getList, getListNames} = require('../../model/list');
 const listStore = require('../../model/listStore');
 
-describe("users list store ", () => {
+describe("list", () => {
     const usr1 = {id: 'user 1'};
     const itms1 = ['item 1', 'item 2', 'item 3'];
     const itms2 = ['red', 'green', 'blue'];
@@ -33,9 +33,9 @@ describe("users list store ", () => {
             hasLists = listStore.hasListsforUser(usr1.id);
             hasLists.should.be.true;
         });
-        it('should return an empty string from getAllListNames', () => {
+        it('should return an empty array from getAllListNames', () => {
             const listnames = getListNames(usr1.id);
-            listnames.should.equal("");
+            listnames.should.deep.equal([]);
         })
     });
 

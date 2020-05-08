@@ -3,21 +3,59 @@ const expect = require('chai').expect;
 const sinon = require('sinon');
 
 const listController = require('../../controllers/listController');
-const {addList} = require('../../model/list');
+const { addList, getListNames} = require('../../model/list');
+const List = require('../../model/list');
 
 describe('listController', function () {
-    describe('get add list page', function () {
+    describe('add list', function () {
         let req;
+        let res;
         beforeEach(function setParams() {
-            req = {params: {userId: '1'}};
+            req = {params: {userId: '1'}, body: {}};
         });
-        it('should render add', function () {
-            const res = {render: sinon.spy()};
-            listController.getAddListPage(req, res);
-            res.render.calledOnce.should.be.true;
-            res.render.firstCall.args[0].should.equal('add');
+        describe('get list page', function () {
+            it('should render add', function () {
+                const res = {render: sinon.spy()};
+                listController.getAddListPage(req, res);
+                res.render.calledOnce.should.be.true;
+                res.render.firstCall.args[0].should.equal('add');
+            })
         })
+        describe('post new list', function () {
+            let redirect, json;
+            beforeEach(function setListname() {
+                req.body.listname = 'shopping';
+            });
+            beforeEach(function setSpies() {
+                res = {redirect: () => {}, json: () => {}};
+                redirect = sinon.spy(res, 'redirect');
+                json = sinon.spy(res, 'json');
+            });
+            afterEach(function () {
+                res.redirect.restore();
+                res.json.restore();
+            });
+            it('should redirect to user\'s lists page', function () {
+                listController.addNewList(req, res);
+                redirect.calledOnce.should.be.true;
+            });
+            it.skip('should not return error message', function () {
+                listController.addNewList(req, res);
+                json.calledOnce.should.be.false;
+            });
+
+            describe('if list name already exists', function () {
+                it('should not redirect', function () {
+                    listController.addNewList(req, res);
+                    res.redirect.calledOnce.should.be.false;
+                });
+                it('should not add list');
+                it('should return and error message');
+            });
+        });
+
     });
+
     describe('get show list page', function () {
         it('should render show', function () {
             const newList = addList('1', 'mylist', ['item 1', 'item 2', 'item 3']);

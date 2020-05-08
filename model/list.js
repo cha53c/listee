@@ -77,7 +77,7 @@ function getAllLists(userId) {
 function getListNames(userId) {
     const lists = getAllLists(userId);
     if(lists === undefined) {
-        return "";
+        return [];
     }
     let listNames = [];
     for(const l of lists.values()){
