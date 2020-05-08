@@ -44,14 +44,14 @@ function validateAddedItem(value) {
 
 
 // parent to row items as buttons
-function appendRowDiv(){
+function appendRowDiv() {
     let rowDiv = document.createElement('LI');
     rowDiv.setAttribute('class', 'list-row list-group-item');
     document.getElementById('list-items').appendChild(rowDiv);
     return rowDiv;
 }
 
-function appendItemDiv(rowDiv, item, id){
+function appendItemDiv(rowDiv, item, id) {
     let itemDiv = document.createElement('DIV');
     itemDiv.setAttribute('id', id);
     itemDiv.setAttribute('class', 'list-item');
@@ -171,7 +171,6 @@ const deleteAction = function (event) {
     let element = document.getElementById(itemId);
     element.classList.toggle('deleted');
     let undoButton = document.getElementById('undo' + itemId);
-    undoButton.classList.toggle('hide');
     undoButton.classList.toggle('hide');
     event.target.classList.toggle('hide');
 };
@@ -293,60 +292,61 @@ function saveLists(userId) {
     }
 }
 
-function toggle_add_item() {
-    const input = document.getElementById('item-input');
-    // const add = document.getElementById('add');
-    if (input) {
-        input.classList.toggle('hide');
-        // add.classList.toggle('hide');
-    }
-}
-
-function cancelAction() {
-    toggle_edit_save();
-    toggle_add_item();
-    toggle_deleted_items();
-    hide_by_class_name('remove-btn');
-    hide_by_class_name('undo-btn');
-    remove_added();
-}
-
-function toggle_deleted_items() {
-    const deletedItems = Array.from(document.getElementsByClassName('deleted'));
-    for (const item of deletedItems) {
-        item.classList.toggle('deleted');
-    }
-}
-
-function hide_by_class_name(className) {
-    const elements = document.getElementsByClassName(className);
-    for (const el of elements) {
-        if (!el.classList.contains('hide')) {
-            el.classList.add('hide');
+    function toggle_add_item() {
+        const input = document.getElementById('item-input');
+        // const add = document.getElementById('add');
+        if (input) {
+            input.classList.toggle('hide');
+            // add.classList.toggle('hide');
         }
     }
-}
 
-function remove_added() {
-    const listItems = document.getElementsByClassName('list-item');
-    for (const item of listItems) {
-        if (item.id.startsWith('a')) {
-            console.log('removing item');
-            removeRowElement(item);
+    function cancelAction() {
+        toggle_edit_save();
+        toggle_add_item();
+        toggle_deleted_items();
+        hide_by_class_name('remove-btn');
+        hide_by_class_name('undo-btn');
+        remove_added();
+    }
+
+    function toggle_deleted_items() {
+        const deletedItems = Array.from(document.getElementsByClassName('deleted'));
+        for (const item of deletedItems) {
+            item.classList.toggle('deleted');
         }
     }
-}
 
-$(function () {
-    $('[data-toggle="tooltip"]').tooltip();
-});
+    function hide_by_class_name(className) {
+        const elements = document.getElementsByClassName(className);
+        for (const el of elements) {
+            if (!el.classList.contains('hide')) {
+                el.classList.add('hide');
+            }
+        }
+    }
+
+    function remove_added() {
+        const listItems = document.getElementsByClassName('list-item');
+        for (const item of listItems) {
+            if (item.id.startsWith('a')) {
+                console.log('removing item');
+                removeRowElement(item);
+            }
+        }
+    }
+
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
 
 //
 // functions from show.ejs
 //
-function showEditAction() {
-    toggle_edit_save();
-    toggle_remove_undo();
-    toggle_add_item();
-    setAddItemfocus();
-}
+    function showEditAction() {
+        toggle_edit_save();
+        toggle_remove_undo();
+        toggle_add_item();
+        setAddItemfocus();
+    }
+        
