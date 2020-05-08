@@ -7,10 +7,12 @@
     "start": "DEBUG=app,app:* nodemon app.js",
     "stop": "ps -e  | grep listeeApp | grep -v grep | awk '{print $1}' | xargs kill -15; ps -e  | grep node | grep -v grep | awk '{print $1}' | xargs kill -15",
     "express-routes-list": "express-routes-list",
-    "test": "mocha './test/**'",
-    "tests-with-debug": "DEBUG=app,app:*  mocha; jasmine",
+    "test-old": "mocha './test/**'",
+    "test": "nyc --reporter=html --reporter=text mocha './test/**'",
+    "tests-with-debug": "DEBUG=app,app:*  mocha",
     "cover": "istanbul cover _mocha",
-    "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
+    "coveralls-old": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
@@ -41,6 +43,7 @@
     "mocha-lcov-reporter": "1.3.0",
     "newman": "5.0.0",
     "nodemon": "^2.0.2",
+    "nyc": "15.0.1",
     "sinon": "9.0.2"
   },
   "nodemonConfig": {
