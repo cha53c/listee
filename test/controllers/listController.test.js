@@ -18,7 +18,7 @@ describe('listController', function () {
             res.render.firstCall.args[0].should.equal('add');
         })
     });
-    describe.only('get show list page', function () {
+    describe('get show list page', function () {
         it('should render show', function () {
             const newList = addList('1', 'mylist', ['item 1', 'item 2', 'item 3']);
             const req = {params: {userId: '1', listId: newList.id}};

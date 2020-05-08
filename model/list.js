@@ -60,6 +60,7 @@ function updateList(userId, listId, listname, items) {
     }
     list.items = items;
     debug('list after update: %o', list);
+    return list;
 }
 
 function getAllLists(userId) {

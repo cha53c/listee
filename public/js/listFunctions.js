@@ -1,6 +1,6 @@
 let itemNum = 0;
 const item = document.getElementById("item-input");
-const listname = document.getElementById('listname');
+const listnameInputElement = document.getElementById('listname');
 const validationMsg = {
     empty: 'empty',
     tooLong: 'too long, max length x',
@@ -127,8 +127,8 @@ if (item) {
         }
     });
 }
-if (listname) {
-    listname.addEventListener("keyup", function (event) {
+if (listnameInputElement) {
+    listnameInputElement.addEventListener("keyup", function (event) {
         // Number 13 is the "Enter" key on the keyboard
         if (event.keyCode === 13) {
             // Cancel the default action, if needed
@@ -217,8 +217,8 @@ function getRemainingItems() {
 function saveOnloadAction(xhr) {
     return function () {
         console.log('xhr status ' + xhr.status);
-        console.log(xhr.response);
         const response = JSON.parse(xhr.response);
+        console.log(response);
         const msg = response.msg;
         if (xhr.status === 200) {
             if (response.status === 'success') {
@@ -238,14 +238,14 @@ function saveOnloadAction(xhr) {
     }
 }
 
-function showSaveAction(userId, listId) {
+function showSaveAction(userId, listId, listName) {
     const xhr = new XMLHttpRequest();
     // send the updated list
     xhr.open("PATCH", '/lists/' + userId + '/' + listId, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     let items = getRemainingItems();
-    let list = {listname: "<%= listId %>", items: items};
+    let list = {id: listId, listname: listName, items: items};
     console.log('list ' + list);
     xhr.send(JSON.stringify(list));
     xhr.onload = saveOnloadAction(xhr);
@@ -349,4 +349,3 @@ function saveLists(userId) {
         toggle_add_item();
         setAddItemfocus();
     }
-        

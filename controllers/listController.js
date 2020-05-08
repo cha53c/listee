@@ -77,8 +77,8 @@ function patchList(req, res) {
     unpackParams(req);
     unpackBody(req);
     // TODO DRY this up - same as show
-    updateList(userId, listId, items);
-    res.json({"status": SUCCESS_STATUS, "msg": 'list updated to ' + items});
+    const updatedList = updateList(userId, listId, listName, items);
+    res.json({"status": SUCCESS_STATUS, "msg": `list updated to ${JSON.stringify(updatedList)}`});
 }
 
 function deleteList(req, res) {
