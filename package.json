@@ -7,11 +7,9 @@
     "start": "DEBUG=app,app:* nodemon app.js",
     "stop": "ps -e  | grep listeeApp | grep -v grep | awk '{print $1}' | xargs kill -15; ps -e  | grep node | grep -v grep | awk '{print $1}' | xargs kill -15",
     "express-routes-list": "express-routes-list",
-    "test-old": "mocha './test/**'",
     "test": "nyc mocha './test/**'",
     "tests-with-debug": "DEBUG=app,app:*  mocha",
-    "cover": "nyc report --reporter=text-lcov",
-    "coveralls-old": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
+    "cover-html": "nyc --reporter=html mocha './test/**'",
     "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {

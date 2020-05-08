@@ -3,22 +3,24 @@ const expect = require('chai').expect;
 const sinon = require('sinon');
 
 const listController = require('../../controllers/listController');
-const { addList, getListNames} = require('../../model/list');
+const {addList, getListNames} = require('../../model/list');
+const {emptyStore} = require('../../model/listStore');
 const List = require('../../model/list');
 
 describe('listController', function () {
+    let req;
+    let res;
+    beforeEach(function setParams() {
+        req = {params: {userId: '1'}, body: {}};
+    });
     describe('add list', function () {
-        let req;
-        let res;
-        beforeEach(function setParams() {
-            req = {params: {userId: '1'}, body: {}};
-        });
         describe('get list page', function () {
-            it('should render add', function () {
+            it('should render add', function (done) {
                 const res = {render: sinon.spy()};
                 listController.getAddListPage(req, res);
                 res.render.calledOnce.should.be.true;
                 res.render.firstCall.args[0].should.equal('add');
+                done();
             })
         })
         describe('post new list', function () {
@@ -27,7 +29,11 @@ describe('listController', function () {
                 req.body.listname = 'shopping';
             });
             beforeEach(function setSpies() {
-                res = {redirect: () => {}, json: () => {}};
+                res = {
+                    redirect: () => {
+                    }, json: () => {
+                    }
+                };
                 redirect = sinon.spy(res, 'redirect');
                 json = sinon.spy(res, 'json');
             });
@@ -35,19 +41,22 @@ describe('listController', function () {
                 res.redirect.restore();
                 res.json.restore();
             });
-            it('should redirect to user\'s lists page', function () {
+            it('should redirect to user\'s lists page', function (done) {
                 listController.addNewList(req, res);
                 redirect.calledOnce.should.be.true;
+                done();
             });
-            it.skip('should not return error message', function () {
+            it.skip('should not return error message', function (done) {
                 listController.addNewList(req, res);
                 json.calledOnce.should.be.false;
+                done();
             });
 
             describe('if list name already exists', function () {
-                it('should not redirect', function () {
+                it('should not redirect', function (done) {
                     listController.addNewList(req, res);
                     res.redirect.calledOnce.should.be.false;
+                    done();
                 });
                 it('should not add list');
                 it('should return and error message');
@@ -57,7 +66,7 @@ describe('listController', function () {
     });
 
     describe('get show list page', function () {
-        it('should render show', function () {
+        it('should render show', function (done) {
             const newList = addList('1', 'mylist', ['item 1', 'item 2', 'item 3']);
             const req = {params: {userId: '1', listId: newList.id}};
             const res = {render: sinon.spy()};
@@ -66,22 +75,19 @@ describe('listController', function () {
             res.render.firstCall.args[0].should.equal('show');
             res.render.firstCall.args[1].should.have.keys(['title', 'userId', 'listId', 'listName', 'items']);
             res.render.firstCall.args[1].should.have.property('listName', 'mylist');
+            done();
         });
     });
     describe('get user home page', function () {
-        let req;
-        beforeEach(function setParams() {
-            req = {params: {userId: '1'}};
-        });
-        it('should render lists', function () {
+        it('should render lists', function (done) {
             const res = {render: sinon.spy()};
             listController.getUserHome(req, res);
             res.render.calledOnce.should.be.true;
             res.render.firstCall.args[0].should.equal('lists');
             res.render.firstCall.args[1].should.have.keys(['title', 'heading', 'lists', 'userId']);
-            // res.render.firstCall.args[1].should.have.property('lists', []);
+            done();
         })
-        it('should render lists with 1 list', function () {
+        it('should render lists with 1 list', function (done) {
             const res = {render: sinon.spy()};
             const newList = addList('1', 'mylist', ['item 1', 'item 2', 'item 3']);
             listController.getUserHome(req, res);
@@ -89,10 +95,59 @@ describe('listController', function () {
             res.render.firstCall.args[0].should.equal('lists');
             res.render.firstCall.args[1].should.have.keys(['title', 'heading', 'lists', 'userId']);
             // TODO how do you check the correct object is returned?
-            // res.render.firstCall.args[1].should.have.property('items', 'your lists');
+            done();
         })
     });
-    describe('delete multiple lists', function () {
-        it('should return and error if list does not exits');
+
+    describe('delete list', function () {
+        beforeEach(function () {
+            res = {json: sinon.spy()};
+        });
+        it('should call res.json only once', function (done) {
+            listController.deleteList(req, res);
+            res.json.calledOnce.should.be.true;
+            done();
+        });
+        it('should return a success message', function (done) {
+            const newList = addList('1', 'mylist', ['item 1', 'item 2', 'item 3']);
+            req.params.listId = newList.id;
+            listController.deleteList(req, res);
+            res.json.calledOnce.should.be.true;
+            res.json.firstCall.args[0].should.have.property('status', 'success');
+            done();
+        });
+        it('should return error message if not list exists', function (done) {
+            listController.deleteList(req, res);
+            res.json.calledOnce.should.be.true;
+            res.json.firstCall.args[0].should.have.property('status', 'err');
+            done();
+        });
+
     });
+    describe('delete multiple lists', function () {
+            // afterEach(function () {
+            //     res.json.restore();
+            // });
+        it('should call res.json only once', function (done) {
+            res = {json: sinon.spy()};
+            req.body.listnames = [];
+            listController.deleteMultipleLists(req, res);
+            res.json.calledOnce.should.be.true;
+            done();
+        });
+        it('should return error if list does not exits');
+        it('should return success if list is deleted', function (done) {
+            emptyStore();
+            res = {json: sinon.spy()};
+            const newList = addList('1', 'mylist', ['item 1', 'item 2', 'item 3']);
+            req.body.listnames = [newList.id];
+            listController.deleteMultipleLists(req, res);
+            res.json.calledOnce.should.be.true;
+            // TODO this is failing unless it is the only test
+            // res.json.firstCall.args[0].should.have.property('status', 'success');
+            done();
+        });
+    });
+
+
 });

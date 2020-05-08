@@ -48,6 +48,8 @@ function getList(userId, listId) {
 
 function removeList(userId, listname) {
     let usersLists = listStore.getListsByUser(userId);
+    // returns false if element does not exist
+    // console.log(usersLists.lists);
     return usersLists.lists.delete(listname);
 }
 
@@ -68,9 +70,7 @@ function getAllLists(userId) {
     if (usersListStore) {
         const lists = Array.from(usersListStore.lists.values());
         return lists
-        // return usersListStore.lists;
     }
-    // return undefined;
     return [];
 }
 

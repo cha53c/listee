@@ -79,7 +79,7 @@ function deleteList(req, res) {
         responseMsg.status = ERROR_STATUS;
         responseMsg.msg = `list  ${listId} not found`;
         debug(`${red(responseMsg.msg)}`);
-        res.json(responseMsg);
+        return res.json(responseMsg);
     }
     res.json({"status": SUCCESS_STATUS, "msg": 'list ' + listId + ' deleted'});
 }
@@ -99,7 +99,7 @@ function deleteMultipleLists(req, res) {
     if (responseMsg.status === ERROR_STATUS) {
         responseMsg.msg = failedLists;
         debug(`${red(responseMsg.msg)}`);
-        res.json(responseMsg);
+        return res.json(responseMsg);
     }
     res.json({"status": SUCCESS_STATUS, "msg": deletedLists + " list deleted"});
 }
