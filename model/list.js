@@ -49,7 +49,7 @@ function getList(userId, listId) {
 function removeList(userId, listname) {
     let usersLists = listStore.getListsByUser(userId);
     // returns false if element does not exist
-    // console.log(usersLists.lists);
+    console.log("lists" + usersLists.lists);
     return usersLists.lists.delete(listname);
 }
 

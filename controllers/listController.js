@@ -15,6 +15,23 @@ const responseMsg = {
     msg: ""
 };
 
+const ResponseMessage = {
+    _status: "",
+    _text: "",
+    set status(status){
+        this._status = status;
+    },
+    get status(){
+        return this._status;
+    },
+    set text(text){
+        this._text = text;
+    },
+    get text(){
+        return this._text;
+    }
+};
+
 function getUserHome(req, res) {
     debug('get user\'s list home');
     unpackParams(req);
@@ -42,12 +59,11 @@ function addNewList(req, res) {
     unpackParams(req);
     unpackBody(req);
     const allNames = getListNames(userId);
-    const found = allNames.indexOf(listName);
-    if(!found){
+    if (allNames.includes(listName)) {
         responseMsg.status = ERROR_STATUS;
         responseMsg.msg = `list ${listName} already exits`;
         debug(`${red(responseMsg.msg)}`);
-       return res.json(responseMsg);
+        return res.json(responseMsg);
     }
     const newlist = addList(userId, listName, items);
     // redirect to list show page
@@ -56,7 +72,7 @@ function addNewList(req, res) {
 
 function showList(req, res) {
     unpackParams(req);
-    debug(`show list for id: %s`, listId );
+    debug(`show list for id: %s`, listId);
     const list = getList(userId, listId);
     const items = list === undefined ? [] : list.items;
     debug('listId %s, list name %s, items: %s', list.id, list.name, items);
@@ -85,6 +101,7 @@ function deleteList(req, res) {
 }
 
 function deleteMultipleLists(req, res) {
+    const resMsg = Object.create(ResponseMessage);
     debug('delete multiple lists');
     unpackParams(req);
     let deletedLists = req.body.listnames;
@@ -92,16 +109,18 @@ function deleteMultipleLists(req, res) {
     for (const listName of deletedLists) {
         // TODO handle errors if remove list returns false still returns 500 if list not found
         if (!removeList(userId, listName)) {
-            responseMsg.status = ERROR_STATUS;
             failedLists += listName + " ";
         }
     }
-    if (responseMsg.status === ERROR_STATUS) {
-        responseMsg.msg = failedLists;
-        debug(`${red(responseMsg.msg)}`);
-        return res.json(responseMsg);
+    if (failedLists != "") {
+        resMsg.status = ERROR_STATUS;
+        resMsg.text = failedLists;
+        debug(`${red(resMsg.text)}`);
+        // return res.json(responseMsg);
     }
-    res.json({"status": SUCCESS_STATUS, "msg": deletedLists + " list deleted"});
+    resMsg.status = SUCCESS_STATUS;
+    resMsg.text = deletedLists + " deleted";
+    res.json(resMsg);
 }
 
 function unpackParams(req) {
@@ -118,5 +137,7 @@ module.exports = {
     getUserHome, getAddListPage,
     addNewList, showList,
     deleteList, patchList,
-    deleteMultipleLists
+    deleteMultipleLists,
+    SUCCESS_STATUS,
+    ERROR_STATUS,
 };
