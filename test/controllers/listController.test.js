@@ -5,12 +5,11 @@ const sinon = require('sinon');
 const listController = require('../../controllers/listController');
 const {SUCCESS_STATUS, ERROR_STATUS} = require('../../controllers/listController');
 const List = require('../../model/list');
-const {addList, getListNames} = require('../../model/list');
+const {addList} = require('../../model/list');
 const {emptyStore, createListStoreForUser} = require('../../model/listStore');
 
 // TODO find out how to check redirect url
 describe('listController', function () {
-    // TODO create constant for user1 id
     const USER1_ID = '1';
     let req;
     let res;
@@ -32,6 +31,27 @@ describe('listController', function () {
         // res.redirect.restore();
         // res.json.restore();
     });
+    describe('get user home page', function () {
+        it('should render lists', function (done) {
+            const res = {render: sinon.spy()};
+            listController.getUserHome(req, res);
+            res.render.calledOnce.should.be.true;
+            res.render.firstCall.args[0].should.equal('lists');
+            res.render.firstCall.args[1].should.have.keys(['title', 'heading', 'lists', 'userId']);
+            done();
+        })
+        it('should render lists with 1 list', function (done) {
+            const res = {render: sinon.spy()};
+            const newList = addList(USER1_ID, 'mylist', ['item 1', 'item 2', 'item 3']);
+            listController.getUserHome(req, res);
+            res.render.calledOnce.should.be.true;
+            res.render.firstCall.args[0].should.equal('lists');
+            res.render.firstCall.args[1].should.have.keys(['title', 'heading', 'lists', 'userId']);
+            // TODO how do you check the correct object is returned?
+            done();
+        })
+    });
+
     describe('add list', function () {
         describe('get list page', function () {
             it('should render add', function (done) {
@@ -98,25 +118,16 @@ describe('listController', function () {
             done();
         });
     });
-    describe('get user home page', function () {
-        it('should render lists', function (done) {
-            const res = {render: sinon.spy()};
-            listController.getUserHome(req, res);
-            res.render.calledOnce.should.be.true;
-            res.render.firstCall.args[0].should.equal('lists');
-            res.render.firstCall.args[1].should.have.keys(['title', 'heading', 'lists', 'userId']);
-            done();
-        })
-        it('should render lists with 1 list', function (done) {
-            const res = {render: sinon.spy()};
+    describe('update a list', function () {
+        it('should update the list and return a success message', function () {
             const newList = addList(USER1_ID, 'mylist', ['item 1', 'item 2', 'item 3']);
-            listController.getUserHome(req, res);
-            res.render.calledOnce.should.be.true;
-            res.render.firstCall.args[0].should.equal('lists');
-            res.render.firstCall.args[1].should.have.keys(['title', 'heading', 'lists', 'userId']);
-            // TODO how do you check the correct object is returned?
-            done();
-        })
+            req.params.listId = newList.id;
+            req.body.listname = newList.name;
+            req.body.items = ['item 1', 'item 2']
+            listController.patchList(req, res);
+            res.json.calledOnce.should.be.true;
+            res.json.firstCall.args[0].should.have.property('status', SUCCESS_STATUS);
+        });
     });
 
     describe('delete list', function () {
@@ -148,14 +159,19 @@ describe('listController', function () {
             res.json.calledOnce.should.be.true;
             done();
         });
-        it('should return error if list does not exits');
+        it('should call res.json once with error if list does not exits', function () {
+            const list1 = addList(USER1_ID, 'mylist', ['item 1', 'item 2', 'item 3']);
+            req.body.listnames = ['nosuchid'];
+            listController.deleteMultipleLists(req, res);
+            res.json.calledOnce.should.be.true;
+            res.json.firstCall.args[0].should.have.property('status', ERROR_STATUS);
+        });
         it('should return success if list is deleted', function (done) {
             const list1 = addList(USER1_ID, 'mylist', ['item 1', 'item 2', 'item 3']);
             const list2 = addList(USER1_ID, 'list2', ['item 1', 'item 2', 'item 3']);
             req.body.listnames = [list1.id, list2.id];
             listController.deleteMultipleLists(req, res);
             res.json.calledOnce.should.be.true;
-            // TODO this is failing unless it is the only test
             res.json.firstCall.args[0].should.have.property('status', 'success');
             res.json.firstCall.args[0].should.have.property("text", );
             done();

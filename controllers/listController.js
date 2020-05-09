@@ -87,7 +87,7 @@ function patchList(req, res) {
     unpackBody(req);
     // TODO DRY this up - same as show
     const updatedList = updateList(userId, listId, listName, items);
-    // TODO allow for errors
+    // TODO handle errors
     resMsg.status = SUCCESS_STATUS;
     resMsg.txt = `list updated to ${JSON.stringify(updatedList)}`;
     res.json(resMsg);
