@@ -18,16 +18,16 @@ const responseMsg = {
 const ResponseMessage = {
     _status: "",
     _text: "",
-    set status(status){
+    set status(status) {
         this._status = status;
     },
-    get status(){
+    get status() {
         return this._status;
     },
-    set text(text){
+    set text(text) {
         this._text = text;
     },
-    get text(){
+    get text() {
         return this._text;
     }
 };
@@ -56,14 +56,15 @@ function getAddListPage(req, res) {
 
 function addNewList(req, res) {
     debug('add list');
+    const resMsg = Object.create(ResponseMessage);
     unpackParams(req);
     unpackBody(req);
     const allNames = getListNames(userId);
     if (allNames.includes(listName)) {
-        responseMsg.status = ERROR_STATUS;
-        responseMsg.msg = `list ${listName} already exits`;
-        debug(`${red(responseMsg.msg)}`);
-        return res.json(responseMsg);
+        resMsg.status = ERROR_STATUS;
+        resMsg.text = `list ${listName} already exits`;
+        debug(`${red(resMsg.text)}`);
+        return res.json(resMsg);
     }
     const newlist = addList(userId, listName, items);
     // redirect to list show page
@@ -80,24 +81,31 @@ function showList(req, res) {
 }
 
 function patchList(req, res) {
+    const resMsg = Object.create(ResponseMessage);
     debug(`update list`);
     unpackParams(req);
     unpackBody(req);
     // TODO DRY this up - same as show
     const updatedList = updateList(userId, listId, listName, items);
-    res.json({"status": SUCCESS_STATUS, "msg": `list updated to ${JSON.stringify(updatedList)}`});
+    // TODO allow for errors
+    resMsg.status = SUCCESS_STATUS;
+    resMsg.txt = `list updated to ${JSON.stringify(updatedList)}`;
+    res.json(resMsg);
 }
 
 function deleteList(req, res) {
     debug('delete list');
+    const resMsg = Object.create(ResponseMessage);
     unpackParams(req);
     if (!removeList(userId, listId)) {
-        responseMsg.status = ERROR_STATUS;
-        responseMsg.msg = `list  ${listId} not found`;
-        debug(`${red(responseMsg.msg)}`);
-        return res.json(responseMsg);
+        resMsg.status = ERROR_STATUS;
+        resMsg.text = `list  ${listId} not found`;
+    } else {
+        resMsg.status = SUCCESS_STATUS;
+        resMsg.text = `list ${listId} deleted`;
     }
-    res.json({"status": SUCCESS_STATUS, "msg": 'list ' + listId + ' deleted'});
+    debug(`${responseMsg.msg}`);
+    res.json(resMsg);
 }
 
 function deleteMultipleLists(req, res) {
@@ -115,11 +123,11 @@ function deleteMultipleLists(req, res) {
     if (failedLists != "") {
         resMsg.status = ERROR_STATUS;
         resMsg.text = failedLists;
-        debug(`${red(resMsg.text)}`);
-        // return res.json(responseMsg);
+    } else {
+        resMsg.status = SUCCESS_STATUS;
+        resMsg.text = `deleted ${deletedLists}`;
     }
-    resMsg.status = SUCCESS_STATUS;
-    resMsg.text = deletedLists + " deleted";
+    debug(`${resMsg.text}`);
     res.json(resMsg);
 }
 

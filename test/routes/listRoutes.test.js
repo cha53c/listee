@@ -200,9 +200,9 @@ describe('lists', () => {
                     .set('content-type', 'application/json')
                     .end((err, res) => {
                         res.should.have.status(200);
-                        res.body.should.property('status');
-                        res.body.should.property('msg');
-                        const status = res.body.status;
+                        res.body.should.property('_status');
+                        res.body.should.property('_text');
+                        const status = res.body._status;
                         expect(status).to.equal('err');
                         done();
                     });

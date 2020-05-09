@@ -50,9 +50,9 @@ describe('listController', function () {
                 res.redirect.calledOnce.should.be.true;
                 done();
             });
-            it.skip('should not return error message', function (done) {
+            it('should not return error message', function (done) {
                 listController.addNewList(req, res);
-                json.calledOnce.should.be.false;
+                res.json.calledOnce.should.be.false;
                 done();
             });
 
@@ -141,7 +141,7 @@ describe('listController', function () {
         });
 
     });
-    describe.only('delete multiple lists', function () {
+    describe('delete multiple lists', function () {
         it('should call res.json only once', function (done) {
             req.body.listnames = []; // TODO ??
             listController.deleteMultipleLists(req, res);
@@ -155,7 +155,6 @@ describe('listController', function () {
             req.body.listnames = [list1.id, list2.id];
             listController.deleteMultipleLists(req, res);
             res.json.calledOnce.should.be.true;
-            console.log(res.json.printf("%n %c %D %C %t"));
             // TODO this is failing unless it is the only test
             res.json.firstCall.args[0].should.have.property('status', 'success');
             res.json.firstCall.args[0].should.have.property("text", );
