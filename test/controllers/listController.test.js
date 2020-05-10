@@ -9,11 +9,17 @@ const List = require('../../model/userListStore');
 const {addList} = require('../../model/userListStore');
 const {emptyStore, createListStoreForUser} = require('../../model/listStore');
 
-// TODO find out how to check redirect url
+// TODO check parameters passed to redirect
 describe('listController', function () {
     const USER1_ID = '1';
+    const list = {id: 'listId1', name: 'mylist', items: ['item 1', 'item 2', 'item 3']};
     let req;
     let res;
+    let userListStoreRewire;
+
+    beforeEach(function setRewire() {
+        userListStoreRewire = listController.__get__('userListStore');
+    });
     beforeEach(function createListStore() {
         createListStoreForUser(USER1_ID);
     });
@@ -26,12 +32,7 @@ describe('listController', function () {
     afterEach(function emptyListStore() {
         emptyStore();
     });
-    afterEach(function removeSpies() {
-        // TODO fix errors on restore
-        // res.render.restore();
-        // res.redirect.restore();
-        // res.json.restore();
-    });
+
     describe('get user home page', function () {
         it('should render lists', function (done) {
             const res = {render: sinon.spy()};
@@ -54,6 +55,15 @@ describe('listController', function () {
     });
 
     describe('add list', function () {
+        let stub, revertRewire;
+        afterEach(function () {
+            if (stub) {
+                stub.restore();
+            }
+            if (revertRewire) {
+                revertRewire();
+            }
+        });
         describe('get list page', function () {
             it('should render add', function (done) {
                 listController.getAddListPage(req, res);
@@ -79,6 +89,7 @@ describe('listController', function () {
 
             describe('if list name already exists', function () {
                 beforeEach(function createList() {
+                    // TODO replace with stubs and spies
                     const newList = addList(USER1_ID, 'mylist', ['item 1', 'item 2', 'item 3']);
                     req.body.listname = 'mylist';
                 });
@@ -89,10 +100,12 @@ describe('listController', function () {
                     done();
                 });
                 it('should not add list', function () {
-                    const listsBefore = List.getAllLists(USER1_ID);
+                    let addList = sinon.spy(userListStoreRewire, 'addList');
+                    const revertRewire = listController.__set__('userListStore', userListStoreRewire);
                     listController.addNewList(req, res);
-                    const listsAfter = List.getAllLists(USER1_ID);
-                    listsBefore.should.deep.equal(listsAfter);
+                    addList.called.should.be.false;
+                    addList.restore();
+                    revertRewire();
                 });
                 it('should call res.json and return error message', function (done) {
                     listController.addNewList(req, res);
@@ -103,30 +116,32 @@ describe('listController', function () {
                 });
             });
         });
-
     });
 
     describe('get show list page', function () {
         it('should render show', function (done) {
-            const newList = addList(USER1_ID, 'mylist', ['item 1', 'item 2', 'item 3']);
-            const req = {params: {userId: USER1_ID, listId: newList.id}};
+            let stub = sinon.stub(userListStoreRewire, 'getList').returns(list);
+            const revertRewire = listController.__set__('userListStore', userListStoreRewire);
+            const req = {params: {userId: USER1_ID, listId: list.id}};
             listController.showList(req, res);
             res.render.calledOnce.should.be.true;
             res.render.firstCall.args[0].should.equal('show');
             res.render.firstCall.args[1].should.have.keys(['title', 'userId', 'listId', 'listName', 'items']);
             res.render.firstCall.args[1].should.have.property('listName', 'mylist');
             res.render.firstCall.args[1].should.have.deep.property('items', ['item 1', 'item 2', 'item 3']);
+            stub.restore();
+            revertRewire();
             done();
         });
 
         it('should render with list items as an empty array if list is not found', function (done) {
-            // TODO is this cleaner than using the userListStore methods directly
-            const userListStore = listController.__get__('userListStore');
-            const getListStubReturnsUndefined = sinon.stub(userListStore, 'getList').returns(undefined);
-            listController.__set__('userListStore', userListStore);
+            let stub = sinon.stub(userListStoreRewire, 'getList').returns(undefined);
+            const revertRewire = listController.__set__('userListStore', userListStoreRewire);
             listController.showList(req, res);
             res.render.calledOnce.should.be.true;
             res.render.firstCall.args[0].should.equal('error');
+            stub.restore();
+            revertRewire();
             done();
         });
     });
@@ -141,53 +156,71 @@ describe('listController', function () {
             res.json.firstCall.args[0].should.have.property('status', SUCCESS_STATUS);
         });
     });
+    describe('delete', function () {
+        let revertRewire, stub;
+        beforeEach(function () {
 
-    describe('delete list', function () {
-        it('should call res.json only once', function (done) {
-            listController.deleteList(req, res);
-            res.json.calledOnce.should.be.true;
-            done();
         });
-        it('should return a success message', function (done) {
-            const newList = addList(USER1_ID, 'mylist', ['item 1', 'item 2', 'item 3']);
-            req.params.listId = newList.id;
-            listController.deleteList(req, res);
-            res.json.calledOnce.should.be.true;
-            res.json.firstCall.args[0].should.have.property('status', SUCCESS_STATUS);
-            res.json.firstCall.args[0].should.have.property('text').which.contains(newList.id);
-            done();
+        afterEach(function () {
+            if (stub) {
+                stub.restore();
+            }
+            if (revertRewire) {
+                revertRewire();
+            }
         });
-        it('should return error message if not list exists', function (done) {
-            listController.deleteList(req, res);
-            res.json.calledOnce.should.be.true;
-            res.json.firstCall.args[0].should.have.property('status', ERROR_STATUS);
-            done();
-        });
+        describe('delete list', function () {
+            it('should call res.json only once', function (done) {
+                listController.deleteList(req, res);
+                res.json.calledOnce.should.be.true;
+                done();
+            });
+            it('should return a success message', function (done) {
+                stub = sinon.stub(userListStoreRewire, 'removeList').returns(true);
+                revertRewire = listController.__set__('userListStore', userListStoreRewire);
+                req.params.listId = 'listId1';
+                listController.deleteList(req, res);
+                res.json.calledOnce.should.be.true;
+                res.json.firstCall.args[0].should.have.property('status', SUCCESS_STATUS);
+                res.json.firstCall.args[0].should.have.property('text').which.contains('listId1');
+                done();
+            });
+            it('should return error message if no list exists', function (done) {
+                listController.deleteList(req, res);
+                res.json.calledOnce.should.be.true;
+                res.json.firstCall.args[0].should.have.property('status', ERROR_STATUS);
+                done();
+            });
 
-    });
-    describe('delete multiple lists', function () {
-        it('should call res.json only once', function (done) {
-            req.body.listnames = []; // TODO ??
-            listController.deleteMultipleLists(req, res);
-            res.json.calledOnce.should.be.true;
-            done();
         });
-        it('should call res.json once with error if list does not exits', function () {
-            const list1 = addList(USER1_ID, 'mylist', ['item 1', 'item 2', 'item 3']);
-            req.body.listnames = ['nosuchid'];
-            listController.deleteMultipleLists(req, res);
-            res.json.calledOnce.should.be.true;
-            res.json.firstCall.args[0].should.have.property('status', ERROR_STATUS);
-        });
-        it('should return success if list is deleted', function (done) {
-            const list1 = addList(USER1_ID, 'mylist', ['item 1', 'item 2', 'item 3']);
-            const list2 = addList(USER1_ID, 'list2', ['item 1', 'item 2', 'item 3']);
-            req.body.listnames = [list1.id, list2.id];
-            listController.deleteMultipleLists(req, res);
-            res.json.calledOnce.should.be.true;
-            res.json.firstCall.args[0].should.have.property('status', 'success');
-            res.json.firstCall.args[0].should.have.property("text").which.contains(list1.id);
-            done();
+        describe('delete multiple lists', function () {
+            it('should call res.json only once', function (done) {
+                req.body.listnames = []; // TODO ??
+                listController.deleteMultipleLists(req, res);
+                res.json.calledOnce.should.be.true;
+                done();
+            });
+            it('should call res.json once with error if list does not exits', function (done) {
+                stub = sinon.stub(userListStoreRewire, 'removeList').returns(false);
+                revertRewire = listController.__set__('userListStore', userListStoreRewire);
+                req.body.listnames = ['nosuchid'];
+                listController.deleteMultipleLists(req, res);
+                res.json.calledOnce.should.be.true;
+                res.json.firstCall.args[0].should.have.property('status', ERROR_STATUS);
+                res.json.firstCall.args[0].should.have.property("text").which.contains('nosuchid');
+                done();
+            });
+            it('should call res.json with success if lists are deleted', function (done) {
+                stub = sinon.stub(userListStoreRewire, 'removeList').returns(true);
+                revertRewire = listController.__set__('userListStore', userListStoreRewire);
+                req.body.listnames = ['id1', 'id2'];
+                listController.deleteMultipleLists(req, res);
+                res.json.calledOnce.should.be.true;
+                res.json.firstCall.args[0].should.have.property('status', 'success');
+                res.json.firstCall.args[0].should.have.property("text").which.contains('id1');
+                res.json.firstCall.args[0].should.have.property("text").which.contains('id2');
+                done();
+            });
         });
     });
 });

@@ -2,7 +2,6 @@ const debug = require('debug')('app:listController');
 const {red} = require('chalk');
 const path = require('path');
 
-const {getListNames, addList, getList, updateList, removeList, getAllLists} = require('../model/userListStore');
 const userListStore = require('../model/userListStore');
 
 

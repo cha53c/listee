@@ -9,8 +9,11 @@ const expect = chai.expect;
 const cheerio = require('cheerio');
 
 chai.use(chaiHttp);
+// THESE TESTS SHOULD TEST KEY COMPONENTS OF HTML RETURN FROM THE ROOTS NOT THE CONTROLLER
+// WHICH IS TESTED BY listConroller.test
 // TODO use rewrite to use mock to remove the need for all the http set calls
-describe('lists', () => {
+
+describe('list routes', () => {
     after(() => {
         stop();
     });
@@ -25,6 +28,7 @@ describe('lists', () => {
                         expect($('h2').text()).to.include('You have 0 lists');
                         done();
                     });
+                it('should lists page for user with 1 list');
             });
             // TODO need find a way to get list ids to make delete call
             describe.skip('/PATCH multiple lists', () => {
@@ -38,7 +42,7 @@ describe('lists', () => {
                         });
                     chai.request(server)
                         .post('/lists/1/create')
-                        .set('content-type', 'application/json')
+                        // .set('content-type', 'application/json')
                         .send({"listname": "new list", "items": ["red"]})
                         .end((err, res) => {
                             res.should.have.status(200);
@@ -102,14 +106,10 @@ describe('lists', () => {
 
     describe('list CRUD operations', () => {
         describe('/POST lists/userId/create', () => {
-            beforeEach(() => {
-                const {app: server, stop} = require('../../app');
-            });
             it('should add a new list and redirect to show page containing list name', (done) => {
                 const list = {"listname": "rainbow", "items": ["red", "yellow", "green", "blue"]};
                 chai.request(server)
                     .post('/lists/1/create')
-                    .set('content-type', 'application/json')
                     .send(list)
                     .end((err, res) => {
                         res.should.have.status(200);
