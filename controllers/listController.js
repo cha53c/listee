@@ -36,7 +36,7 @@ const ResponseMessage = {
 function getUserHome(req, res) {
     debug('get user\'s list home');
     unpackParams(req);
-    const lists = getAllLists(userId);
+    const lists = userListStore.getAllLists(userId);
     res.render('lists', {
         title: 'your lists', heading: 'Listee keeps all your lists here',
         lists: lists, userId: userId
@@ -46,7 +46,7 @@ function getUserHome(req, res) {
 function getAddListPage(req, res) {
     debug('get add list page');
     unpackParams(req);
-    const listnames = getListNames(userId);
+    const listnames = userListStore.getListNames(userId);
     res.render('add', {
         title: 'add new list',
         heading: 'Create your new list',
@@ -60,14 +60,14 @@ function addNewList(req, res) {
     const resMsg = Object.create(ResponseMessage);
     unpackParams(req);
     unpackBody(req);
-    const allNames = getListNames(userId);
+    const allNames = userListStore.getListNames(userId);
     if (allNames.includes(listName)) {
         resMsg.status = ERROR_STATUS;
         resMsg.text = `list ${listName} already exits`;
         debug(`${red(resMsg.text)}`);
         return res.json(resMsg);
     }
-    const newlist = addList(userId, listName, items);
+    const newlist = userListStore.addList(userId, listName, items);
     // redirect to list show page
     res.redirect(path.join('/lists', userId, newlist.id));
 }
@@ -90,7 +90,7 @@ function patchList(req, res) {
     unpackParams(req);
     unpackBody(req);
     // TODO DRY this up - same as show
-    const updatedList = updateList(userId, listId, listName, items);
+    const updatedList = userListStore.updateList(userId, listId, listName, items);
     // TODO handle errors
     resMsg.status = SUCCESS_STATUS;
     resMsg.txt = `list updated to ${JSON.stringify(updatedList)}`;
@@ -101,7 +101,7 @@ function deleteList(req, res) {
     debug('delete list');
     const resMsg = Object.create(ResponseMessage);
     unpackParams(req);
-    if (!removeList(userId, listId)) {
+    if (!userListStore.removeList(userId, listId)) {
         resMsg.status = ERROR_STATUS;
         resMsg.text = `list  ${listId} not found`;
     } else {
@@ -120,7 +120,7 @@ function deleteMultipleLists(req, res) {
     let failedLists = "";
     for (const listName of deletedLists) {
         // TODO handle errors if remove list returns false still returns 500 if list not found
-        if (!removeList(userId, listName)) {
+        if (!userListStore.removeList(userId, listName)) {
             failedLists += listName + " ";
         }
     }
