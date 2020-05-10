@@ -3,6 +3,7 @@ const {red} = require('chalk');
 const path = require('path');
 
 const {getListNames, addList, getList, updateList, removeList, getAllLists} = require('../model/list');
+const userListStore = require('../model/list');
 
 
 let userId, listId, listName, items;
@@ -74,10 +75,13 @@ function addNewList(req, res) {
 function showList(req, res) {
     unpackParams(req);
     debug(`show list for id: %s`, listId);
-    const list = getList(userId, listId);
-    const items = list === undefined ? [] : list.items;
-    debug('listId %s, list name %s, items: %s', list.id, list.name, items);
-    res.render('show', {title: list.name, userId: userId, listId: listId, listName: list.name, items: items});
+    const list = userListStore.getList(userId, listId);
+    if(list){
+        debug('listId %s, list name %s, items: %s', list.id, list.name, list.items);
+        res.render('show', {title: list.name, userId: userId, listId: listId, listName: list.name, items: list.items});
+    } else {
+        res.render('error', {title: 'error page', errorMsg: `list ${listId} not found`});
+    }
 }
 
 function patchList(req, res) {

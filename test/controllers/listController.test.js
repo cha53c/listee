@@ -1,8 +1,9 @@
 const should = require('chai').should();
 const expect = require('chai').expect;
 const sinon = require('sinon');
+const rewire = require('rewire');
 
-const listController = require('../../controllers/listController');
+const listController = rewire("../../controllers/listController");
 const {SUCCESS_STATUS, ERROR_STATUS} = require('../../controllers/listController');
 const List = require('../../model/list');
 const {addList} = require('../../model/list');
@@ -109,12 +110,23 @@ describe('listController', function () {
         it('should render show', function (done) {
             const newList = addList(USER1_ID, 'mylist', ['item 1', 'item 2', 'item 3']);
             const req = {params: {userId: USER1_ID, listId: newList.id}};
-            const res = {render: sinon.spy()};
             listController.showList(req, res);
             res.render.calledOnce.should.be.true;
             res.render.firstCall.args[0].should.equal('show');
             res.render.firstCall.args[1].should.have.keys(['title', 'userId', 'listId', 'listName', 'items']);
             res.render.firstCall.args[1].should.have.property('listName', 'mylist');
+            res.render.firstCall.args[1].should.have.deep.property('items', ['item 1', 'item 2', 'item 3']);
+            done();
+        });
+
+        it('should render with list items as an empty array if list is not found', function (done) {
+            // TODO is this cleaner than using the userListStore methods directly
+            const userListStore = listController.__get__('userListStore');
+            const getListStubReturnsUndefined = sinon.stub(userListStore, 'getList').returns(undefined);
+            listController.__set__('userListStore', userListStore);
+            listController.showList(req, res);
+            res.render.calledOnce.should.be.true;
+            res.render.firstCall.args[0].should.equal('error');
             done();
         });
     });
@@ -142,6 +154,7 @@ describe('listController', function () {
             listController.deleteList(req, res);
             res.json.calledOnce.should.be.true;
             res.json.firstCall.args[0].should.have.property('status', SUCCESS_STATUS);
+            res.json.firstCall.args[0].should.have.property('text').which.contains(newList.id);
             done();
         });
         it('should return error message if not list exists', function (done) {
@@ -173,7 +186,7 @@ describe('listController', function () {
             listController.deleteMultipleLists(req, res);
             res.json.calledOnce.should.be.true;
             res.json.firstCall.args[0].should.have.property('status', 'success');
-            res.json.firstCall.args[0].should.have.property("text", );
+            res.json.firstCall.args[0].should.have.property("text").which.contains(list1.id);
             done();
         });
     });
