@@ -4,7 +4,7 @@
 <body>
 <script> const userId = '<%- userId %>'; const listId = '<%= listId %>' ; const listname = '<%- listName %>' </script>
 <div class="container-fluid bg-warning">
-    <h1>List name: <%= listName %>
+    <h1>UserListStore name: <%= listName %>
         <span><%- include('list/editSaveButtons', { editAction: 'showEditAction()',
             saveAction: 'showSaveAction(userId, listId, listname)', cancelAction: 'cancelAction()'}) %></span>
         <span><i id="delete-list-btn" class="update-page hide material-icons-two-tone md-36" type="button" onclick="deleteList(userId, listId)" data-toggle="tooltip" title="delete list">delete</i></span>
@@ -12,7 +12,7 @@
 </div>
 <div class="container bg-light" >
 <a href="/lists/<%= userId %>">Back to my lists</a>
-<h2>List items</h2>
+<h2>UserListStore items</h2>
 <%- include('list/listItems', { items: items, addButton: true, withLinks: false }) %>
 </div>
 </body>

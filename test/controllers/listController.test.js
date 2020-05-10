@@ -5,8 +5,8 @@ const rewire = require('rewire');
 
 const listController = rewire("../../controllers/listController");
 const {SUCCESS_STATUS, ERROR_STATUS} = require('../../controllers/listController');
-const List = require('../../model/list');
-const {addList} = require('../../model/list');
+const List = require('../../model/userListStore');
+const {addList} = require('../../model/userListStore');
 const {emptyStore, createListStoreForUser} = require('../../model/listStore');
 
 // TODO find out how to check redirect url

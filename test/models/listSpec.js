@@ -1,7 +1,7 @@
 const should = require('chai').should();
 const expect = require('chai').expect;
 
-const {addList, updateList, removeList, getList, getListNames} = require('../../model/list');
+const {addList, updateList, removeList, getList, getListNames} = require('../../model/userListStore');
 const listStore = require('../../model/listStore');
 
 describe("list", () => {
