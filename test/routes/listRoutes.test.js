@@ -9,7 +9,7 @@ const expect = chai.expect;
 const cheerio = require('cheerio');
 
 chai.use(chaiHttp);
-// THESE TESTS SHOULD TEST KEY COMPONENTS OF HTML RETURN FROM THE ROOTS NOT THE CONTROLLER
+// THESE SHOULD TEST KEY COMPONENTS OF THE RENDERED HTML AND  NOT THE CONTROLLER
 // WHICH IS TESTED BY listConroller.test
 // TODO use rewrite to use mock to remove the need for all the http set calls
 
@@ -19,12 +19,15 @@ describe('list routes', () => {
     });
     describe('home page', () => {
         describe('/GET lists', () => {
+            // it should have ul id list
             it('should GET the lists page with 0 lists', (done) => {
                 chai.request(server)
                     .get('/lists/1')
                     .end((err, res) => {
                         res.should.have.status(200);
                         const $ = cheerio.load(res.text);
+                        $('ul#list-items').length.should.equal(1);
+                        $('li.list-row').length.should.equal(0);
                         expect($('h2').text()).to.include('You have 0 lists');
                         done();
                     });
