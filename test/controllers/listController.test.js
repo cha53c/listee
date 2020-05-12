@@ -3,7 +3,7 @@ const expect = require('chai').expect;
 const sinon = require('sinon');
 const rewire = require('rewire');
 
-const listController = rewire("../../controllers/listController");
+const listController = rewire("../../controllers/listController");  //object under test
 const {SUCCESS_STATUS, ERROR_STATUS} = require('../../controllers/listController');
 const List = require('../../model/userListStore');
 const {addList} = require('../../model/userListStore');

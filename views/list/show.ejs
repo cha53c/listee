@@ -4,6 +4,7 @@
 <body>
 <script> const userId = '<%- userId %>'; const listId = '<%= listId %>' ; const listname = '<%- listName %>' </script>
 <div class="container-fluid bg-warning">
+    <h1 hidden id="list-id" data-listId="<%= listId %>"></h1>
     <h1>UserListStore name: <%= listName %>
         <span><%- include('list/editSaveButtons', { editAction: 'showEditAction()',
             saveAction: 'showSaveAction(userId, listId, listname)', cancelAction: 'cancelAction()'}) %></span>

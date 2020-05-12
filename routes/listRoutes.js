@@ -3,11 +3,7 @@ const debug = require('debug')('app:listRoutes');
 const {green} = require('chalk');
 
 const {isDefCol} = require('../utils/chalkbox');
-const {
-    getUserHome, getAddListPage, addNewList, showList,
-    patchList, deleteList, deleteMultipleLists
-} = require('../controllers/listController');
-
+const listController = require('../controllers/listController');
 const router = express.Router();
 
 router.use('/:userId/', (req, res, next) => {
@@ -32,15 +28,15 @@ router.use('/:userId/:listId/', (req, res, next) => {
 });
 
 router.route('/:userId')
-    .get(getUserHome)
-    .patch(deleteMultipleLists);
+    .get(listController.getUserHome)
+    .patch(listController.deleteMultipleLists);
 router.route('/:userId/create/')
-    .get(getAddListPage)
-    .post(addNewList);
+    .get(listController.getAddListPage)
+    .post(listController.addNewList);
 router.route('/:userId/:listId/')
-    .get(showList)
-    .patch(patchList)
-    .delete(deleteList);
+    .get(listController.showList)
+    .patch(listController.patchList)
+    .delete(listController.deleteList);
 
 router.param('userId', (req, res, next) => {
     debug(`param userId: ${isDefCol(req.params.userId)}`);

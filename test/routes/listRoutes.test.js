@@ -7,6 +7,10 @@ const {app: server, stop} = require('../../app');
 const should = chai.should();
 const expect = chai.expect;
 const cheerio = require('cheerio');
+const sinon = require('sinon');
+const rewire = require('rewire');
+const listController = rewire("../../controllers/listController");
+
 
 chai.use(chaiHttp);
 // THESE SHOULD TEST KEY COMPONENTS OF THE RENDERED HTML AND  NOT THE CONTROLLER
@@ -14,6 +18,7 @@ chai.use(chaiHttp);
 // TODO use rewrite to use mock to remove the need for all the http set calls
 
 describe('list routes', () => {
+    const LIST_ID = "xXXXx01"
     after(() => {
         stop();
     });
@@ -26,6 +31,7 @@ describe('list routes', () => {
                     .end((err, res) => {
                         res.should.have.status(200);
                         const $ = cheerio.load(res.text);
+                        $('title').text().should.equal('your lists');
                         $('ul#list-items').length.should.equal(1);
                         $('li.list-row').length.should.equal(0);
                         expect($('h2').text()).to.include('You have 0 lists');
@@ -150,16 +156,39 @@ describe('list routes', () => {
             });
         });
         describe('/GET lists/userId/listId', () => {
+            // TODO  renders error even though this works when tested with actual server
             it.skip('should show contents of list', (done) => {
-                chai.request(server)
-                    // todo need to find a way to create a list id.
-                    .get('/lists/1/rainbow')
+                let xId;
+                let url;
+                const request = chai.request(server).keepOpen();
+                const promise = new Promise( () =>{request
+                    .post('/lists/1/create')
+                    // .set('content-type', 'application/json')
+                    .send({"listname": "new list", "items": ["red"]})
                     .end((err, res) => {
                         res.should.have.status(200);
                         const $ = cheerio.load(res.text);
-                        expect($('.list-item').first().text()).to.eql('red');
-                        done();
-                    });
+                        xId = $('h1#list-id').attr('data-listId');
+                        console.log(xId);
+                        // TODO need to slave list id
+                    })});
+                promise.then(function () {
+                    url = '/lists/1/' + xId;
+                }).then(()=>{request
+                    .get(url)
+                    .set('content-type', 'application/json')
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                        const $ = cheerio.load(res.text);
+                        $('title').text().should.equal("new list");
+                        $('ul#list-items').length.should.equal(1);
+                        $('li.list-row').length.should.equal(3);
+                    })}).then(function () {
+                    request.close();
+                    done();
+                }).catch(function () {
+                    assert.fail('something went wrong with the promises');
+                });
             });
         });
         describe('/PATCH lists/userId/listId', () => {
