@@ -7,11 +7,11 @@
         <li class="list-row list-group-item">
 
             <% if(withLinks === true) { %>
-                <%- include('list/removeUndoButtons', {
+                <%- include('list/includes/removeUndoButtons', {
                 id: item.id, removeAction: 'deleteAction(event)', undoAction: 'undoAction(event)'}) %>
                 <a class='list-item' id="<%= item.id %>" href="/lists/<%= userId %>/<%= item.id %>"><%= item.name %></a>
             <% } else { %>
-                <%- include('list/removeUndoButtons', {
+                <%- include('list/includes/removeUndoButtons', {
                 id: id, removeAction: 'deleteAction(event)', undoAction: 'undoAction(event)'}) %>
                 <div class='list-item' id="<%= id %>"><%= item %></div>
             <% } %>

@@ -5,7 +5,7 @@
 <div class="container-fluid bg-warning">
     <h1><%= heading %>
         <script> const userId = <%= userId %> </script>
-        <%- include('list/editSaveButtons', { editAction: 'editLists()',
+        <%- include('list/includes/editSaveButtons', { editAction: 'editLists()',
         saveAction: 'saveLists(userId)', cancelAction: 'cancelAction()'}) %>
     </h1>
 </div>

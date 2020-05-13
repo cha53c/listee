@@ -6,7 +6,7 @@
 <div class="container-fluid bg-warning">
     <h1 hidden id="list-id" data-listId="<%= listId %>"></h1>
     <h1>UserListStore name: <%= listName %>
-        <span><%- include('list/editSaveButtons', { editAction: 'showEditAction()',
+        <span><%- include('list/includes/editSaveButtons', { editAction: 'showEditAction()',
             saveAction: 'showSaveAction(userId, listId, listname)', cancelAction: 'cancelAction()'}) %></span>
         <span><i id="delete-list-btn" class="update-page hide material-icons-two-tone md-36" type="button" onclick="deleteList(userId, listId)" data-toggle="tooltip" title="delete list">delete</i></span>
     </h1>
