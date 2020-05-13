@@ -221,19 +221,22 @@ function saveOnloadAction(xhr) {
         console.log(response);
         const msg = response.msg;
         if (xhr.status === 200) {
-            if (response.status === 'success') {
+            if (response._status === 'success') {
                 console.log('save was successful');
                 console.log(msg);
                 removeDeletedRows();
                 toggle_edit_save();
                 toggle_remove_undo();
                 toggle_add_item();
+                $('#save-ok').show();
             } else {
+                $('#save-failed').show();
                 console.log(msg);
             }
 
         } else {
             alert('Error! changes not saved');
+            $('#save-failed').show();
         }
     }
 }

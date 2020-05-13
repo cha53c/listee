@@ -64,6 +64,13 @@ div.list-item {
 }
 
 /*
+    Bootstrap
+*/
+.alert {
+    display: none;
+}
+
+/*
     Material icon settings
 */
 .material-icons-two-tone {
