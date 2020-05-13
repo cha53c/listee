@@ -1,6 +1,7 @@
 const should = require('chai').should();
 const expect = require('chai').expect;
 const rewire = require('rewire');
+const sinon = require('sinon');
 
 const {addList, updateList, removeList, getList, getListNames} = require('../../model/userListStore');
 const userListStore = rewire('../../model/userListStore');

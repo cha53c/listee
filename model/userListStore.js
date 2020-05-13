@@ -76,15 +76,14 @@ function getAllLists(userId) {
 
 function getListNames(userId) {
     const lists = getAllLists(userId);
-    if(lists === undefined) {
-        return [];
-    }
+    // if(lists === undefined) {
+    //     return [];
+    // }
     let listNames = [];
     for(const l of lists.values()){
         listNames.push(l.name);
     }
     return listNames;
-    // return lists === undefined ? "" : Array.from(lists.keys()); // pass empty iterable if undefined
 }
 
 module.exports = {addList, getList, updateList, removeList, getAllLists, getListNames};
