@@ -9,6 +9,7 @@
     </h1>
 </div>
 <div class="container bg-light">
+    <%- include('list/includes/saveAlerts') %>
     <h2>UserListStore name
         <span><input id="listname" type="text" placeholder="enter list name"></span>
     </h2>
@@ -44,15 +45,23 @@
         appendRemoveButton(rowDiv, id, removeAction);
         appendItemDiv(rowDiv, value, id);
 
-        // let itemNode = appendListItem(value, id);
-        // appendRemoveButton(itemNode, removeAction);
         document.getElementById('item-input').value = ''; // reset input text
         setAddItemfocus();
     }
 
     const xhr = new XMLHttpRequest();
     xhr.onload = function (xhr) {
+        // TODO if xhr.response is undefined redirect other wise show alert
+        if(xhr.response === undefined){
+            window.location = this.responseURL;
+        } else {
+            const response = JSON.parse(xhr.response);
+            console.log(response);
+            $('#save-failed').show();
+            console.log(response.msg);
+        }
         console.log(xhr.response);
+        console.log(this.responseURL);
         window.location = this.responseURL;
     };
 

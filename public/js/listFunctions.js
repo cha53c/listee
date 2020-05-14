@@ -289,6 +289,7 @@ function saveLists(userId) {
     xhr.send(JSON.stringify(list));
 
     xhr.onload = saveOnloadAction(xhr);
+    
 
     xhr.onerror = function () {
         console.log('there was an error saving changes');
