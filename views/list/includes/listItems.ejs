@@ -1,7 +1,7 @@
 <% let id = 0; %>
 <ul id="list-items" class="list-items list-group overflow-auto">
     <% if (addButton === true) { %>
-        <%- include('list/addItem', { classStr: 'hide' }) %>
+        <%- include('list/includes/addItem', { classStr: 'hide' }) %>
     <% } %>
     <% for (const item of items) { %>
         <li class="list-row list-group-item">

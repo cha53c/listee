@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include('list/head') %>
+<%- include('includes/head') %>
 <body>
 <script> const userId = '<%- userId %>'; const listId = '<%= listId %>' ; const listname = '<%- listName %>' </script>
 <div class="container-fluid bg-warning">
@@ -14,10 +14,10 @@
 <div class="container bg-light" >
 <a href="/lists/<%= userId %>">Back to my lists</a>
 <h2>UserListStore items</h2>
-<%- include('list/listItems', { items: items, addButton: true, withLinks: false }) %>
+<%- include('list/includes/listItems', { items: items, addButton: true, withLinks: false }) %>
 </div>
 </body>
-<%- include('bootstrapScripts') %>
+<%- include('includes/bootstrapScripts') %>
 <script src="/static/listFunctions.js"></script>
 </body>
 </html>

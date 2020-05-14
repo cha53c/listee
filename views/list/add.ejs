@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include('list/head') %>
+<%- include('includes/head') %>
 <body>
 <div class="container-fluid bg-warning">
     <h1><%= heading %>
@@ -15,10 +15,10 @@
     <br>
     <h2>UserListStore Items</h2>
     <div id="list-items"></div>
-    <%- include('list/addItem', { classStr: ''}) %>
+    <%- include('list/includes/addItem', { classStr: ''}) %>
     <br>
 </div>
-<%- include('bootstrapScripts') %>
+<%- include('includes/bootstrapScripts') %>
 <script src="/static/listFunctions.js"></script>
 <script>
     <!--    TODO move JS to a separate file -->
