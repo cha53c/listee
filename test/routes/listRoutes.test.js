@@ -156,59 +156,51 @@ describe('list routes', () => {
             });
         });
         describe('/GET lists/userId/listId', () => {
-            // TODO  renders error even though this works when tested with actual server
-            it.skip('should show contents of list', (done) => {
-                let xId;
-                let url;
-                const request = chai.request(server).keepOpen();
-                const promise = new Promise( () =>{request
-                    .post('/lists/1/create')
-                    // .set('content-type', 'application/json')
-                    .send({"listname": "new list", "items": ["red"]})
-                    .end((err, res) => {
-                        res.should.have.status(200);
-                        const $ = cheerio.load(res.text);
-                        xId = $('h1#list-id').attr('data-listId');
-                        console.log(xId);
-                        // TODO need to slave list id
-                    })});
-                promise.then(function () {
-                    url = '/lists/1/' + xId;
-                }).then(()=>{request
-                    .get(url)
-                    .set('content-type', 'application/json')
-                    .end((err, res) => {
-                        res.should.have.status(200);
-                        const $ = cheerio.load(res.text);
-                        $('title').text().should.equal("new list");
-                        $('ul#list-items').length.should.equal(1);
-                        $('li.list-row').length.should.equal(3);
-                    })}).then(function () {
-                    request.close();
-                    done();
-                }).catch(function () {
-                    assert.fail('something went wrong with the promises');
+            it('should show contents of list', (done) => {
+                listController.__set__("userListStore.getList", function getList(userId, listId) {
+                    return {'id': "9999", 'name': "rainbow", 'items': ["red", "yellow", "green", "blue"]};
                 });
+                chai.request(server)
+                    .get('/lists/1/9999')
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                        const $ = cheerio.load(res.text);
+                        $('title').text().should.equal("rainbow");
+                        $('ul#list-items').length.should.equal(1);
+                        $('li.list-row').length.should.equal(4);
+                    });
+                done();
+            });
+            it('should rende error page if not list found', function (done) {
+                listController.__set__("userListStore.getList", function getList(userId, listId) {
+                    return undefined;
+                });
+                chai.request(server)
+                    .get('/lists/1/9999')
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                        const $ = cheerio.load(res.text);
+                        $('title').text().should.equal("Error");
+                    });
+                done();
             });
         });
         describe('/PATCH lists/userId/listId', () => {
             // TODO needs a way to retrieve list id to work
-            it.skip('should update an existing list', (done) => {
-                const originalList = {"listname": "rainbow", "items": ["red", "green"]};
+            it('should update an existing list', (done) => {
+                const updatedList = {"id": "9999", "name": "rainbow", "items": ["red", "green", "blue"]};
+                listController.__set__("userListStore.updateList", function updateList(userId, listId, listName, items) {
+                    return updatedList;
+                });
+
                 chai.request(server)
-                    .post('/lists/1/create')
-                    .set('content-type', 'application/json')
-                    .send(originalList)
-                    .end((err, res) => {
-                        res.should.have.status(200);
-                    });
-                const updatedList = {"listname": "rainbow", "items": ["red", "green", "blue"]};
-                chai.request(server)
-                    .patch('/lists/1/rainbow')
+                    .patch('/lists/1/9999')
                     .set('content-type', 'application/json')
                     .send(updatedList)
                     .end((err, res) => {
                         res.should.have.status(200);
+                        res.text.should.include('red');
+                        res.text.should.include('green');
                         res.text.should.include('blue');
                     });
                 done();
@@ -240,6 +232,21 @@ describe('list routes', () => {
                         done();
                     });
             })
+        });
+    });
+    describe.skip('rewire test', function () {
+        it('should mock UserListStore', function () {
+            listController.__set__("SUCCESS_STATUS", 'cheese');
+            const status = listController.__get__("SUCCESS_STATUS");
+            console.log((status));
+
+            const getList = listController.__get__("userListStore.getList");
+            console.log(getList);
+            listController.__set__("userListStore.getList", function getList() {
+                return 'tomatoes'
+            });
+            const newGetList = listController.__get__("userListStore.getList");
+            console.log(newGetList());
         });
     });
 });
