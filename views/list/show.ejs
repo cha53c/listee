@@ -7,7 +7,7 @@
     const listname = '<%- listName %>' </script>
 <div class="container-fluid bg-warning">
     <h1 hidden id="list-id" data-listId="<%= listId %>"></h1>
-    <h1>UserListStore name: <%= listName %>
+    <h1>name: <%= listName %>
         <span><%- include('list/includes/editSaveButtons', { editAction: 'showEditAction()',
             saveAction: 'showSaveAction(userId, listId, listname)', cancelAction: 'cancelAction()'}) %></span>
         <span><i id="delete-list-btn" class="update-page hide material-icons-two-tone md-36" type="button"
@@ -15,6 +15,9 @@
     </h1>
 </div>
 <div class="container bg-light">
+    <%- include('list/includes/deleteModal', {
+    yesAction: 'deleteListConfirmed(userId, listId)',
+    title: 'Do you want to delete the following list?'}) %>
     <a href="/lists/<%= userId %>">Back to my lists</a>
     <%- include('list/includes/saveAlerts') %>
     <h2>UserListStore items</h2>

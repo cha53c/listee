@@ -28,7 +28,7 @@ describe('list routes', () => {
     describe('home page', () => {
         describe('/GET lists', () => {
             // it should have ul id list
-            it.only('should GET the lists home page with 0 lists', (done) => {
+            it('should GET the lists home page with 0 lists', (done) => {
                 chai.request(server)
                     .get('/lists/1')
                     .end((err, res) => {

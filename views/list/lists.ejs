@@ -10,7 +10,9 @@
     </h1>
 </div>
 <div class="container bg-light">
-    <%- include('list/includes/deleteModal', {userId: userId}) %>
+    <%- include('list/includes/deleteModal', {
+    userId: userId, yesAction: 'saveListsConfirmed(userId)',
+    title: 'Do you want to delete the following?'}) %>
     <%- include('list/includes/saveAlerts') %>
     <h2 id="list-count">You have <%= lists.length %> lists
         <i class="material-icons-two-tone md-36 update-page" data-toggle="tooltip" title="add a list"

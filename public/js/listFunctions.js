@@ -253,6 +253,14 @@ function saveOnloadAction(xhr) {
     }
 }
 
+function deleteList(userId, listId) {
+    $('p#deleted-lists').text(listname);
+    $('#delete-modal').modal({
+        keyboard: true
+    });
+    $('#delete-modal').modal('show');
+}
+
 function showSaveAction(userId, listId, listName) {
     const xhr = new XMLHttpRequest();
     // send the updated list
@@ -269,7 +277,9 @@ function showSaveAction(userId, listId, listName) {
     }
 }
 
-function deleteList(userId, listId) {
+
+
+function deleteListConfirmed(userId, listId) {
     const xhr = new XMLHttpRequest();
     // delete list
     xhr.open("DELETE", '/lists/' + userId + '/' + listId, true);
@@ -278,7 +288,6 @@ function deleteList(userId, listId) {
     xhr.onload = function () {
         if (xhr.status === 200) {
             console.log('list deleted');
-            alert('list deleted');
             window.location.replace('/lists/' + userId);
         }
     };
