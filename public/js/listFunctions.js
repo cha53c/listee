@@ -187,7 +187,7 @@ const undoAction = function (event) {
 };
 
 
-function getDeletedItems() {
+function getDeletedItemIds() {
     let items = [];
     let elements = document.getElementsByClassName('list-item');
     console.log(elements);
@@ -195,7 +195,19 @@ function getDeletedItems() {
         console.log(el.id);
         if (el.classList.contains('deleted')) {
             items.push(el.id);
-            // items.push(el.innerText);
+        }
+    }
+    return items;
+}
+
+function getDeletedItemNames() {
+    let items = [];
+    let elements = document.getElementsByClassName('list-item');
+    console.log(elements);
+    for (const el of elements) {
+        if (el.classList.contains('deleted')) {
+            console.log(el.innerText);
+            items.push(el.innerText);
         }
     }
     return items;
@@ -277,79 +289,83 @@ function deleteList(userId, listId) {
 
 function saveLists(userId) {
     console.log('you clicked save lists');
+    // TODO show names in an li
+    let deletedListNames = getDeletedItemNames();
+    $('p#deleted-lists').text(deletedListNames);
+    $('#delete-modal').modal({
+        keyboard: true
+    });
+    $('#delete-modal').modal('show');
+}
+
+function saveListsConfirmed(userId){
     const xhr = new XMLHttpRequest();
-    // send the updated list
-    // xhr.open("PATCH", '/lists/<%= userId %>', true);
     xhr.open("PATCH", '/lists/' + userId, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
-
-    let deletedListNames = getDeletedItems();
-    let list = {listnames: deletedListNames};
+    let deletedListIds = getDeletedItemIds();
+    let list = {listnames: deletedListIds};
     console.log(JSON.stringify(list));
     xhr.send(JSON.stringify(list));
-
     xhr.onload = saveOnloadAction(xhr);
-    
-
     xhr.onerror = function () {
         console.log('there was an error saving changes');
     }
 }
 
-    function toggle_add_item() {
-        const input = document.getElementById('item-input');
-        // const add = document.getElementById('add');
-        if (input) {
-            input.classList.toggle('hide');
-            // add.classList.toggle('hide');
+function toggle_add_item() {
+    const input = document.getElementById('item-input');
+    // const add = document.getElementById('add');
+    if (input) {
+        input.classList.toggle('hide');
+        // add.classList.toggle('hide');
+    }
+}
+
+function cancelAction() {
+    toggle_edit_save();
+    toggle_add_item();
+    toggle_deleted_items();
+    hide_by_class_name('remove-btn');
+    hide_by_class_name('undo-btn');
+    remove_added();
+}
+
+function toggle_deleted_items() {
+    const deletedItems = Array.from(document.getElementsByClassName('deleted'));
+    for (const item of deletedItems) {
+        item.classList.toggle('deleted');
+    }
+}
+
+function hide_by_class_name(className) {
+    const elements = document.getElementsByClassName(className);
+    for (const el of elements) {
+        if (!el.classList.contains('hide')) {
+            el.classList.add('hide');
         }
     }
+}
 
-    function cancelAction() {
-        toggle_edit_save();
-        toggle_add_item();
-        toggle_deleted_items();
-        hide_by_class_name('remove-btn');
-        hide_by_class_name('undo-btn');
-        remove_added();
-    }
-
-    function toggle_deleted_items() {
-        const deletedItems = Array.from(document.getElementsByClassName('deleted'));
-        for (const item of deletedItems) {
-            item.classList.toggle('deleted');
+function remove_added() {
+    const listItems = document.getElementsByClassName('list-item');
+    for (const item of listItems) {
+        if (item.id.startsWith('a')) {
+            console.log('removing item');
+            removeRowElement(item);
         }
     }
+}
 
-    function hide_by_class_name(className) {
-        const elements = document.getElementsByClassName(className);
-        for (const el of elements) {
-            if (!el.classList.contains('hide')) {
-                el.classList.add('hide');
-            }
-        }
-    }
-
-    function remove_added() {
-        const listItems = document.getElementsByClassName('list-item');
-        for (const item of listItems) {
-            if (item.id.startsWith('a')) {
-                console.log('removing item');
-                removeRowElement(item);
-            }
-        }
-    }
-
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-    });
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+});
 
 //
 // functions from show.ejs
 //
-    function showEditAction() {
-        toggle_edit_save();
-        toggle_remove_undo();
-        toggle_add_item();
-        setAddItemfocus();
-    }
+function showEditAction() {
+    toggle_edit_save();
+    toggle_remove_undo();
+    toggle_add_item();
+    setAddItemfocus();
+}

@@ -28,7 +28,7 @@ describe('list routes', () => {
     describe('home page', () => {
         describe('/GET lists', () => {
             // it should have ul id list
-            it('should GET the lists page with 0 lists', (done) => {
+            it.only('should GET the lists home page with 0 lists', (done) => {
                 chai.request(server)
                     .get('/lists/1')
                     .end((err, res) => {
@@ -37,7 +37,9 @@ describe('list routes', () => {
                         $('title').text().should.equal('your lists');
                         $('ul#list-items').length.should.equal(1);
                         $('li.list-row').length.should.equal(0);
+                        $('#delete-modal').length.should.equal(1);
                         expect($('h2').text()).to.include('You have 0 lists');
+
                         done();
                     });
                 it('should lists page for user with 1 list');
