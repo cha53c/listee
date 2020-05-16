@@ -140,6 +140,7 @@ function unpackParams(req) {
 }
 
 function unpackBody(req) {
+    // TODO should this be called name or listname XHR requests are using listname list objects us list??
     listName = req.body.listname;
     items = req.body.items;
 }

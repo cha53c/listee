@@ -7,7 +7,6 @@ const {app: server, stop} = require('../../app');
 const should = chai.should();
 const expect = chai.expect;
 const cheerio = require('cheerio');
-const sinon = require('sinon');
 const rewire = require('rewire');
 const listController = rewire("../../controllers/listController");
 
@@ -15,10 +14,14 @@ const listController = rewire("../../controllers/listController");
 chai.use(chaiHttp);
 // THESE SHOULD TEST KEY COMPONENTS OF THE RENDERED HTML AND  NOT THE CONTROLLER
 // WHICH IS TESTED BY listConroller.test
-// TODO use rewrite to use mock to remove the need for all the http set calls
 
 describe('list routes', () => {
-    const LIST_ID = "xXXXx01"
+    let revert;
+    afterEach(function revertRewire() {
+        if (revert) {
+            revert();
+        }
+    });
     after(() => {
         stop();
     });
@@ -39,75 +42,38 @@ describe('list routes', () => {
                     });
                 it('should lists page for user with 1 list');
             });
-            // TODO need find a way to get list ids to make delete call
-            describe.skip('/PATCH multiple lists', () => {
-                it('should delete all lists', (done) => {
-                    chai.request(server)
-                        .get('/lists/1')
-                        .end((err, res) => {
-                            res.should.have.status(200);
-                            const $ = cheerio.load(res.text);
-                            expect($('h2').text()).to.include('You have 0 lists');
-                        });
-                    chai.request(server)
-                        .post('/lists/1/create')
-                        // .set('content-type', 'application/json')
-                        .send({"listname": "new list", "items": ["red"]})
-                        .end((err, res) => {
-                            res.should.have.status(200);
-                            res.should.redirect;
-                            // TODO need to slave list id
-                        });
-                    chai.request(server)
-                        .post('/lists/1/create')
-                        .set('content-type', 'application/json')
-                        .send({"listname": "old list", "items": ["blue"]})
-                        .end((err, res) => {
-                            res.should.have.status(200);
-                            // TODO need to slave list id
-                        });
-                    chai.request(server)
-                        .get('/lists/1')
-                        .end((err, res) => {
-                            res.should.have.status(200);
-                            const $ = cheerio.load(res.text);
-                            expect($('h2').text()).to.include('You have 2 lists');
-                        });
+            describe('/PATCH multiple lists', () => {
+                it('should return success message if all list are deleted', (done) => {
+                    // TODO change json key to listids instead of listnames
+                    revert = listController.__set__("userListStore.removeList", function removeList(listId) {
+                        return true;
+                    });
                     chai.request(server)
                         .patch('/lists/1')
                         .set('content-type', 'application/json')
                         .send({"listnames": ["old list", "new list"]})
                         .end((err, res) => {
                             res.should.have.status(200);
+                            res.body.should.property('_status');
+                            res.body._status.should.equal('success');
+                            done();
                         });
-                    chai.request(server)
-                        .get('/lists/1')
-                        .end((err, res) => {
-                            res.should.have.status(200);
-                            const $ = cheerio.load(res.text);
-                            // expect($('h2').text()).to.include('You have 0 lists');
-                        });
-                    done();
                 });
-                it('should return an error if a list does not exist', (done) => {
-                    chai.request(server)
-                        .post('/lists/1/create')
-                        .set('content-type', 'application/json')
-                        .send({"listname": "new list", "items": ["red"]})
-                        .end((err, res) => {
-                            res.should.have.status(200);
-                        });
+                it('should return an error if 1 or more lists are no found', (done) => {
+                    revert = listController.__set__("userListStore.removeList", function removeList(listId) {
+                        return false;
+                    });
                     chai.request(server)
                         .patch('/lists/1')
-                        .set('content-type', 'application/json')
                         .send({"listnames": ["new list", "wrong list"]})
                         .end((err, res) => {
                             res.should.have.status(200);
-                            res.text.should.include('err');
-                            res.text.should.include('wrong list');
-                            res.text.should.not.include('new list');
+                            res.body.should.have.property('_status');
+                            res.body._status.should.equal('err');
+                            res.body._text.should.include("new list");
+                            res.body._text.should.include("wrong list");
+                            done();
                         });
-                    done();
                 });
             });
         });
@@ -131,33 +97,28 @@ describe('list routes', () => {
                         done();
                     });
             });
-            it('should not add a list if the id already exits', (done) => {
-                const list = {"listname": "new list", "items": ["red", "yellow", "green", "blue"]};
+            it('should return an error if the list name already exits ', (done) => {
+                const name = 'new list';
+                revert = listController.__set__("userListStore.getListNames", function getListNames(userId) {
+                    return [name];
+                });
+                const list = {"listname": name, "items": ["red", "yellow", "green", "blue"]};
                 chai.request(server)
                     .post('/lists/1/create')
-                    .set('content-type', 'application/json')
                     .send(list)
                     .end((err, res) => {
                         res.should.have.status(200);
-                        // expect(res).to.redirect;
-                        // done();
+                        res.should.not.redirect;
+                        res.body.should.property('_status');
+                        // const status = res.body._status;
+                        res.body._status.should.equal('err');
+                        done();
                     });
-                chai.request(server)
-                    .post('/lists/1/create')
-                    .set('content-type', 'application/json')
-                    .send(list)
-                    .end((err, res) => {
-                        res.should.have.status(200);
-                        // TODO check response message
-                        expect(res).to.have.property('status');
-
-                    });
-                done();
             });
         });
         describe('/GET lists/userId/listId', () => {
             it('should show contents of list', (done) => {
-                listController.__set__("userListStore.getList", function getList(userId, listId) {
+                revert = listController.__set__("userListStore.getList", function getList(userId, listId) {
                     return {'id': "9999", 'name': "rainbow", 'items': ["red", "yellow", "green", "blue"]};
                 });
                 chai.request(server)
@@ -172,7 +133,7 @@ describe('list routes', () => {
                 done();
             });
             it('should rende error page if not list found', function (done) {
-                listController.__set__("userListStore.getList", function getList(userId, listId) {
+                revert = listController.__set__("userListStore.getList", function getList(userId, listId) {
                     return undefined;
                 });
                 chai.request(server)
@@ -189,7 +150,7 @@ describe('list routes', () => {
             // TODO needs a way to retrieve list id to work
             it('should update an existing list', (done) => {
                 const updatedList = {"id": "9999", "name": "rainbow", "items": ["red", "green", "blue"]};
-                listController.__set__("userListStore.updateList", function updateList(userId, listId, listName, items) {
+                revert = listController.__set__("userListStore.updateList", function updateList(userId, listId, listName, items) {
                     return updatedList;
                 });
 
@@ -207,46 +168,33 @@ describe('list routes', () => {
             });
         });
         describe('/delete /:userId/:listId/', () => {
-            // TODO need to get list id for this to work
-            it.skip('should delete an existing list', (done) => {
+            it('should delete an existing list', (done) => {
+                revert = listController.__set__("userListStore.removeList", function removeList(userId, listname) {
+                    return true;
+                });
                 chai.request(server)
-                    .delete('/lists/1/rainbow')
-                    .set('content-type', 'application/json')
+                    .delete('/lists/1/9999')
                     .end((err, res) => {
                         res.should.have.status(200);
-                        const status = res.body.status;
+                        const status = res.body._status;
                         expect(status).to.equal('success');
                         done();
                     });
             });
             it('should return massage if list does not exist', (done) => {
+                revert = listController.__set__("userListStore.removeList", function removeList(userId, listname) {
+                    return false;
+                });
                 chai.request(server)
-                    .delete('/lists/1/whatnot')
-                    .set('content-type', 'application/json')
+                    .delete('/lists/1/9999')
                     .end((err, res) => {
                         res.should.have.status(200);
                         res.body.should.property('_status');
                         res.body.should.property('_text');
-                        const status = res.body._status;
-                        expect(status).to.equal('err');
+                        res.body._status.should.equal('err');
                         done();
                     });
             })
-        });
-    });
-    describe.skip('rewire test', function () {
-        it('should mock UserListStore', function () {
-            listController.__set__("SUCCESS_STATUS", 'cheese');
-            const status = listController.__get__("SUCCESS_STATUS");
-            console.log((status));
-
-            const getList = listController.__get__("userListStore.getList");
-            console.log(getList);
-            listController.__set__("userListStore.getList", function getList() {
-                return 'tomatoes'
-            });
-            const newGetList = listController.__get__("userListStore.getList");
-            console.log(newGetList());
         });
     });
 });
