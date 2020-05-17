@@ -4,7 +4,7 @@ const path = require('path');
 
 function getTest(req, res) {
     debug('get test');
-    res.render('test', {title: 'Spelling test'});
+    res.render('test', {title: 'spelling test', heading: 'Spelling test'});
 }
 
 module.exports = { getTest }
