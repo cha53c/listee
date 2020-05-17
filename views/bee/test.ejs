@@ -4,7 +4,23 @@
 <body>
 <h1><%= heading %></h1>
 <p>test yourself on commonly misspelled words</p>
-<button id="start-test" class="btn btn-success" type="button">Start</button>
-
+<button id="start-test" onclick="playAudio()" class="btn btn-success" type="button">Start</button>
+<p id="audio">Audio?</p>
+<%- include('../includes/bootstrapScripts') %>
+<script>
+    function playAudio(){
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', '/bee/test/1000', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send();
+        xhr.onload = function() {
+            const response = JSON.parse(xhr.response);
+            $('p#audio').text(response);
+        }
+        xhr.onerror = function () {
+            console.log('/bee/test/1000 errored' );
+        }
+    }
+</script>
 </body>
 </html>
