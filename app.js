@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 const home = require(path.join(__dirname, 'routes', 'homeRoutes'));
 const lists = require(path.join(__dirname, 'routes', 'listRoutes'));
 const auth = require(path.join(__dirname, 'routes', 'authRoutes'));
+const bee = require(path.join(__dirname, 'routes', 'beeRoutes'));
 const app = express();
 
 process.title = "listeeApp";
@@ -29,8 +30,9 @@ app.use('/static', express.static('public/js'));
 app.use('/', home);
 app.use('/lists', lists);
 app.use('/auth', auth);
+app.use('/bee', bee);
 
-app.set('views', ['./views', 'views/list', 'views/auth'] );
+app.set('views', ['./views', 'views/list', 'views/auth', 'views/bee'] );
 app.set('view engine', 'ejs');
 
 const PORT = 3000;
