@@ -15,11 +15,12 @@ function getPronunciationAudioUrl(word) {
             .then(function (response) {
                 debug(response);
                 let audioUrl = response.data.results[0].lexicalEntries[0].pronunciations[0].audioFile;
-                debug('audioUrl %s', audioUrl);
-                resolve(audioUrl);
+                debug('word %s, audioUrl %s', word, audioUrl);
+                resolve( {word: word, audioUrl: audioUrl});
             })
             .catch(function (error) {
                 console.log(error);
+                reject(error);
             })
     });
 }

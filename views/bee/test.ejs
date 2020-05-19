@@ -6,8 +6,8 @@
 <p>test yourself on commonly misspelled words</p>
 <button id="start-test" onclick="playAudio()" class="btn btn-success" type="button">Start</button>
 <p id="audio">Audio?</p>
-<% for(let i = 0; i <= audioUrls.length; i++) { %>
-    <audio id="<%= i %>" src="<%= audioUrls[i] %>"></audio>
+<% for(let i in mappedUrls) { %>
+    <audio id="<%= mappedUrls[i].word %>" src="<%= mappedUrls[i].audioUrl %>"></audio>
 <% } %>
 <%- include('../includes/bootstrapScripts') %>
 <script>

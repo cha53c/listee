@@ -10,9 +10,9 @@ function getTest(req, res) {
     (async function oed() {
         // TODO need to handle rejects currently hangs if word not found.
         const promises = words.map(word => audioService.getPronunciationAudioUrl(word));
-        const urls = await Promise.all(promises);
-        console.log(urls);
-        res.render('test', {title: 'spelling test', heading: 'Spelling test', audioUrls: urls});
+        const mappedUrls = await Promise.all(promises);
+        console.log(mappedUrls);
+        res.render('test', {title: 'spelling test', heading: 'Spelling test', mappedUrls: mappedUrls});
     }());
 
 }
